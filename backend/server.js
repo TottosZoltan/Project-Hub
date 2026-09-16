@@ -156,7 +156,10 @@ async function initializeDatabase() {
         updated_at
         TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
     `);
-
+await pool.query(`
+    ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS profile_image TEXT;
+`);
 
     // ==================================================
     // AUTH TOKENS
