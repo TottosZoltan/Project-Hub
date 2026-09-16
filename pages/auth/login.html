@@ -94,20 +94,34 @@
                 </div>
 
 
-                <div class="form-group">
+                <div class="form-group password-group">
 
                     <label for="password">
                         Jelszó
                     </label>
 
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Jelszó"
-                        autocomplete="current-password"
-                        required
-                    >
+                    <div class="password-input-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Jelszó"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="passwordToggleButton"
+                            class="password-toggle-button"
+                            aria-label="Jelszó megjelenítése"
+                            aria-pressed="false"
+                        >
+                            👁
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -182,12 +196,19 @@
                     );
 
 
+                const passwordToggleButton =
+                    document.getElementById(
+                        "passwordToggleButton"
+                    );
+
+
                 if (
                     !loginForm ||
                     !loginButton ||
                     !loginMessage ||
                     !loginInput ||
-                    !passwordInput
+                    !passwordInput ||
+                    !passwordToggleButton
                 ) {
 
                     console.error(
@@ -229,6 +250,39 @@
                         "login-message";
 
                 }
+
+
+                // =========================================
+                // JELSZÓ MEGJELENÍTÉSE / ELREJTÉSE
+                // =========================================
+
+                passwordToggleButton.addEventListener(
+                    "click",
+                    function () {
+
+                        const isPassword =
+                            passwordInput.type === "password";
+
+                        passwordInput.type =
+                            isPassword ? "text" : "password";
+
+                        passwordToggleButton.textContent =
+                            isPassword ? "🙈" : "👁";
+
+                        passwordToggleButton.setAttribute(
+                            "aria-label",
+                            isPassword
+                                ? "Jelszó elrejtése"
+                                : "Jelszó megjelenítése"
+                        );
+
+                        passwordToggleButton.setAttribute(
+                            "aria-pressed",
+                            String(isPassword)
+                        );
+
+                    }
+                );
 
 
                 loginForm.addEventListener(
