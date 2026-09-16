@@ -4353,8 +4353,7 @@ app.get(
             // --------------------------------------------------
 
             return res.redirect(
-                FRONTEND_URL +
-                "/?steam_link=success"
+                "https://tottoszoltan.github.io/Project-Hub/index.html?steam_link=success"
             );
 
         }
