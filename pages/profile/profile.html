@@ -2,6 +2,7 @@
 <html lang="hu">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -16,178 +17,10 @@
         href="../../style.css"
     >
 
-    <style>
-
-        body {
-            visibility: hidden;
-        }
-
-        body.authenticated {
-            visibility: visible;
-        }
-
-        /* =========================================
-           PROFIL
-        ========================================= */
-
-        .profile-card {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 20px;
-        }
-
-        .profile-user {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            flex: 0 0 80px;
-            object-fit: cover;
-            border-radius: 50%;
-            background: #080a0f;
-            border: 1px solid #292e3a;
-        }
-
-        .profile-user-info {
-            min-width: 0;
-        }
-
-        .profile-user-name {
-            margin: 0;
-            color: #ffffff;
-            font-size: 20px;
-            font-weight: bold;
-            overflow-wrap: anywhere;
-        }
-
-        .profile-user-id {
-            margin-top: 6px;
-            color: #858b99;
-            font-size: 12px;
-            overflow-wrap: anywhere;
-        }
-
-        .profile-status {
-            display: inline-flex;
-            align-items: center;
-            margin-top: 10px;
-            padding: 5px 9px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .profile-status.connected {
-            color: #9ee6b5;
-            background: rgba(61, 166, 93, 0.12);
-            border: 1px solid rgba(61, 166, 93, 0.25);
-        }
-
-        .profile-status.disconnected {
-            color: #ffaaaa;
-            background: rgba(200, 60, 60, 0.10);
-            border: 1px solid rgba(200, 60, 60, 0.22);
-        }
-
-        .profile-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .profile-button {
-            min-height: 42px;
-            padding: 0 15px;
-            box-sizing: border-box;
-            border: 1px solid #303644;
-            border-radius: 10px;
-            background: #151922;
-            color: #ffffff;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            transition:
-                background 0.2s ease,
-                border-color 0.2s ease,
-                transform 0.15s ease;
-        }
-
-        .profile-button:hover {
-            background: #1b202b;
-            border-color: #424a5a;
-        }
-
-        .profile-button:active {
-            transform: scale(0.98);
-        }
-
-        .profile-button.danger {
-            color: #ffaaaa;
-            border-color: #47282d;
-            background: #1a1215;
-        }
-
-        .profile-button.danger:hover {
-            background: #241619;
-            border-color: #61353c;
-        }
-
-        .profile-loading,
-        .profile-error {
-            padding: 20px;
-            color: #858b99;
-            text-align: center;
-            font-size: 13px;
-        }
-
-        .profile-error {
-            color: #ff8d8d;
-        }
-
-        .profile-blacklist-info {
-            padding: 20px;
-            color: #858b99;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 500px) {
-
-            .profile-card {
-                padding: 15px;
-            }
-
-            .profile-user {
-                align-items: flex-start;
-                gap: 13px;
-            }
-
-            .profile-avatar {
-                width: 65px;
-                height: 65px;
-                flex-basis: 65px;
-            }
-
-            .profile-user-name {
-                font-size: 17px;
-            }
-
-            .profile-actions {
-                flex-direction: column;
-            }
-
-            .profile-button {
-                width: 100%;
-            }
-
-        }
-
-    </style>
+    <link
+        rel="stylesheet"
+        href="profile.css"
+    >
 
 </head>
 
@@ -241,8 +74,6 @@
             </a>
 
 
-            <!-- FELHASZNÁLÓ -->
-
             <a
                 href="profile.html"
                 id="userMenuItem"
@@ -253,8 +84,6 @@
                 </span>
             </a>
 
-
-            <!-- KIJELENTKEZÉS -->
 
             <a
                 href="#"
@@ -295,14 +124,15 @@
         </div>
 
 
-        <button
-            type="button"
-            id="menuButton"
-            class="menu-button"
-            aria-label="Menü megnyitása"
+        <!-- VISSZA NYÍL -->
+
+        <a
+            href="../../index.html"
+            class="profile-back-button"
+            aria-label="Vissza a főoldalra"
         >
-            ☰
-        </button>
+            ←
+        </a>
 
     </header>
 
@@ -359,13 +189,7 @@
                 <div class="profile-user">
 
                     <div
-                        class="profile-avatar"
-                        style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: 30px;
-                        "
+                        class="profile-avatar profile-avatar-placeholder"
                     >
                         👤
                     </div>
@@ -779,13 +603,7 @@
 
                             <div>
 
-                                <div
-                                    style="
-                                        color: #858b99;
-                                        font-size: 13px;
-                                        line-height: 1.5;
-                                    "
-                                >
+                                <div class="steam-not-connected-text">
 
                                     A Steam-fiókod jelenleg
                                     nincs összekötve a Project Hub-pal.
@@ -890,13 +708,7 @@
                                 :
                                 `
                                 <div
-                                    class="profile-avatar"
-                                    style="
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                        font-size: 30px;
-                                    "
+                                    class="profile-avatar profile-avatar-placeholder"
                                 >
                                     🎮
                                 </div>
@@ -1215,7 +1027,7 @@
                                 🚫 Jelenleg
 
                                 <strong
-                                    style="color: #ffffff;"
+                                    class="blacklist-count"
                                 >
                                     ${blacklist.length}
                                 </strong>
