@@ -1,1 +1,428 @@
+<!DOCTYPE html>
+<html lang="hu">
 
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Profil - Project Hub</title>
+
+    <link
+        rel="stylesheet"
+        href="../../style.css"
+    >
+
+    <style>
+
+        body {
+            visibility: hidden;
+        }
+
+        body.authenticated {
+            visibility: visible;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- =========================================
+         OLDALSÓ MENÜ
+    ========================================== -->
+
+    <nav
+        class="side-menu"
+        id="sideMenu"
+    >
+
+        <div class="menu-header">
+
+            <h2>PROJECT HUB</h2>
+
+            <button
+                type="button"
+                id="closeMenu"
+                class="close-button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="menu-links">
+
+            <a href="../../index.html">
+                🏠 Kezdőlap
+            </a>
+
+            <a href="../notes/notes.html">
+                📝 Jegyzetek
+            </a>
+
+            <a href="../tasks/tasks.html">
+                ✅ Feladatok
+            </a>
+
+            <a href="../games/games.html">
+                🎮 Játékok
+            </a>
+
+            <a href="../places/places.html">
+                📍 Helyek
+            </a>
+
+
+            <!-- FELHASZNÁLÓ -->
+
+            <a
+                href="profile.html"
+                id="userMenuItem"
+            >
+                👤
+                <span id="usernameDisplay">
+                    Profil
+                </span>
+            </a>
+
+
+            <!-- KIJELENTKEZÉS -->
+
+            <a
+                href="#"
+                id="logoutButton"
+            >
+                🚪 Kijelentkezés
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         MENÜ HÁTTÉR
+    ========================================== -->
+
+    <div
+        class="menu-overlay"
+        id="menuOverlay"
+    ></div>
+
+
+    <!-- =========================================
+         FEJLÉC
+    ========================================== -->
+
+    <header class="header">
+
+        <div>
+
+            <h1>PROFIL</h1>
+
+            <p>
+                Fiókod és beállításaid
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="menuButton"
+            class="menu-button"
+            aria-label="Menü megnyitása"
+        >
+            ☰
+        </button>
+
+    </header>
+
+
+    <!-- =========================================
+         FŐ TARTALOM
+    ========================================== -->
+
+    <main>
+
+
+        <!-- =========================================
+             PROFIL FEJLÉC
+        ========================================== -->
+
+        <section class="welcome">
+
+            <p class="small-title">
+                SAJÁT PROFIL 👤
+            </p>
+
+            <h2 id="profileUsername">
+                Betöltés...
+            </h2>
+
+            <p>
+                Itt kezelheted a Project Hub fiókodat.
+            </p>
+
+        </section>
+
+
+        <!-- =========================================
+             FELHASZNÁLÓI ADATOK
+        ========================================== -->
+
+        <section class="overview">
+
+            <div class="section-header">
+
+                <h2>
+                    👤 Fiók
+                </h2>
+
+            </div>
+
+
+            <div class="stats">
+
+
+                <div class="stat">
+
+                    <strong id="profileName">
+                        -
+                    </strong>
+
+                    <span>
+                        Felhasználónév
+                    </span>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <strong>
+                        ✓
+                    </strong>
+
+                    <span>
+                        Bejelentkezve
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             STEAM
+        ========================================== -->
+
+        <section class="overview">
+
+            <div class="section-header">
+
+                <h2>
+                    🎮 Steam
+                </h2>
+
+                <span id="steamStatus">
+                    Betöltés...
+                </span>
+
+            </div>
+
+
+            <div
+                id="steamProfile"
+                style="
+                    padding: 20px;
+                    color: #858b99;
+                "
+            >
+
+                Steam adatok betöltése...
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             REJTETT JÁTÉKOK
+        ========================================== -->
+
+        <section class="overview">
+
+            <div class="section-header">
+
+                <h2>
+                    🚫 Rejtett játékok
+                </h2>
+
+                <span>
+                    Steam
+                </span>
+
+            </div>
+
+
+            <div
+                id="blacklistInfo"
+                style="
+                    padding: 20px;
+                    color: #858b99;
+                "
+            >
+
+                Jelenleg nincsenek megjelenítve
+                rejtett játékok.
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script src="../../script.js"></script>
+
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const usernameDisplay =
+                    document.getElementById(
+                        "usernameDisplay"
+                    );
+
+                const profileUsername =
+                    document.getElementById(
+                        "profileUsername"
+                    );
+
+                const profileName =
+                    document.getElementById(
+                        "profileName"
+                    );
+
+
+                /*
+                 * A script.js által betöltött
+                 * felhasználónév használata.
+                 */
+
+                function updateProfile() {
+
+                    if (
+                        usernameDisplay &&
+                        usernameDisplay.textContent
+                    ) {
+
+                        const username =
+                            usernameDisplay.textContent.trim();
+
+                        if (
+                            username &&
+                            username !== "Profil"
+                        ) {
+
+                            profileUsername.textContent =
+                                username;
+
+                            profileName.textContent =
+                                username;
+
+                        }
+
+                    }
+
+                }
+
+
+                updateProfile();
+
+
+                /*
+                 * Kis késleltetés azért,
+                 * hogy a script.js-nek legyen ideje
+                 * betölteni a felhasználói adatokat.
+                 */
+
+                setTimeout(
+                    updateProfile,
+                    500
+                );
+
+                setTimeout(
+                    updateProfile,
+                    1000
+                );
+
+
+                /*
+                 * Steam blacklist számláló
+                 */
+
+                const blacklistInfo =
+                    document.getElementById(
+                        "blacklistInfo"
+                    );
+
+
+                try {
+
+                    const blacklist =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "steamGameBlacklist"
+                            )
+                        );
+
+
+                    if (
+                        Array.isArray(
+                            blacklist
+                        ) &&
+                        blacklist.length > 0
+                    ) {
+
+                        blacklistInfo.textContent =
+                            blacklist.length +
+                            " játék van elrejtve.";
+
+                    }
+
+                }
+                catch (error) {
+
+                    console.warn(
+                        "Blacklist betöltési hiba:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
