@@ -16,6 +16,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================================
+    // STEAM BLACKLIST
+    // =========================================
+
+    const STEAM_BLACKLIST_KEY =
+        "steamGameBlacklist";
+
+
+    // =========================================
     // HTML ELEMEK
     // =========================================
 
@@ -150,6 +158,150 @@ document.addEventListener("DOMContentLoaded", function () {
 
         window.location.href =
             "../auth/login.html";
+
+    }
+
+
+    // =========================================
+    // STEAM BLACKLIST LEKÉRÉSE
+    // =========================================
+
+    function getSteamBlacklist() {
+
+        try {
+
+            const blacklist =
+                JSON.parse(
+                    localStorage.getItem(
+                        STEAM_BLACKLIST_KEY
+                    )
+                );
+
+
+            if (
+                Array.isArray(
+                    blacklist
+                )
+            ) {
+
+                return blacklist;
+
+            }
+
+
+            return [];
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "Steam blacklist betöltési hiba:",
+                error
+            );
+
+
+            return [];
+
+        }
+
+    }
+
+
+    // =========================================
+    // STEAM BLACKLIST MENTÉSE
+    // =========================================
+
+    function saveSteamBlacklist(
+        blacklist
+    ) {
+
+        localStorage.setItem(
+            STEAM_BLACKLIST_KEY,
+            JSON.stringify(
+                blacklist
+            )
+        );
+
+    }
+
+
+    // =========================================
+    // JÁTÉK BLACKLIST ELLENŐRZÉSE
+    // =========================================
+
+    function isGameBlacklisted(
+        appid
+    ) {
+
+        const blacklist =
+            getSteamBlacklist();
+
+
+        return blacklist.includes(
+            String(appid)
+        );
+
+    }
+
+
+    // =========================================
+    // JÁTÉK BLACKLISTRE HELYEZÉSE
+    // =========================================
+
+    function addToSteamBlacklist(
+        appid
+    ) {
+
+        const blacklist =
+            getSteamBlacklist();
+
+
+        const id =
+            String(appid);
+
+
+        if (
+            !blacklist.includes(id)
+        ) {
+
+            blacklist.push(id);
+
+
+            saveSteamBlacklist(
+                blacklist
+            );
+
+        }
+
+    }
+
+
+    // =========================================
+    // JÁTÉK VISSZAÁLLÍTÁSA BLACKLISTBŐL
+    // =========================================
+
+    function removeFromSteamBlacklist(
+        appid
+    ) {
+
+        const id =
+            String(appid);
+
+
+        const blacklist =
+            getSteamBlacklist().filter(
+                function (item) {
+
+                    return item !== id;
+
+                }
+            );
+
+
+        saveSteamBlacklist(
+            blacklist
+        );
 
     }
 
@@ -710,7 +862,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // KIRAJZOLÁS
             // =================================
 
-            renderGames(games);
+            renderGames(
+                games
+            );
 
         }
 
@@ -747,13 +901,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function renderGames(games) {
 
+        // =====================================
+        // BLACKLIST SZŰRÉS
+        // =====================================
+
+        games =
+            games.filter(
+                function (game) {
+
+                    return !isGameBlacklisted(
+                        game.appid
+                    );
+
+                }
+            );
+
+
+        // =====================================
+        // HA MINDEN JÁTÉK REJTVE VAN
+        // =====================================
+
         if (!games.length) {
 
             gamesList.innerHTML = `
 
                 <div class="games-empty">
 
-                    🎮 Nem található Steam játék.
+                    🎮 Nem található megjeleníthető Steam játék.
+
+                    <br><br>
+
+                    A rejtett játékokat később
+                    a profilodban tudod kezelni.
 
                 </div>
 
@@ -786,15 +965,27 @@ document.addEventListener("DOMContentLoaded", function () {
                     "pointer";
 
 
+                // =================================
+                // JÁTÉKIDŐ
+                // =================================
+
                 const playtime =
                     formatPlaytime(
                         game.playtime_forever || 0
                     );
 
 
+                // =================================
+                // JÁTÉK KÉP
+                // =================================
+
                 const imageUrl =
                     getGameImage(game);
 
+
+                // =================================
+                // HTML
+                // =================================
 
                 gameElement.innerHTML = `
 
@@ -802,17 +993,48 @@ document.addEventListener("DOMContentLoaded", function () {
                         imageUrl
                         ?
                         `
-                        <img
-    class="steam-game-image"
-    src="${escapeHtml(imageUrl)}"
-    alt="${escapeHtml(game.name || "Steam játék")}"
-    loading="lazy"
-    onerror="this.style.display='none';"
->
+                        <div class="steam-game-image-wrapper">
+
+                            <img
+                                class="steam-game-image"
+                                src="${escapeHtml(imageUrl)}"
+                                alt="${escapeHtml(
+                                    game.name ||
+                                    "Steam játék"
+                                )}"
+                                loading="lazy"
+                                onerror="this.style.display='none';"
+                            >
+
+
+                            <button
+                                class="steam-game-hide"
+                                type="button"
+                                title="Játék elrejtése"
+                                aria-label="Játék elrejtése"
+                            >
+                                ⋮
+                            </button>
+
+                        </div>
                         `
                         :
-                        ""
+                        `
+                        <div class="steam-game-image-wrapper">
+
+                            <button
+                                class="steam-game-hide"
+                                type="button"
+                                title="Játék elrejtése"
+                                aria-label="Játék elrejtése"
+                            >
+                                ⋮
+                            </button>
+
+                        </div>
+                        `
                     }
+
 
                     <div class="steam-game-info">
 
@@ -828,7 +1050,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         <div class="steam-game-playtime">
 
-                            ⏱️ ${escapeHtml(playtime)}
+                            🎮 ${escapeHtml(
+                                playtime
+                            )}
 
                         </div>
 
@@ -838,7 +1062,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 // =================================
-                // KATTINTÁS
+                // JÁTÉK KÁRTYA KATTINTÁS
                 // =================================
 
                 gameElement.addEventListener(
@@ -851,6 +1075,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     }
                 );
+
+
+                // =================================
+                // ELREJTÉS GOMB
+                // =================================
+
+                const hideButton =
+                    gameElement.querySelector(
+                        ".steam-game-hide"
+                    );
+
+
+                if (hideButton) {
+
+                    hideButton.addEventListener(
+                        "click",
+                        function (event) {
+
+                            event.stopPropagation();
+
+
+                            const confirmed =
+                                confirm(
+                                    `"${game.name || "Ez a játék"}" elrejtése?`
+                                );
+
+
+                            if (!confirmed) {
+
+                                return;
+
+                            }
+
+
+                            addToSteamBlacklist(
+                                game.appid
+                            );
+
+
+                            gameElement.remove();
+
+                        }
+                    );
+
+                }
 
 
                 gamesList.appendChild(
