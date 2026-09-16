@@ -1070,6 +1070,18 @@
             }
 
 
+            const confirmed =
+                confirm(
+                    "Biztosan le szeretnéd választani a Steam fiókodat?\n\n" +
+                    "A Steam kapcsolat megszűnik, és a Project Hub nem fogja tudni betölteni a Steam játékaidat."
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
             button.disabled = true;
 
             button.textContent =
