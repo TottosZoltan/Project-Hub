@@ -803,11 +803,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         ?
                         `
                         <img
-                            class="steam-game-image"
-                            src="${escapeHtml(imageUrl)}"
-                            alt=""
-                            loading="lazy"
-                        >
+    class="steam-game-image"
+    src="${escapeHtml(imageUrl)}"
+    alt="${escapeHtml(game.name || "Steam játék")}"
+    loading="lazy"
+    onerror="this.style.display='none';"
+>
                         `
                         :
                         ""
