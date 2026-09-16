@@ -1,5 +1,5 @@
 /* =========================================
-   PROFIL ALAP
+   PROFILE PAGE
 ========================================= */
 
 body {
@@ -12,177 +12,278 @@ body.authenticated {
 
 
 /* =========================================
-   PROFIL
+   PAGE
+========================================= */
+
+.profile-page {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.profile-header h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 28px;
+}
+
+.profile-header p {
+    margin: 5px 0 0;
+    color: #858b99;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.profile-back-button {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid #292e3a;
+    border-radius: 10px;
+
+    background: #11141b;
+    color: #ffffff;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.profile-back-button:hover {
+    background: #181c25;
+    border-color: #3b4250;
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.profile-section {
+    margin-bottom: 26px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 12px;
+}
+
+.section-title > span {
+    font-size: 24px;
+}
+
+.section-title h2 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 18px;
+}
+
+.section-title p {
+    margin: 3px 0 0;
+
+    color: #777e8d;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   CARD
 ========================================= */
 
 .profile-card {
     width: 100%;
+
     box-sizing: border-box;
+
     padding: 20px;
+
+    background: #101319;
+
+    border: 1px solid #292e3a;
+
+    border-radius: 14px;
 }
 
+
+/* =========================================
+   HUB PROFILE
+========================================= */
 
 .profile-user {
     display: flex;
     align-items: center;
+
     gap: 18px;
 }
 
+.profile-avatar-wrapper {
+    flex: 0 0 80px;
+
+    width: 80px;
+    height: 80px;
+}
 
 .profile-avatar {
     width: 80px;
     height: 80px;
-    flex: 0 0 80px;
-    object-fit: cover;
-    border-radius: 50%;
-    background: #080a0f;
-    border: 1px solid #292e3a;
-}
 
+    flex: 0 0 80px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    background: #080a0f;
+
+    border: 1px solid #292e3a;
+
+    box-sizing: border-box;
+}
 
 .profile-avatar-placeholder {
     display: flex;
+
     align-items: center;
     justify-content: center;
-    font-size: 30px;
-}
 
+    font-size: 30px;
+
+    color: #777e8d;
+}
 
 .profile-user-info {
     min-width: 0;
 }
 
-
 .profile-user-name {
     margin: 0;
+
     color: #ffffff;
+
     font-size: 20px;
+
     font-weight: bold;
+
     overflow-wrap: anywhere;
 }
-
 
 .profile-user-id {
     margin-top: 6px;
+
     color: #858b99;
+
     font-size: 12px;
+
+    overflow-wrap: anywhere;
+}
+
+.profile-user-email {
+    margin-top: 5px;
+
+    color: #777e8d;
+
+    font-size: 13px;
+
     overflow-wrap: anywhere;
 }
 
 
 /* =========================================
-   PROFIL STÁTUSZ
+   PROFILE IMAGE ACTIONS
 ========================================= */
 
-.profile-status {
-    display: inline-flex;
-    align-items: center;
-    margin-top: 10px;
-    padding: 5px 9px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: bold;
+.profile-avatar-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #222631;
 }
 
+.profile-image-status {
+    min-height: 18px;
 
-.profile-status.connected {
-    color: #9ee6b5;
-    background: rgba(61, 166, 93, 0.12);
-    border: 1px solid rgba(61, 166, 93, 0.25);
-}
+    margin-top: 12px;
 
+    color: #858b99;
 
-.profile-status.disconnected {
-    color: #ffaaaa;
-    background: rgba(200, 60, 60, 0.10);
-    border: 1px solid rgba(200, 60, 60, 0.22);
+    font-size: 12px;
 }
 
 
 /* =========================================
-   PROFIL GOMBOK
+   BUTTONS
 ========================================= */
 
 .profile-actions {
     display: flex;
+
     flex-wrap: wrap;
+
     gap: 10px;
+
     margin-top: 20px;
 }
 
-
 .profile-button {
-    min-height: 42px;
-    padding: 0 15px;
-    box-sizing: border-box;
-    border: 1px solid #303644;
-    border-radius: 10px;
-    background: #151922;
-    color: #ffffff;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.15s ease;
-}
+    display: inline-flex;
 
-
-.profile-button:hover {
-    background: #1b202b;
-    border-color: #424a5a;
-}
-
-
-.profile-button:active {
-    transform: scale(0.98);
-}
-
-
-.profile-button.danger {
-    color: #ffaaaa;
-    border-color: #47282d;
-    background: #1a1215;
-}
-
-
-.profile-button.danger:hover {
-    background: #241619;
-    border-color: #61353c;
-}
-
-
-.profile-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-
-/* =========================================
-   VISSZA GOMB
-========================================= */
-
-.profile-back-button {
-    width: 44px;
-    height: 44px;
-
-    display: flex;
     align-items: center;
     justify-content: center;
 
+    min-height: 40px;
+
+    padding: 9px 14px;
+
     box-sizing: border-box;
 
-    color: #ffffff;
-    text-decoration: none;
-
-    font-size: 30px;
-    line-height: 1;
-
     border: 1px solid #303644;
-    border-radius: 10px;
 
-    background: #151922;
+    border-radius: 9px;
+
+    background: #171b23;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-decoration: none;
 
     cursor: pointer;
 
@@ -192,33 +293,38 @@ body.authenticated {
         transform 0.15s ease;
 }
 
+.profile-button:hover {
+    background: #202530;
 
-.profile-back-button:hover {
-    background: #1b202b;
     border-color: #424a5a;
+
+    transform: translateY(-1px);
 }
 
+.profile-button.primary {
+    background: #1d6cff;
 
-.profile-back-button:active {
-    transform: scale(0.95);
+    border-color: #1d6cff;
 }
 
+.profile-button.primary:hover {
+    background: #2b78ff;
 
-/* =========================================
-   BETÖLTÉS / HIBA
-========================================= */
-
-.profile-loading,
-.profile-error {
-    padding: 20px;
-    color: #858b99;
-    text-align: center;
-    font-size: 13px;
+    border-color: #2b78ff;
 }
 
+.profile-button.danger {
+    color: #ff8f8f;
 
-.profile-error {
-    color: #ff8d8d;
+    border-color: #522c2c;
+
+    background: #1a1214;
+}
+
+.profile-button.danger:hover {
+    background: #241619;
+
+    border-color: #713737;
 }
 
 
@@ -226,73 +332,267 @@ body.authenticated {
    STEAM
 ========================================= */
 
+.steam-profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+}
+
+.steam-avatar {
+    width: 80px;
+    height: 80px;
+
+    flex: 0 0 80px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    background: #080a0f;
+
+    border: 1px solid #292e3a;
+}
+
+.steam-avatar-placeholder {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
+}
+
+.steam-profile-info {
+    min-width: 0;
+}
+
+.steam-profile-info .profile-user-name {
+    font-size: 21px;
+}
+
+.profile-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-top: 8px;
+
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.profile-status.connected {
+    color: #7ee2a8;
+
+    background: #102219;
+
+    border: 1px solid #21482f;
+}
+
+
+/* =========================================
+   STEAM NOT CONNECTED
+========================================= */
+
+.steam-not-connected {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+}
+
+.steam-not-connected-icon {
+    width: 56px;
+    height: 56px;
+
+    flex: 0 0 56px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #171b23;
+
+    border: 1px solid #292e3a;
+
+    font-size: 26px;
+}
+
+.steam-not-connected h3 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 16px;
+}
+
 .steam-not-connected-text {
+    margin: 5px 0 0;
+
     color: #858b99;
+
     font-size: 13px;
+
     line-height: 1.5;
 }
 
 
 /* =========================================
-   REJTETT JÁTÉKOK
+   BLACKLIST
 ========================================= */
 
 .profile-blacklist-info {
-    padding: 20px;
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
     color: #858b99;
+
     font-size: 13px;
-    line-height: 1.5;
 }
 
+.profile-blacklist-info p {
+    margin: 5px 0 0;
 
-.blacklist-count {
+    color: #6f7684;
+
+    font-size: 12px;
+}
+
+.blacklist-number {
+    width: 50px;
+    height: 50px;
+
+    flex: 0 0 50px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #171b23;
+
+    border: 1px solid #292e3a;
+
     color: #ffffff;
+
+    font-size: 18px;
+
+    font-weight: bold;
 }
 
 
 /* =========================================
-   MOBIL
+   LOADING / ERROR
 ========================================= */
 
-@media (max-width: 500px) {
+.profile-loading,
+.profile-error {
+    padding: 8px 0;
 
-    .profile-card {
-        padding: 15px;
+    color: #858b99;
+
+    font-size: 13px;
+}
+
+.profile-error {
+    color: #ff8f8f;
+}
+
+
+/* =========================================
+   MENU
+========================================= */
+
+.menu-divider {
+    height: 1px;
+
+    margin: 12px 0;
+
+    background: #252a34;
+}
+
+.menu-profile-link.active {
+    background: #171b23;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .profile-page {
+        padding: 18px;
     }
 
+    .profile-header h1 {
+        font-size: 24px;
+    }
+
+    .profile-card {
+        padding: 16px;
+    }
 
     .profile-user {
-        align-items: flex-start;
         gap: 13px;
     }
 
-
-    .profile-avatar {
+    .profile-avatar,
+    .profile-avatar-wrapper {
         width: 65px;
         height: 65px;
+    }
+
+    .profile-avatar {
         flex-basis: 65px;
     }
 
+    .steam-avatar {
+        width: 65px;
+        height: 65px;
+
+        flex-basis: 65px;
+    }
 
     .profile-user-name {
         font-size: 17px;
     }
 
-
-    .profile-actions {
-        flex-direction: column;
+    .steam-profile-info .profile-user-name {
+        font-size: 18px;
     }
 
+    .steam-not-connected {
+        align-items: flex-start;
+    }
 
     .profile-button {
         width: 100%;
     }
 
+    .profile-actions {
+        flex-direction: column;
+    }
 
-    .profile-back-button {
-        width: 40px;
-        height: 40px;
-        font-size: 27px;
+    .profile-avatar-actions {
+        flex-direction: column;
     }
 
 }
