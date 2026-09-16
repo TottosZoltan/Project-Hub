@@ -13,7 +13,6 @@
 .games-section {
 
     width: 100%;
-
     box-sizing: border-box;
 }
 
@@ -63,31 +62,34 @@
 
 .games-list {
 
-    display: flex;
+    display: grid;
 
-    flex-direction: column;
+    grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
 
-    gap: 8px;
+    gap: 14px;
 
     width: 100%;
+
+    box-sizing: border-box;
 }
 
 
 /* =========================================
-   JÁTÉK
+   JÁTÉK KÁRTYA
 ========================================= */
 
 .steam-game {
 
     display: flex;
 
-    align-items: center;
+    flex-direction: column;
 
     width: 100%;
 
     min-width: 0;
 
-    padding: 14px;
+    overflow: hidden;
 
     box-sizing: border-box;
 
@@ -95,7 +97,7 @@
 
     border: 1px solid #222631;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
     transition:
         background 0.2s ease,
@@ -110,6 +112,7 @@
 
     border-color: #303644;
 
+    transform: translateY(-2px);
 }
 
 
@@ -129,6 +132,10 @@
     width: 100%;
 
     min-width: 0;
+
+    padding: 14px;
+
+    box-sizing: border-box;
 }
 
 
@@ -143,17 +150,40 @@
     line-height: 1.4;
 
     overflow-wrap: anywhere;
+
+    word-break: break-word;
 }
 
 
 .steam-game-playtime {
 
-    margin-top: 5px;
+    margin-top: 6px;
 
     color: #858b99;
 
     font-size: 12px;
 
+    line-height: 1.4;
+}
+
+
+/* =========================================
+   JÁTÉK KÉP
+========================================= */
+
+.steam-game img {
+
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    aspect-ratio: 460 / 215;
+
+    object-fit: cover;
+
+    background: #080a0f;
 }
 
 
@@ -200,7 +230,6 @@
     text-align: center;
 
     font-size: 13px;
-
 }
 
 
@@ -221,6 +250,40 @@
     text-align: center;
 
     font-size: 13px;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 700px) {
+
+    .games-list {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+
+    .steam-game {
+
+        border-radius: 12px;
+    }
+
+
+    .steam-game-info {
+
+        padding: 12px;
+    }
+
+
+    .steam-game-name {
+
+        font-size: 13px;
+    }
 
 }
 
@@ -234,28 +297,72 @@
     .games-section-header {
 
         margin-bottom: 14px;
-
     }
 
 
     .games-section-header h3 {
 
         font-size: 17px;
+    }
 
+
+    .games-list {
+
+        grid-template-columns: 1fr;
+
+        gap: 10px;
     }
 
 
     .steam-game {
 
-        padding: 13px;
+        border-radius: 12px;
+    }
 
+
+    .steam-game-info {
+
+        padding: 12px;
+    }
+
+
+    .steam-game-name {
+
+        font-size: 14px;
+
+        line-height: 1.35;
+    }
+
+
+    .steam-game-playtime {
+
+        font-size: 12px;
+    }
+
+}
+
+
+/* =========================================
+   EXTRA KIS MOBIL
+========================================= */
+
+@media (max-width: 360px) {
+
+    .games-list {
+
+        gap: 8px;
+    }
+
+
+    .steam-game-info {
+
+        padding: 11px;
     }
 
 
     .steam-game-name {
 
         font-size: 13px;
-
     }
 
 }
