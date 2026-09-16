@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="hu">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -12,229 +9,225 @@
 
     <title>Profil - Project Hub</title>
 
-    <link
-        rel="stylesheet"
-        href="../../style.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="profile.css"
-    >
-
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="profile.css">
 </head>
-
 
 <body>
 
     <!-- =========================================
-         OLDALSÓ MENÜ
+         SIDE MENU
     ========================================== -->
 
-    <nav
-        class="side-menu"
-        id="sideMenu"
-    >
+    <div id="menuOverlay" class="menu-overlay"></div>
 
-        <div class="menu-header">
+    <aside id="sideMenu" class="side-menu">
 
-            <h2>PROJECT HUB</h2>
+        <button
+            id="closeMenu"
+            class="close-menu"
+            type="button"
+        >
+            ×
+        </button>
 
-            <button
-                type="button"
-                id="closeMenu"
-                class="close-button"
-            >
-                ✕
-            </button>
-
+        <div class="menu-title">
+            PROJECT HUB
         </div>
 
-
-        <div class="menu-links">
+        <nav class="menu-nav">
 
             <a href="../../index.html">
-                🏠 Kezdőlap
-            </a>
-
-            <a href="../notes/notes.html">
                 📝 Jegyzetek
             </a>
 
-            <a href="../tasks/tasks.html">
+            <a href="../../index.html">
                 ✅ Feladatok
             </a>
 
-            <a href="../games/games.html">
+            <a href="../../pages/games/games.html">
                 🎮 Játékok
             </a>
 
-            <a href="../places/places.html">
+            <a href="../../index.html">
                 📍 Helyek
             </a>
 
+            <div class="menu-divider"></div>
 
             <a
                 href="profile.html"
-                id="userMenuItem"
+                class="menu-profile-link active"
             >
-                👤
-                <span id="usernameDisplay">
-                    Profil
-                </span>
+                👤 Profil
             </a>
 
-
-            <a
-                href="#"
+            <button
                 id="logoutButton"
+                class="menu-logout"
+                type="button"
             >
                 🚪 Kijelentkezés
-            </a>
+            </button>
 
-        </div>
-
-    </nav>
-
-
-    <!-- =========================================
-         MENÜ HÁTTÉR
-    ========================================== -->
-
-    <div
-        class="menu-overlay"
-        id="menuOverlay"
-    ></div>
+        </nav>
+    </aside>
 
 
     <!-- =========================================
-         FEJLÉC
+         HEADER
     ========================================== -->
 
-    <header class="header">
+    <header class="top-header">
 
-        <div>
-
-            <h1>PROFIL</h1>
-
-            <p>
-                Fiókod és beállításaid
-            </p>
-
-        </div>
-
-
-        <!-- VISSZA NYÍL -->
-
-        <a
-            href="../../index.html"
-            class="profile-back-button"
-            aria-label="Vissza a főoldalra"
+        <button
+            id="menuButton"
+            class="menu-button"
+            type="button"
         >
-            ←
-        </a>
+            ☰
+        </button>
+
+        <div class="header-title">
+            PROFIL
+        </div>
 
     </header>
 
 
     <!-- =========================================
-         FŐ TARTALOM
+         MAIN
     ========================================== -->
 
-    <main>
+    <main class="profile-page">
+
+        <div class="profile-header">
+
+            <button
+                class="profile-back-button"
+                onclick="history.back()"
+                type="button"
+            >
+                ←
+            </button>
+
+            <div>
+                <h1>Profil</h1>
+                <p>Project Hub fiókod kezelése</p>
+            </div>
+
+        </div>
 
 
-        <!-- =========================================
-             PROFIL FEJLÉC
-        ========================================== -->
+        <!-- =====================================
+             HUB PROFILE
+        ====================================== -->
 
-        <section class="welcome">
+        <section class="profile-section">
 
-            <p class="small-title">
-                SAJÁT PROFIL 👤
-            </p>
-
-            <h2 id="profileUsername">
-                Betöltés...
-            </h2>
-
-            <p>
-                Itt kezelheted a Project Hub fiókodat.
-            </p>
-
-        </section>
-
-
-        <!-- =========================================
-             FELHASZNÁLÓI ADATOK
-        ========================================== -->
-
-        <section class="overview">
-
-            <div class="section-header">
-
-                <h2>
-                    👤 Fiók
-                </h2>
-
-                <span>
-                    Project Hub
-                </span>
-
+            <div class="section-title">
+                <span>👤</span>
+                <div>
+                    <h2>Project Hub profil</h2>
+                    <p>A saját profilod</p>
+                </div>
             </div>
 
 
-            <div class="profile-card">
+            <div class="profile-card hub-profile-card">
 
                 <div class="profile-user">
 
-                    <div
-                        class="profile-avatar profile-avatar-placeholder"
-                    >
-                        👤
+                    <div class="profile-avatar-wrapper">
+
+                        <img
+                            id="hubProfileAvatar"
+                            class="profile-avatar"
+                            src=""
+                            alt="Profilkép"
+                            style="display:none;"
+                        >
+
+                        <div
+                            id="hubProfileAvatarPlaceholder"
+                            class="profile-avatar profile-avatar-placeholder"
+                        >
+                            👤
+                        </div>
+
                     </div>
 
 
                     <div class="profile-user-info">
 
                         <h3
+                            id="hubProfileUsername"
                             class="profile-user-name"
-                            id="profileName"
                         >
                             Betöltés...
                         </h3>
 
-
                         <div
-                            class="profile-status connected"
+                            id="hubProfileEmail"
+                            class="profile-user-email"
                         >
-                            ✓ Bejelentkezve
                         </div>
 
                     </div>
 
                 </div>
 
+
+                <div class="profile-avatar-actions">
+
+                    <label
+                        for="profileImageInput"
+                        class="profile-button primary"
+                    >
+                        📷 Profilkép feltöltése
+                    </label>
+
+                    <input
+                        id="profileImageInput"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/*"
+                        hidden
+                    >
+
+                    <button
+                        id="deleteProfileImageButton"
+                        class="profile-button danger"
+                        type="button"
+                    >
+                        🗑 Profilkép törlése
+                    </button>
+
+                </div>
+
+                <div
+                    id="profileImageStatus"
+                    class="profile-image-status"
+                ></div>
+
             </div>
 
         </section>
 
 
-        <!-- =========================================
+        <!-- =====================================
              STEAM
-        ========================================== -->
+        ====================================== -->
 
-        <section class="overview">
+        <section class="profile-section">
 
-            <div class="section-header">
+            <div class="section-title">
 
-                <h2>
-                    🎮 Steam
-                </h2>
+                <span>🎮</span>
 
-                <span id="steamStatus">
-                    Betöltés...
-                </span>
+                <div>
+                    <h2>Steam</h2>
+                    <p>Steam fiókod kapcsolata</p>
+                </div>
 
             </div>
 
@@ -245,9 +238,7 @@
             >
 
                 <div class="profile-loading">
-
                     🎮 Steam kapcsolat ellenőrzése...
-
                 </div>
 
             </div>
@@ -255,31 +246,32 @@
         </section>
 
 
-        <!-- =========================================
-             REJTETT JÁTÉKOK
-        ========================================== -->
+        <!-- =====================================
+             HIDDEN GAMES
+        ====================================== -->
 
-        <section class="overview">
+        <section class="profile-section">
 
-            <div class="section-header">
+            <div class="section-title">
 
-                <h2>
-                    🚫 Rejtett játékok
-                </h2>
+                <span>🚫</span>
 
-                <span>
-                    Steam
-                </span>
+                <div>
+                    <h2>Elrejtett játékok</h2>
+                    <p>Az általad elrejtett Steam játékok</p>
+                </div>
 
             </div>
 
 
-            <div
-                id="blacklistInfo"
-                class="profile-blacklist-info"
-            >
+            <div class="profile-card">
 
-                Rejtett játékok betöltése...
+                <div
+                    id="blacklistInfo"
+                    class="profile-blacklist-info"
+                >
+                    Betöltés...
+                </div>
 
             </div>
 
@@ -288,822 +280,979 @@
     </main>
 
 
-    <!-- =========================================
-         JAVASCRIPT
-    ========================================== -->
-
     <script src="../../script.js"></script>
 
 
     <script>
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
+        const BACKEND_URL =
+            "https://project-hub-backend-1.onrender.com";
 
-                // =================================
-                // BEÁLLÍTÁSOK
-                // =================================
-
-                const BACKEND_URL =
-                    "https://project-hub-backend-1.onrender.com";
+        const AUTH_TOKEN =
+            localStorage.getItem("projectHubAuthToken");
 
 
-                const BLACKLIST_KEY =
-                    "steamGameBlacklist";
+        // =========================================
+        // AUTH
+        // =========================================
+
+        if (!AUTH_TOKEN) {
+
+            window.location.href =
+                "../../index.html";
+
+        } else {
+
+            document.body.classList.add("authenticated");
+
+        }
 
 
-                // =================================
-                // ELEMEK
-                // =================================
+        // =========================================
+        // HELPERS
+        // =========================================
 
-                const usernameDisplay =
-                    document.getElementById(
-                        "usernameDisplay"
+        function authHeaders() {
+
+            return {
+                "Authorization":
+                    "Bearer " + AUTH_TOKEN,
+
+                "Content-Type":
+                    "application/json"
+            };
+
+        }
+
+
+        function escapeHtml(value) {
+
+            if (value === null ||
+                value === undefined) {
+
+                return "";
+
+            }
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+
+        // =========================================
+        // LOAD PROFILE
+        // =========================================
+
+        async function loadProfile() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        BACKEND_URL + "/api/profile",
+                        {
+                            method: "GET",
+                            headers: authHeaders()
+                        }
                     );
 
 
-                const profileUsername =
-                    document.getElementById(
-                        "profileUsername"
-                    );
+                if (!response.ok) {
 
-
-                const profileName =
-                    document.getElementById(
-                        "profileName"
-                    );
-
-
-                const steamStatus =
-                    document.getElementById(
-                        "steamStatus"
-                    );
-
-
-                const steamProfile =
-                    document.getElementById(
-                        "steamProfile"
-                    );
-
-
-                const blacklistInfo =
-                    document.getElementById(
-                        "blacklistInfo"
-                    );
-
-
-                // =================================
-                // TOKEN
-                // =================================
-
-                function getToken() {
-
-                    return localStorage.getItem(
-                        "projectHubAuthToken"
+                    throw new Error(
+                        "Profil betöltése sikertelen."
                     );
 
                 }
 
 
-                // =================================
-                // AUTH HEADER
-                // =================================
-
-                function getAuthHeaders() {
-
-                    const token =
-                        getToken();
+                const data =
+                    await response.json();
 
 
-                    return {
+                if (!data.success ||
+                    !data.profile) {
 
-                        "Authorization":
-                            "Bearer " + token,
+                    throw new Error(
+                        "Érvénytelen profil adat."
+                    );
 
-                        "Content-Type":
-                            "application/json"
+                }
+
+
+                const profile =
+                    data.profile;
+
+
+                const username =
+                    profile.username ||
+                    "Felhasználó";
+
+
+                document.getElementById(
+                    "hubProfileUsername"
+                ).textContent = username;
+
+
+                document.getElementById(
+                    "hubProfileEmail"
+                ).textContent =
+                    profile.email || "";
+
+
+                setHubAvatar(
+                    profile.profileImage
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "loadProfile error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "hubProfileUsername"
+                ).textContent =
+                    "Profil betöltési hiba";
+
+            }
+
+        }
+
+
+        // =========================================
+        // HUB AVATAR
+        // =========================================
+
+        function setHubAvatar(image) {
+
+            const avatar =
+                document.getElementById(
+                    "hubProfileAvatar"
+                );
+
+            const placeholder =
+                document.getElementById(
+                    "hubProfileAvatarPlaceholder"
+                );
+
+
+            if (image) {
+
+                avatar.src = image;
+
+                avatar.style.display =
+                    "block";
+
+                placeholder.style.display =
+                    "none";
+
+            } else {
+
+                avatar.src = "";
+
+                avatar.style.display =
+                    "none";
+
+                placeholder.style.display =
+                    "flex";
+
+            }
+
+        }
+
+
+        // =========================================
+        // RESIZE IMAGE
+        // =========================================
+
+        function resizeImage(file) {
+
+            return new Promise(
+                (resolve, reject) => {
+
+                    const reader =
+                        new FileReader();
+
+
+                    reader.onload = () => {
+
+                        const image =
+                            new Image();
+
+
+                        image.onload = () => {
+
+                            const MAX_SIZE = 512;
+
+                            let width =
+                                image.width;
+
+                            let height =
+                                image.height;
+
+
+                            if (
+                                width > MAX_SIZE ||
+                                height > MAX_SIZE
+                            ) {
+
+                                if (
+                                    width > height
+                                ) {
+
+                                    height =
+                                        Math.round(
+                                            height *
+                                            MAX_SIZE /
+                                            width
+                                        );
+
+                                    width =
+                                        MAX_SIZE;
+
+                                } else {
+
+                                    width =
+                                        Math.round(
+                                            width *
+                                            MAX_SIZE /
+                                            height
+                                        );
+
+                                    height =
+                                        MAX_SIZE;
+
+                                }
+
+                            }
+
+
+                            const canvas =
+                                document.createElement(
+                                    "canvas"
+                                );
+
+
+                            canvas.width =
+                                width;
+
+                            canvas.height =
+                                height;
+
+
+                            const ctx =
+                                canvas.getContext(
+                                    "2d"
+                                );
+
+
+                            ctx.drawImage(
+                                image,
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+
+                            const result =
+                                canvas.toDataURL(
+                                    "image/jpeg",
+                                    0.82
+                                );
+
+
+                            resolve(result);
+
+                        };
+
+
+                        image.onerror = () => {
+
+                            reject(
+                                new Error(
+                                    "A kép nem tölthető be."
+                                )
+                            );
+
+                        };
+
+
+                        image.src =
+                            reader.result;
 
                     };
 
+
+                    reader.onerror = () => {
+
+                        reject(
+                            new Error(
+                                "A fájl olvasása sikertelen."
+                            )
+                        );
+
+                    };
+
+
+                    reader.readAsDataURL(file);
+
+                }
+            );
+
+        }
+
+
+        // =========================================
+        // UPLOAD AVATAR
+        // =========================================
+
+        document
+            .getElementById(
+                "profileImageInput"
+            )
+            .addEventListener(
+                "change",
+                async function () {
+
+                    const file =
+                        this.files?.[0];
+
+
+                    if (!file) {
+                        return;
+                    }
+
+
+                    const status =
+                        document.getElementById(
+                            "profileImageStatus"
+                        );
+
+
+                    try {
+
+                        status.textContent =
+                            "⏳ Profilkép feldolgozása...";
+
+
+                        const image =
+                            await resizeImage(file);
+
+
+                        status.textContent =
+                            "⏳ Profilkép feltöltése...";
+
+
+                        const response =
+                            await fetch(
+                                BACKEND_URL +
+                                "/api/profile/avatar",
+                                {
+                                    method: "POST",
+
+                                    headers:
+                                        authHeaders(),
+
+                                    body:
+                                        JSON.stringify({
+                                            image: image
+                                        })
+                                }
+                            );
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (!response.ok ||
+                            !data.success) {
+
+                            throw new Error(
+                                data.error ||
+                                "Profilkép feltöltése sikertelen."
+                            );
+
+                        }
+
+
+                        setHubAvatar(
+                            data.profileImage
+                        );
+
+
+                        status.textContent =
+                            "✓ Profilkép sikeresen mentve.";
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "avatar upload error:",
+                            error
+                        );
+
+
+                        status.textContent =
+                            "❌ " +
+                            (
+                                error.message ||
+                                "Hiba történt."
+                            );
+
+                    }
+
+
+                    this.value = "";
+
+                }
+            );
+
+
+        // =========================================
+        // DELETE AVATAR
+        // =========================================
+
+        document
+            .getElementById(
+                "deleteProfileImageButton"
+            )
+            .addEventListener(
+                "click",
+                async function () {
+
+                    const status =
+                        document.getElementById(
+                            "profileImageStatus"
+                        );
+
+
+                    try {
+
+                        status.textContent =
+                            "⏳ Profilkép törlése...";
+
+
+                        const response =
+                            await fetch(
+                                BACKEND_URL +
+                                "/api/profile/avatar",
+                                {
+                                    method: "DELETE",
+                                    headers:
+                                        authHeaders()
+                                }
+                            );
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (!response.ok ||
+                            !data.success) {
+
+                            throw new Error(
+                                data.error ||
+                                "Törlés sikertelen."
+                            );
+
+                        }
+
+
+                        setHubAvatar(null);
+
+
+                        status.textContent =
+                            "✓ Profilkép törölve.";
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "delete avatar error:",
+                            error
+                        );
+
+
+                        status.textContent =
+                            "❌ " +
+                            (
+                                error.message ||
+                                "Hiba történt."
+                            );
+
+                    }
+
+                }
+            );
+
+
+        // =========================================
+        // STEAM ACCOUNT
+        // =========================================
+
+        async function loadSteamProfile() {
+
+            const container =
+                document.getElementById(
+                    "steamProfile"
+                );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        BACKEND_URL +
+                        "/api/steam/account",
+                        {
+                            method: "GET",
+                            headers:
+                                authHeaders()
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Steam kapcsolat ellenőrzése sikertelen."
+                    );
+
                 }
 
 
-                // =================================
-                // AUTH HIBA
-                // =================================
+                if (
+                    !data.connected ||
+                    !data.account
+                ) {
 
-                function handleAuthError() {
+                    renderSteamNotConnected();
+                    return;
+
+                }
+
+
+                renderSteamConnected(
+                    data.account
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "loadSteamProfile error:",
+                    error
+                );
+
+
+                container.innerHTML = `
+                    <div class="profile-error">
+                        ❌ Nem sikerült betölteni a Steam kapcsolatot.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        // =========================================
+        // STEAM CONNECTED
+        // =========================================
+
+        function renderSteamConnected(account) {
+
+            const container =
+                document.getElementById(
+                    "steamProfile"
+                );
+
+
+            /*
+             * A backend különböző formában
+             * adhatja vissza az adatokat.
+             */
+
+            const personaName =
+                account.personaName ||
+                account.steamName ||
+                account.steam_name ||
+                account.personaname ||
+                account.name ||
+                "Steam felhasználó";
+
+
+            const steamId =
+                account.steamId ||
+                account.steamID ||
+                account.steam_id ||
+                account.id ||
+                "Ismeretlen";
+
+
+            const avatar =
+                account.avatarUrl ||
+                account.avatar ||
+                account.avatar_url ||
+                account.avatarfull ||
+                account.avatarmedium ||
+                "";
+
+
+            const profileUrl =
+                account.profileUrl ||
+                account.profile_url ||
+                (
+                    "https://steamcommunity.com/profiles/" +
+                    steamId
+                );
+
+
+            const avatarHtml =
+                avatar
+                    ? `
+                        <img
+                            src="${escapeHtml(avatar)}"
+                            class="steam-avatar"
+                            alt="Steam profilkép"
+                        >
+                    `
+                    : `
+                        <div class="steam-avatar steam-avatar-placeholder">
+                            🎮
+                        </div>
+                    `;
+
+
+            container.innerHTML = `
+
+                <div class="steam-profile">
+
+                    ${avatarHtml}
+
+                    <div class="steam-profile-info">
+
+                        <h3 class="profile-user-name">
+                            ${escapeHtml(personaName)}
+                        </h3>
+
+                        <div class="profile-user-id">
+                            SteamID: ${escapeHtml(steamId)}
+                        </div>
+
+                        <div class="profile-status connected">
+                            ✓ Steam összekötve
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-actions">
+
+                    <a
+                        href="${escapeHtml(profileUrl)}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="profile-button"
+                    >
+                        🔗 Steam profil
+                    </a>
+
+                    <button
+                        id="steamDisconnectButton"
+                        class="profile-button danger"
+                        type="button"
+                    >
+                        🔓 Steam leválasztása
+                    </button>
+
+                </div>
+
+            `;
+
+
+            document
+                .getElementById(
+                    "steamDisconnectButton"
+                )
+                .addEventListener(
+                    "click",
+                    disconnectSteam
+                );
+
+        }
+
+
+        // =========================================
+        // STEAM NOT CONNECTED
+        // =========================================
+
+        function renderSteamNotConnected() {
+
+            const container =
+                document.getElementById(
+                    "steamProfile"
+                );
+
+
+            container.innerHTML = `
+
+                <div class="steam-not-connected">
+
+                    <div class="steam-not-connected-icon">
+                        🎮
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Nincs Steam fiók összekötve
+                        </h3>
+
+                        <p class="steam-not-connected-text">
+                            Kösd össze a Steam fiókodat,
+                            hogy megjelenjenek a játékaid.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-actions">
+
+                    <a
+                        href="${BACKEND_URL}/api/steam/link"
+                        class="profile-button primary"
+                    >
+                        🎮 Steam összekötése
+                    </a>
+
+                </div>
+
+            `;
+
+        }
+
+
+        // =========================================
+        // STEAM DISCONNECT
+        // =========================================
+
+        async function disconnectSteam() {
+
+            const button =
+                document.getElementById(
+                    "steamDisconnectButton"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "⏳ Leválasztás...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        BACKEND_URL +
+                        "/api/steam/account",
+                        {
+                            method: "DELETE",
+                            headers:
+                                authHeaders()
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok ||
+                    !data.success) {
+
+                    throw new Error(
+                        data.error ||
+                        "Steam leválasztása sikertelen."
+                    );
+
+                }
+
+
+                renderSteamNotConnected();
+
+
+            } catch (error) {
+
+                console.error(
+                    "disconnectSteam error:",
+                    error
+                );
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "🔓 Steam leválasztása";
+
+
+                alert(
+                    error.message ||
+                    "Hiba történt."
+                );
+
+            }
+
+        }
+
+
+        // =========================================
+        // BLACKLIST
+        // =========================================
+
+        function loadBlacklistInfo() {
+
+            const container =
+                document.getElementById(
+                    "blacklistInfo"
+                );
+
+
+            try {
+
+                const raw =
+                    localStorage.getItem(
+                        "steamGameBlacklist"
+                    );
+
+
+                if (!raw) {
+
+                    container.textContent =
+                        "Nincs elrejtett játék.";
+
+                    return;
+
+                }
+
+
+                const blacklist =
+                    JSON.parse(raw);
+
+
+                if (
+                    !Array.isArray(blacklist) ||
+                    blacklist.length === 0
+                ) {
+
+                    container.textContent =
+                        "Nincs elrejtett játék.";
+
+                    return;
+
+                }
+
+
+                container.innerHTML = `
+
+                    <div class="blacklist-number">
+                        ${blacklist.length}
+                    </div>
+
+                    <div>
+                        <strong>
+                            ${blacklist.length === 1
+                                ? "elrejtett játék"
+                                : "elrejtett játék"}
+                        </strong>
+
+                        <p>
+                            Ezek a játékok nem jelennek meg
+                            a Játékok oldalon.
+                        </p>
+                    </div>
+
+                `;
+
+            } catch (error) {
+
+                console.error(
+                    "blacklist error:",
+                    error
+                );
+
+                container.textContent =
+                    "Nem sikerült betölteni.";
+
+            }
+
+        }
+
+
+        // =========================================
+        // LOGOUT
+        // =========================================
+
+        const logoutButton =
+            document.getElementById(
+                "logoutButton"
+            );
+
+
+        if (logoutButton) {
+
+            logoutButton.addEventListener(
+                "click",
+                function () {
 
                     localStorage.removeItem(
                         "projectHubAuthToken"
                     );
 
-
-                    sessionStorage.setItem(
-                        "projectHubAuthMessage",
-                        "🔐 A munkameneted lejárt. Kérlek jelentkezz be újra."
-                    );
-
-
                     window.location.href =
-                        "../auth/login.html";
+                        "../../index.html";
 
                 }
+            );
 
+        }
 
-                // =================================
-                // FELHASZNÁLÓNÉV
-                // =================================
 
-                function updateUsername() {
+        // =========================================
+        // INIT
+        // =========================================
 
-                    if (
-                        usernameDisplay &&
-                        usernameDisplay.textContent
-                    ) {
-
-                        const username =
-                            usernameDisplay.textContent.trim();
-
-
-                        if (
-                            username &&
-                            username !== "Profil"
-                        ) {
-
-                            profileUsername.textContent =
-                                username;
-
-                            profileName.textContent =
-                                username;
-
-                        }
-
-                    }
-
-                }
-
-
-                updateUsername();
-
-
-                setTimeout(
-                    updateUsername,
-                    500
-                );
-
-
-                setTimeout(
-                    updateUsername,
-                    1000
-                );
-
-
-                // =================================
-                // STEAM FIÓK
-                // =================================
-
-                loadSteamAccount();
-
-
-                async function loadSteamAccount() {
-
-                    try {
-
-                        const response =
-                            await fetch(
-                                BACKEND_URL +
-                                "/api/steam/account",
-                                {
-                                    method: "GET",
-
-                                    headers:
-                                        getAuthHeaders(),
-
-                                    credentials:
-                                        "include"
-                                }
-                            );
-
-
-                        if (
-                            response.status === 401
-                        ) {
-
-                            handleAuthError();
-
-                            return;
-
-                        }
-
-
-                        const result =
-                            await response.json();
-
-
-                        console.log(
-                            "PROFIL - STEAM FIÓK:",
-                            result
-                        );
-
-
-                        if (!response.ok) {
-
-                            throw new Error(
-                                result.message ||
-                                "A Steam-fiók lekérése sikertelen."
-                            );
-
-                        }
-
-
-                        // =============================
-                        // NINCS KAPCSOLVA
-                        // =============================
-
-                        if (
-                            !result.success ||
-                            !result.connected
-                        ) {
-
-                            showSteamNotConnected();
-
-                            return;
-
-                        }
-
-
-                        // =============================
-                        // KAPCSOLVA
-                        // =============================
-
-                        showSteamConnected(
-                            result.account
-                        );
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Profil Steam hiba:",
-                            error
-                        );
-
-
-                        if (steamStatus) {
-
-                            steamStatus.textContent =
-                                "Hiba";
-
-                        }
-
-
-                        if (steamProfile) {
-
-                            steamProfile.innerHTML = `
-
-                                <div class="profile-error">
-
-                                    ❌
-                                    ${escapeHtml(
-                                        error.message ||
-                                        "Nem sikerült betölteni a Steam adatokat."
-                                    )}
-
-                                </div>
-
-                            `;
-
-                        }
-
-                    }
-
-                }
-
-
-                // =================================
-                // STEAM NINCS KAPCSOLVA
-                // =================================
-
-                function showSteamNotConnected() {
-
-                    if (steamStatus) {
-
-                        steamStatus.textContent =
-                            "Nincs kapcsolva";
-
-                    }
-
-
-                    if (steamProfile) {
-
-                        steamProfile.innerHTML = `
-
-                            <div>
-
-                                <div class="steam-not-connected-text">
-
-                                    A Steam-fiókod jelenleg
-                                    nincs összekötve a Project Hub-pal.
-
-                                </div>
-
-
-                                <div class="profile-actions">
-
-                                    <button
-                                        type="button"
-                                        class="profile-button"
-                                        id="connectSteamProfileButton"
-                                    >
-                                        🎮 Steam összekötése
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                        `;
-
-
-                        const button =
-                            document.getElementById(
-                                "connectSteamProfileButton"
-                            );
-
-
-                        if (button) {
-
-                            button.addEventListener(
-                                "click",
-                                connectSteam
-                            );
-
-                        }
-
-                    }
-
-                }
-
-
-                // =================================
-                // STEAM KAPCSOLVA
-                // =================================
-
-                function showSteamConnected(
-                    account
-                ) {
-
-                    if (steamStatus) {
-
-                        steamStatus.textContent =
-                            "Kapcsolva";
-
-                    }
-
-
-                    const avatar =
-                        account &&
-                        account.avatarUrl
-                            ?
-                            account.avatarUrl
-                            :
-                            "";
-
-
-                    const personaName =
-                        account &&
-                        account.personaName
-                            ?
-                            account.personaName
-                            :
-                            "Steam felhasználó";
-
-
-                    const steamId =
-                        account &&
-                        account.steamId
-                            ?
-                            account.steamId
-                            :
-                            "Ismeretlen";
-
-
-                    steamProfile.innerHTML = `
-
-                        <div class="profile-user">
-
-                            ${
-                                avatar
-                                ?
-                                `
-                                <img
-                                    class="profile-avatar"
-                                    src="${escapeHtml(avatar)}"
-                                    alt="Steam avatar"
-                                >
-                                `
-                                :
-                                `
-                                <div
-                                    class="profile-avatar profile-avatar-placeholder"
-                                >
-                                    🎮
-                                </div>
-                                `
-                            }
-
-
-                            <div class="profile-user-info">
-
-                                <h3 class="profile-user-name">
-
-                                    ${escapeHtml(
-                                        personaName
-                                    )}
-
-                                </h3>
-
-
-                                <div class="profile-user-id">
-
-                                    SteamID:
-                                    ${escapeHtml(
-                                        steamId
-                                    )}
-
-                                </div>
-
-
-                                <div
-                                    class="profile-status connected"
-                                >
-
-                                    ✓ Steam összekötve
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="profile-actions">
-
-                            <button
-                                type="button"
-                                class="profile-button danger"
-                                id="disconnectSteamProfileButton"
-                            >
-                                Steam leválasztása
-                            </button>
-
-                        </div>
-
-                    `;
-
-
-                    const disconnectButton =
-                        document.getElementById(
-                            "disconnectSteamProfileButton"
-                        );
-
-
-                    if (disconnectButton) {
-
-                        disconnectButton.addEventListener(
-                            "click",
-                            disconnectSteam
-                        );
-
-                    }
-
-                }
-
-
-                // =================================
-                // STEAM ÖSSZEKÖTÉS
-                // =================================
-
-                async function connectSteam() {
-
-                    const button =
-                        document.getElementById(
-                            "connectSteamProfileButton"
-                        );
-
-
-                    if (button) {
-
-                        button.disabled =
-                            true;
-
-                        button.textContent =
-                            "Steam kapcsolat előkészítése...";
-
-                    }
-
-
-                    try {
-
-                        const response =
-                            await fetch(
-                                BACKEND_URL +
-                                "/api/steam/link",
-                                {
-                                    method: "GET",
-
-                                    headers:
-                                        getAuthHeaders(),
-
-                                    credentials:
-                                        "include"
-                                }
-                            );
-
-
-                        if (
-                            response.status === 401
-                        ) {
-
-                            handleAuthError();
-
-                            return;
-
-                        }
-
-
-                        const result =
-                            await response.json();
-
-
-                        if (
-                            !response.ok ||
-                            !result.success ||
-                            !result.url
-                        ) {
-
-                            throw new Error(
-                                result.message ||
-                                "Nem sikerült elindítani a Steam összekötést."
-                            );
-
-                        }
-
-
-                        window.location.href =
-                            result.url;
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Steam összekötési hiba:",
-                            error
-                        );
-
-
-                        alert(
-                            error.message ||
-                            "Nem sikerült összekötni a Steam-fiókot."
-                        );
-
-
-                        if (button) {
-
-                            button.disabled =
-                                false;
-
-                            button.textContent =
-                                "🎮 Steam összekötése";
-
-                        }
-
-                    }
-
-                }
-
-
-                // =================================
-                // STEAM LEVÁLASZTÁSA
-                // =================================
-
-                async function disconnectSteam() {
-
-                    const confirmed =
-                        confirm(
-                            "Biztosan leválasztod a Steam-fiókodat a Project Hub-ról?"
-                        );
-
-
-                    if (!confirmed) {
-
-                        return;
-
-                    }
-
-
-                    const button =
-                        document.getElementById(
-                            "disconnectSteamProfileButton"
-                        );
-
-
-                    if (button) {
-
-                        button.disabled =
-                            true;
-
-                        button.textContent =
-                            "Leválasztás...";
-
-                    }
-
-
-                    try {
-
-                        const response =
-                            await fetch(
-                                BACKEND_URL +
-                                "/api/steam/account",
-                                {
-                                    method: "DELETE",
-
-                                    headers:
-                                        getAuthHeaders(),
-
-                                    credentials:
-                                        "include"
-                                }
-                            );
-
-
-                        if (
-                            response.status === 401
-                        ) {
-
-                            handleAuthError();
-
-                            return;
-
-                        }
-
-
-                        const result =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            throw new Error(
-                                result.message ||
-                                "Nem sikerült leválasztani a Steam-fiókot."
-                            );
-
-                        }
-
-
-                        showSteamNotConnected();
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Steam leválasztási hiba:",
-                            error
-                        );
-
-
-                        alert(
-                            error.message ||
-                            "Nem sikerült leválasztani a Steam-fiókot."
-                        );
-
-
-                        if (button) {
-
-                            button.disabled =
-                                false;
-
-                            button.textContent =
-                                "Steam leválasztása";
-
-                        }
-
-                    }
-
-                }
-
-
-                // =================================
-                // BLACKLIST
-                // =================================
-
-                function loadBlacklistInfo() {
-
-                    try {
-
-                        const blacklist =
-                            JSON.parse(
-                                localStorage.getItem(
-                                    BLACKLIST_KEY
-                                )
-                            );
-
-
-                        if (
-                            Array.isArray(
-                                blacklist
-                            ) &&
-                            blacklist.length > 0
-                        ) {
-
-                            blacklistInfo.innerHTML = `
-
-                                🚫 Jelenleg
-
-                                <strong
-                                    class="blacklist-count"
-                                >
-                                    ${blacklist.length}
-                                </strong>
-
-                                játék van elrejtve.
-
-                                <br><br>
-
-                                A játékok listájából ezek
-                                automatikusan ki vannak szűrve.
-
-                            `;
-
-                        }
-
-                        else {
-
-                            blacklistInfo.innerHTML = `
-
-                                ✓ Jelenleg nincs rejtett
-                                Steam játék.
-
-                            `;
-
-                        }
-
-                    }
-
-                    catch (error) {
-
-                        console.warn(
-                            "Blacklist betöltési hiba:",
-                            error
-                        );
-
-
-                        blacklistInfo.textContent =
-                            "Nem sikerült betölteni a rejtett játékok számát.";
-
-                    }
-
-                }
-
-
-                loadBlacklistInfo();
-
-
-                // =================================
-                // HTML ESCAPE
-                // =================================
-
-                function escapeHtml(text) {
-
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    div.textContent =
-                        text == null
-                            ?
-                            ""
-                            :
-                            String(text);
-
-
-                    return div.innerHTML;
-
-                }
-
-            }
-        );
+        loadProfile();
+        loadSteamProfile();
+        loadBlacklistInfo();
 
     </script>
 
 </body>
-
 </html>
