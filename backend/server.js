@@ -3873,9 +3873,8 @@ app.get(
             if (!state) {
 
                 return res.redirect(
-                    FRONTEND_URL +
-                    "/?steam_link=error&reason=missing_state"
-                );
+    "https://tottoszoltan.github.io/Project-Hub/index.html?steam_link=success"
+);
 
             }
 
