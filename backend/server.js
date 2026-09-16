@@ -1857,7 +1857,20 @@ app.post(
 
     }
 );
+async function getAuthenticatedUser(req) {
+    try {
+        const token = getBearerToken(req);
 
+        if (!token) {
+            return null;
+        }
+
+        return await getUserFromAuthToken(token);
+    } catch (error) {
+        console.error("getAuthenticatedUser error:", error);
+        return null;
+    }
+}
 
 // ======================================================
 // AUTH ME
