@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 const FRONTEND_URL =
-    "https://tottoszoltan.github.io/Project-Hub";
+    "https://tottoszoltan.github.io";
 
 const BACKEND_URL =
     "https://project-hub-backend-1.onrender.com";
