@@ -695,6 +695,271 @@ router.post(
 );
 
 
+
+// ======================================================
+// PROJECT HUB PROFILE
+// ======================================================
+
+router.get(
+    "/api/profile",
+    async function (req, res) {
+
+        try {
+
+            const user =
+                await getAuthenticatedUser(req);
+
+
+            if (!user) {
+
+                return res.status(401).json({
+                    success: false,
+                    message:
+                        "Érvényes bejelentkezés szükséges."
+                });
+
+            }
+
+
+            const result =
+                await pool.query(
+                    `
+                    SELECT
+                        id,
+                        username,
+                        email,
+                        profile_image
+                    FROM users
+                    WHERE id = $1
+                    LIMIT 1
+                    `,
+                    [user.id]
+                );
+
+
+            if (result.rows.length === 0) {
+
+                return res.status(404).json({
+                    success: false,
+                    message:
+                        "A profil nem található."
+                });
+
+            }
+
+
+            const profile = result.rows[0];
+
+
+            return res.json({
+                success: true,
+                profile: {
+                    id: profile.id,
+                    username: profile.username,
+                    email: profile.email,
+                    profileImage: profile.profile_image || null
+                }
+            });
+
+        }
+        catch (error) {
+
+            console.error(
+                "PROFILE GET HIBA:",
+                error
+            );
+
+            return res.status(500).json({
+                success: false,
+                message:
+                    "Nem sikerült betölteni a profilt."
+            });
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// PROJECT HUB PROFILE - AVATAR FELTÖLTÉS
+// ======================================================
+
+router.post(
+    "/api/profile/avatar",
+    async function (req, res) {
+
+        try {
+
+            const user =
+                await getAuthenticatedUser(req);
+
+
+            if (!user) {
+
+                return res.status(401).json({
+                    success: false,
+                    message:
+                        "Érvényes bejelentkezés szükséges."
+                });
+
+            }
+
+
+            const image =
+                typeof req.body.image === "string"
+                    ? req.body.image.trim()
+                    : "";
+
+
+            if (!image) {
+
+                return res.status(400).json({
+                    success: false,
+                    error:
+                        "A profilkép hiányzik."
+                });
+
+            }
+
+
+            // A frontend JPEG data URL-t küld a képfeldolgozás után.
+            const imagePattern =
+                /^data:image\/(jpeg|jpg|png|webp);base64,[A-Za-z0-9+/=\r\n]+$/i;
+
+
+            if (!imagePattern.test(image)) {
+
+                return res.status(400).json({
+                    success: false,
+                    error:
+                        "Érvénytelen profilkép formátum."
+                });
+
+            }
+
+
+            // A képadatot kb. 1.5 MB alatt tartjuk, hogy a profilkép
+            // ne terhelje túl az API-t és az adatbázist.
+            if (Buffer.byteLength(image, "utf8") > 1.5 * 1024 * 1024) {
+
+                return res.status(413).json({
+                    success: false,
+                    error:
+                        "A profilkép túl nagy. Válassz kisebb képet."
+                });
+
+            }
+
+
+            await pool.query(
+                `
+                UPDATE users
+                SET
+                    profile_image = $1,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id = $2
+                `,
+                [
+                    image,
+                    user.id
+                ]
+            );
+
+
+            return res.json({
+                success: true,
+                profileImage: image,
+                message:
+                    "A profilkép sikeresen mentve."
+            });
+
+        }
+        catch (error) {
+
+            console.error(
+                "PROFILE AVATAR POST HIBA:",
+                error
+            );
+
+            return res.status(500).json({
+                success: false,
+                error:
+                    "Nem sikerült elmenteni a profilképet."
+            });
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// PROJECT HUB PROFILE - AVATAR TÖRLÉS
+// ======================================================
+
+router.delete(
+    "/api/profile/avatar",
+    async function (req, res) {
+
+        try {
+
+            const user =
+                await getAuthenticatedUser(req);
+
+
+            if (!user) {
+
+                return res.status(401).json({
+                    success: false,
+                    message:
+                        "Érvényes bejelentkezés szükséges."
+                });
+
+            }
+
+
+            await pool.query(
+                `
+                UPDATE users
+                SET
+                    profile_image = NULL,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id = $1
+                `,
+                [
+                    user.id
+                ]
+            );
+
+
+            return res.json({
+                success: true,
+                profileImage: null,
+                message:
+                    "A profilkép törölve."
+            });
+
+        }
+        catch (error) {
+
+            console.error(
+                "PROFILE AVATAR DELETE HIBA:",
+                error
+            );
+
+            return res.status(500).json({
+                success: false,
+                error:
+                    "Nem sikerült törölni a profilképet."
+            });
+
+        }
+
+    }
+);
+
+
 // ======================================================
 // DATABASE TEST
 // ======================================================
