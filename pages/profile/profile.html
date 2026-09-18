@@ -16,6 +16,15 @@
 <body>
 
     <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="top-header profile-top-header">
+        <div class="header-title">PROFIL</div>
+    </header>
+
+
+    <!-- =========================================
          MAIN
     ========================================== -->
 
@@ -1062,53 +1071,41 @@
 
             if (steamLink === "success") {
 
-                container.insertAdjacentHTML(
-                    "afterbegin",
-                    `<div class="steam-link-message success">✓ A Steam fiók sikeresen összekapcsolva.</div>`
-                );
-
-                loadSteamProfile();
+                loadSteamProfile().then(function () {
+                    container.insertAdjacentHTML(
+                        "afterbegin",
+                        `<div class="steam-link-message success">✓ A Steam fiók sikeresen összekapcsolva.</div>`
+                    );
+                });
 
             } else if (reason === "steam_already_linked") {
 
-                container.innerHTML = `
-                    <div class="steam-link-message error">
-                        ❌ Ez a Steam fiók már egy másik Project Hub fiókhoz van kapcsolva.
-                    </div>
-
-                    <div class="steam-not-connected">
-                        <div class="steam-not-connected-icon">🎮</div>
-                        <div>
-                            <h3>Nincs Steam fiók összekötve</h3>
-                            <p class="steam-not-connected-text">
-                                Próbálj meg egy másik Steam fiókot összekapcsolni.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="profile-actions">
-                        <button
-                            id="steamConnectButton"
-                            class="profile-button primary"
-                            type="button"
-                        >
-                            🎮 Steam összekötése
-                        </button>
-                    </div>
-                `;
-
-                document
-                    .getElementById("steamConnectButton")
-                    ?.addEventListener("click", connectSteam);
-
-            } else {
+                renderSteamNotConnected();
 
                 container.insertAdjacentHTML(
                     "afterbegin",
-                    `<div class="steam-link-message error">❌ A Steam összekapcsolása nem sikerült. (${escapeHtml(reason || "ismeretlen hiba")})</div>`
+                    `<div class="steam-link-message error steam-link-message-long">
+                        <strong>❌ Ezt a Steam-fiókot már egy másik Project Hub-fiók használja.</strong>
+                        <p>
+                            Ez a Steam-fiók már hozzá van kapcsolva egy másik Project Hub-fiókhoz, ezért ugyanazt a Steam-fiókot nem lehet ehhez a profilhoz is hozzákapcsolni.
+                        </p>
+                        <p>
+                            Ha ez a te régi Project Hub-fiókod, lépj be abba a fiókba, és ott válaszd le a Steam-kapcsolatot. Ezután ezen a profilon újra megpróbálhatod az összekapcsolást.
+                        </p>
+                        <p>
+                            Ha nem ismered a másik fiókot, vagy szerinted tévesen jelenik meg ez az üzenet, ne próbáld többször ugyanazt a Steam-fiókot összekapcsolni.
+                        </p>
+                    </div>`
                 );
 
-                loadSteamProfile();
+            } else {
+
+                loadSteamProfile().then(function () {
+                    container.insertAdjacentHTML(
+                        "afterbegin",
+                        `<div class="steam-link-message error">❌ A Steam összekapcsolása nem sikerült. (${escapeHtml(reason || "ismeretlen hiba")})</div>`
+                    );
+                });
             }
 
             window.history.replaceState(

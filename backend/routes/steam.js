@@ -223,8 +223,8 @@ router.get(
             if (!state) {
 
                 return res.redirect(
-    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=success"
-);
+                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=missing_state"
+                );
 
             }
 

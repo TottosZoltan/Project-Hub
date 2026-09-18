@@ -597,6 +597,13 @@ body.authenticated {
 
 }
 
+
+.profile-top-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .profile-link-message {
     margin-bottom: 14px;
 }
@@ -619,4 +626,22 @@ body.authenticated {
     color: #ff9b9b;
     background: #241619;
     border: 1px solid #713737;
+}
+
+
+.steam-link-message-long p {
+    margin: 10px 0 0;
+    color: #d8a8a8;
+}
+
+.steam-link-message-long strong {
+    display: block;
+    color: #ffb0b0;
+}
+
+@media (max-width: 600px) {
+    .steam-link-message-long {
+        font-size: 13px;
+        line-height: 1.55;
+    }
 }

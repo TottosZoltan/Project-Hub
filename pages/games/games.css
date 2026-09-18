@@ -539,3 +539,17 @@
     }
 
 }
+
+
+.steam-management-hint {
+    margin: 14px 0 0;
+    color: #858b99;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.steam-account-info .steam-connect-button {
+    display: inline-flex;
+    margin-top: 10px;
+    text-decoration: none;
+}
