@@ -427,3 +427,17 @@ main {
     .header { gap: 10px; }
     .page-profile-link { padding: 0 11px; }
 }
+
+/* ========================= MOBILE GESTURES ========================= */
+@media (pointer: coarse) {
+    .side-menu,
+    .menu-overlay,
+    .games-library-viewport {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    .games-library-viewport {
+        touch-action: pan-y;
+    }
+}

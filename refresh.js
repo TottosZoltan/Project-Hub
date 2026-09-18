@@ -5,8 +5,11 @@
 (function () {
     "use strict";
 
-    const APP_VERSION = "1.3";
+    const APP_VERSION = "1.3.1";
     const PULL_THRESHOLD = 72;
+    const EDGE_SWIPE_THRESHOLD = 55;
+    const EDGE_ZONE = 28;
+    const AXIS_LOCK = 10;
 
     function mountVersionFooter() {
         const existing = document.querySelector(".app-version-footer");
@@ -24,9 +27,11 @@
     function setupPullRefresh() {
         if (document.body.dataset.pullRefresh === "off") return;
 
+        let startX = 0;
         let startY = 0;
         let pullDistance = 0;
         let pulling = false;
+        let refreshAxisLocked = false;
         let refreshing = false;
 
         const indicator = document.createElement("div");
@@ -70,20 +75,35 @@
 
         document.addEventListener("touchstart", function (event) {
             if (refreshing || window.scrollY > 0 || event.touches.length !== 1) return;
-            startY = event.touches[0].clientY;
+            if (event.target.closest(".side-menu, [role=dialog], input, textarea, select, button, a")) return;
+            const touch = event.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
             pullDistance = 0;
+            refreshAxisLocked = false;
             pulling = true;
         }, { passive: true });
 
         document.addEventListener("touchmove", function (event) {
             if (!pulling || refreshing || window.scrollY > 0 || event.touches.length !== 1) return;
-            const currentY = event.touches[0].clientY;
-            pullDistance = currentY - startY;
-            if (pullDistance <= 0) {
+            const touch = event.touches[0];
+            const dx = touch.clientX - startX;
+            const dy = touch.clientY - startY;
+
+            if (!refreshAxisLocked && Math.max(Math.abs(dx), Math.abs(dy)) > AXIS_LOCK) {
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    resetIndicator();
+                    return;
+                }
+                refreshAxisLocked = true;
+            }
+
+            if (dy <= 0) {
                 resetIndicator();
                 return;
             }
             event.preventDefault();
+            pullDistance = dy;
             updateIndicator(pullDistance * 0.65);
         }, { passive: false });
 
@@ -107,13 +127,76 @@
         document.addEventListener("touchcancel", resetIndicator, { passive: true });
     }
 
+    function setupMobileGestures() {
+        const menuButton = document.getElementById("menuButton");
+        const sideMenu = document.getElementById("sideMenu");
+        const menuOverlay = document.getElementById("menuOverlay");
+        const hasBackNavigation = !!document.querySelector(".games-back, .back-button");
+
+        if (!menuButton && !hasBackNavigation) return;
+
+        let startX = 0;
+        let startY = 0;
+        let tracking = false;
+
+        document.addEventListener("touchstart", function (event) {
+            if (event.touches.length !== 1) return;
+            const touch = event.touches[0];
+            const width = window.innerWidth;
+            const menuOpen = sideMenu && sideMenu.classList.contains("open");
+            const menuWidth = sideMenu ? Math.min(width * 0.88, 340) : 0;
+            const canOpenMenu = !!menuButton && touch.clientX >= width - EDGE_ZONE;
+            const canCloseMenu = menuOpen && touch.clientX >= width - menuWidth - 12;
+            const canGoBack = hasBackNavigation && touch.clientX <= EDGE_ZONE && !menuOpen;
+
+            tracking = canOpenMenu || canCloseMenu || canGoBack;
+            if (!tracking) return;
+            startX = touch.clientX;
+            startY = touch.clientY;
+        }, { passive: true });
+
+        document.addEventListener("touchend", function (event) {
+            if (!tracking || event.changedTouches.length !== 1) return;
+            tracking = false;
+
+            const touch = event.changedTouches[0];
+            const dx = touch.clientX - startX;
+            const dy = touch.clientY - startY;
+            if (Math.abs(dx) < EDGE_SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy) * 1.15) return;
+
+            const width = window.innerWidth;
+            const menuOpen = sideMenu && sideMenu.classList.contains("open");
+
+            if (menuOpen && dx > 0 && startX >= width - Math.min(width * 0.88, 340) - 12) {
+                menuOverlay?.click();
+                return;
+            }
+
+            if (!menuOpen && menuButton && startX >= width - EDGE_ZONE && dx < 0) {
+                menuButton.click();
+                return;
+            }
+
+            if (!menuOpen && hasBackNavigation && startX <= EDGE_ZONE && dx > 0) {
+                const back = document.querySelector(".games-back, .back-button");
+                if (back) back.click();
+            }
+        }, { passive: true });
+
+        document.addEventListener("touchcancel", function () {
+            tracking = false;
+        }, { passive: true });
+    }
+
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function () {
             mountVersionFooter();
             setupPullRefresh();
+            setupMobileGestures();
         }, { once: true });
     } else {
         mountVersionFooter();
         setupPullRefresh();
+        setupMobileGestures();
     }
 })();
