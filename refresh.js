@@ -11,6 +11,25 @@
     const EDGE_ZONE = 28;
     const AXIS_LOCK = 10;
 
+    function handleSteamCallbackRedirect() {
+        const params = new URLSearchParams(window.location.search);
+        if (!params.has("steam_link")) return;
+
+        const path = window.location.pathname;
+        const alreadyProfile = /\/pages\/profile\/profile\.html$/.test(path);
+        if (alreadyProfile) return;
+
+        // A Steam callback can arrive at the site root. Always bring it
+        // back to the Profile page where the callback is rendered.
+        const profilePath = path.endsWith("/index.html") || path.endsWith("/")
+            ? "pages/profile/profile.html"
+            : "../profile/profile.html";
+
+        window.location.replace(
+            new URL(profilePath + window.location.search, window.location.href).href
+        );
+    }
+
     function mountVersionFooter() {
         const existing = document.querySelector(".app-version-footer");
         if (existing) {
@@ -190,11 +209,13 @@
 
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function () {
+            handleSteamCallbackRedirect();
             mountVersionFooter();
             setupPullRefresh();
             setupMobileGestures();
         }, { once: true });
     } else {
+        handleSteamCallbackRedirect();
         mountVersionFooter();
         setupPullRefresh();
         setupMobileGestures();

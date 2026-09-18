@@ -441,3 +441,119 @@ main {
         touch-action: pan-y;
     }
 }
+
+/* 1.3.2 — mobile text containment / no overflow */
+.profile-card,
+.steam-link-message,
+.steam-not-connected,
+.steam-not-connected-text,
+.profile-user-info,
+.steam-profile-info,
+.games-section-header,
+.games-section-header > *,
+.app-card,
+.app-card > div {
+    min-width: 0;
+}
+
+.steam-link-message,
+.steam-not-connected-text,
+.profile-user-name,
+.profile-user-email,
+.profile-user-id,
+.steam-profile-info,
+.steam-not-connected h3 {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.profile-button {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .steam-not-connected {
+        align-items: flex-start;
+    }
+
+    .steam-not-connected > div:last-child {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .steam-link-message {
+        width: 100%;
+        box-sizing: border-box;
+        line-height: 1.45;
+    }
+}
+
+/* 1.3.2 — games text containment */
+.games-topbar-inner,
+.games-hero-copy,
+.steam-account-main,
+.steam-account-copy,
+.library-header,
+.library-header > *,
+.game-card-body,
+.game-card-meta,
+.custom-game-content,
+.custom-game-form,
+.games-state {
+    min-width: 0;
+}
+
+.games-hero h2,
+.games-hero p,
+.steam-account-copy h2,
+.steam-account-copy p,
+.library-header h2,
+.library-header p,
+.game-card-body h3,
+.game-card-meta,
+.games-state strong,
+.games-state p,
+.custom-game-content h2,
+.custom-game-content > p {
+    overflow-wrap: anywhere !important;
+    word-break: break-word;
+    white-space: normal !important;
+}
+
+.game-card-body h3 {
+    text-overflow: clip !important;
+}
+
+@media (max-width: 560px) {
+    .games-topbar-inner {
+        gap: 7px !important;
+    }
+
+    .games-topbar-inner h1 {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .games-profile-link {
+        max-width: 84px;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        white-space: normal !important;
+        text-align: center;
+    }
+
+    .library-tabs {
+        min-width: 0;
+    }
+
+    .library-tab {
+        min-width: 0;
+        padding: 5px 7px;
+        line-height: 1.15;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+}
