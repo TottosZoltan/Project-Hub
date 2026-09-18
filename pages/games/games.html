@@ -31,7 +31,7 @@
                 <h2>A játékaid, egy helyen.</h2>
                 <p>Játékidő, könyvtár és achievementek egy gyors, mobilbarát nézetben.</p>
             </div>
-            <div class="games-hero-badge" aria-hidden="true">🎮</div>
+            
         </section>
 
         <section class="steam-account-card" aria-labelledby="steamAccountTitle">
@@ -49,13 +49,24 @@
         </section>
 
         <section id="steamGamesSection" class="games-library" aria-labelledby="libraryTitle">
+            <div class="library-switcher" aria-label="Játékkönyvtárak">
+                <div class="library-tabs" role="tablist">
+                    <button id="steamLibraryTab" class="library-tab active" type="button" role="tab" aria-selected="true">Steam játékaid</button>
+                    <button id="customLibraryTab" class="library-tab" type="button" role="tab" aria-selected="false">Egyéni könyvtár</button>
+                </div>
+                <div class="library-tab-hint">Húzd oldalra a könyvtárak váltásához</div>
+            </div>
+
             <div class="library-header">
                 <div>
-                    <p class="eyebrow">KÖNYVTÁR</p>
+                    <p class="eyebrow" id="libraryEyebrow">STEAM KÖNYVTÁR</p>
                     <h2 id="libraryTitle">Steam játékaid</h2>
                     <p id="libraryMeta">Betöltés...</p>
                 </div>
-                <button id="refreshGamesButton" class="library-refresh" type="button" aria-label="Játéklista frissítése">↻</button>
+                <div class="library-header-actions">
+                    <button id="addCustomGameButton" class="library-add" type="button" hidden>+ Játék hozzáadása</button>
+                    <button id="refreshGamesButton" class="library-refresh" type="button" aria-label="Játéklista frissítése">↻</button>
+                </div>
             </div>
 
             <div id="gamesControls" class="games-controls" style="display:none;">
@@ -70,11 +81,39 @@
                 </div>
             </div>
 
-            <div id="gamesList" class="games-list">
-                <div class="games-state loading-state"><span class="state-icon">◌</span><strong>Steam játékok betöltése...</strong></div>
+            <div id="gamesLibraryViewport" class="games-library-viewport">
+                <div id="gamesLibraryTrack" class="games-library-track">
+                    <div class="games-library-panel" data-library="steam">
+                        <div id="gamesList" class="games-list">
+                            <div class="games-state loading-state"><span class="state-icon">◌</span><strong>Steam játékok betöltése...</strong></div>
+                        </div>
+                    </div>
+                    <div class="games-library-panel" data-library="custom">
+                        <div id="customGamesList" class="games-list custom-games-list"></div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
+
+    <div id="customGameModal" class="custom-game-modal" hidden>
+        <div class="custom-game-overlay"></div>
+        <div class="custom-game-content" role="dialog" aria-modal="true" aria-labelledby="customGameTitle">
+            <button id="closeCustomGameButton" class="game-details-close" type="button" aria-label="Bezárás">×</button>
+            <p class="eyebrow">EGYÉNI KÖNYVTÁR</p>
+            <h2 id="customGameTitle">Játék hozzáadása</h2>
+            <p>Adj hozzá olyan játékot is, ami nincs a Steam könyvtáradban.</p>
+            <form id="customGameForm" class="custom-game-form">
+                <label>Játék neve<input id="customGameName" name="name" type="text" maxlength="80" required placeholder="Pl. Minecraft"></label>
+                <label>Kép URL-je <span>(opcionális)</span><input id="customGameImage" name="image" type="url" maxlength="500" placeholder="https://..."></label>
+                <label>Játékidő percben <span>(opcionális)</span><input id="customGameMinutes" name="minutes" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></label>
+                <div class="custom-game-form-actions">
+                    <button id="cancelCustomGameButton" type="button" class="secondary-action">Mégse</button>
+                    <button type="submit" class="primary-action">Hozzáadás</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div id="gameDetailsModal" class="game-details-modal" hidden>
         <div class="game-details-overlay"></div>

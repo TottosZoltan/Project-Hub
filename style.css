@@ -420,3 +420,10 @@ main {
     .app-icon { width: 42px; height: 42px; min-width: 42px; }
     .app-card h3 { font-size: 13px; }
 }
+
+/* Shared page header: back on the left, profile on the right. */
+.header > .page-profile-link { margin-left: auto; flex-shrink: 0; }
+@media (max-width: 520px) {
+    .header { gap: 10px; }
+    .page-profile-link { padding: 0 11px; }
+}

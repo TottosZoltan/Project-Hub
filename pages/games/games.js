@@ -17,6 +17,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const steamAccountStatus = document.getElementById("steamAccountStatus");
     const steamAccountAvatar = document.getElementById("steamAccountAvatar");
     const refreshButton = document.getElementById("refreshGamesButton");
+    const steamLibraryTab = document.getElementById("steamLibraryTab");
+    const customLibraryTab = document.getElementById("customLibraryTab");
+    const libraryTitle = document.getElementById("libraryTitle");
+    const libraryEyebrow = document.getElementById("libraryEyebrow");
+    const addCustomGameButton = document.getElementById("addCustomGameButton");
+    const customGamesList = document.getElementById("customGamesList");
+    const gamesLibraryViewport = document.getElementById("gamesLibraryViewport");
+    const gamesLibraryTrack = document.getElementById("gamesLibraryTrack");
+    const customGameModal = document.getElementById("customGameModal");
+    const customGameOverlay = document.querySelector(".custom-game-overlay");
+    const customGameForm = document.getElementById("customGameForm");
+    const closeCustomGameButton = document.getElementById("closeCustomGameButton");
+    const cancelCustomGameButton = document.getElementById("cancelCustomGameButton");
+    const customGameName = document.getElementById("customGameName");
+    const customGameImage = document.getElementById("customGameImage");
+    const customGameMinutes = document.getElementById("customGameMinutes");
+    const CUSTOM_LIBRARY_KEY = "projectHubCustomGames";
 
     const modal = document.getElementById("gameDetailsModal");
     const modalOverlay = document.querySelector(".game-details-overlay");
@@ -30,6 +47,83 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let allGames = [];
     let currentSort = "playtime";
+    let activeLibrary = "steam";
+
+    function customGames() {
+        try {
+            const value = JSON.parse(localStorage.getItem(CUSTOM_LIBRARY_KEY) || "[]");
+            return Array.isArray(value) ? value : [];
+        } catch (_) {
+            return [];
+        }
+    }
+
+    function saveCustomGames(list) {
+        localStorage.setItem(CUSTOM_LIBRARY_KEY, JSON.stringify(list));
+    }
+
+    function setLibrary(library) {
+        activeLibrary = library === "custom" ? "custom" : "steam";
+        const custom = activeLibrary === "custom";
+        steamLibraryTab.classList.toggle("active", !custom);
+        customLibraryTab.classList.toggle("active", custom);
+        steamLibraryTab.setAttribute("aria-selected", String(!custom));
+        customLibraryTab.setAttribute("aria-selected", String(custom));
+        gamesLibraryTrack.style.transform = `translateX(${custom ? "-50%" : "0"})`;
+        libraryEyebrow.textContent = custom ? "SAJÁT KÖNYVTÁR" : "STEAM KÖNYVTÁR";
+        libraryTitle.textContent = custom ? "Egyéni könyvtár" : "Steam játékaid";
+        addCustomGameButton.hidden = !custom;
+        refreshButton.hidden = custom;
+        gamesControls.style.display = custom ? "none" : (allGames.length ? "flex" : "none");
+        if (custom) renderCustomGames();
+    }
+
+    function openCustomGameModal() {
+        customGameForm.reset();
+        customGameModal.hidden = false;
+        document.body.classList.add("modal-open");
+        setTimeout(() => customGameName.focus(), 30);
+    }
+
+    function closeCustomGameModal() {
+        customGameModal.hidden = true;
+        document.body.classList.remove("modal-open");
+    }
+
+    function renderCustomGames() {
+        const games = customGames();
+        libraryMeta.textContent = games.length + (games.length === 1 ? " saját játék" : " saját játék");
+        if (!games.length) {
+            customGamesList.innerHTML = `<div class="games-state empty-state"><span class="state-icon">+</span><strong>Még nincs saját játékod.</strong><p>Adj hozzá egy játékot, és külön könyvtárban fog megjelenni.</p></div>`;
+            return;
+        }
+        customGamesList.innerHTML = "";
+        const fragment = document.createDocumentFragment();
+        games.forEach(game => {
+            const card = document.createElement("article");
+            card.className = "game-card custom-game-card";
+            const image = game.image || "";
+            const minutes = Number(game.minutes) || 0;
+            card.innerHTML = `
+                <div class="game-card-media">
+                    ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">` : `<div class="game-card-placeholder">${escapeHtml(game.name.slice(0,1).toUpperCase())}</div>`}
+                    <div class="game-card-gradient"></div>
+                    <button class="game-hide-button custom-delete-button" type="button" aria-label="${escapeHtml(game.name)} törlése" title="Játék törlése">×</button>
+                </div>
+                <div class="game-card-body">
+                    <h3>${escapeHtml(game.name)}</h3>
+                    <div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>Saját játék</span></div>
+                </div>`;
+            card.querySelector(".custom-delete-button").addEventListener("click", event => {
+                event.stopPropagation();
+                if (!confirm(`„${game.name}” törlése a saját könyvtárból?`)) return;
+                saveCustomGames(customGames().filter(item => item.id !== game.id));
+                renderCustomGames();
+            });
+            fragment.appendChild(card);
+        });
+        customGamesList.appendChild(fragment);
+    }
 
     function token() {
         return localStorage.getItem("projectHubAuthToken");
@@ -267,7 +361,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.add("modal-open");
 
         try {
-            const response = await fetch(BACKEND_URL + "/api/steam/game/" + encodeURIComponent(game.appid), {
+            const response = await fetch(BACKEND_URL + "/api/steam/games/" + encodeURIComponent(game.appid), {
                 method: "GET",
                 headers: headers(),
                 credentials: "include"
@@ -314,6 +408,43 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.remove("modal-open");
     }
 
+    steamLibraryTab.addEventListener("click", () => setLibrary("steam"));
+    customLibraryTab.addEventListener("click", () => setLibrary("custom"));
+    addCustomGameButton.addEventListener("click", openCustomGameModal);
+    closeCustomGameButton.addEventListener("click", closeCustomGameModal);
+    cancelCustomGameButton.addEventListener("click", closeCustomGameModal);
+    customGameOverlay.addEventListener("click", closeCustomGameModal);
+    customGameForm.addEventListener("submit", event => {
+        event.preventDefault();
+        const name = customGameName.value.trim();
+        if (!name) return;
+        const games = customGames();
+        games.unshift({
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+            name,
+            image: customGameImage.value.trim(),
+            minutes: Math.max(0, Number(customGameMinutes.value) || 0)
+        });
+        saveCustomGames(games);
+        closeCustomGameModal();
+        setLibrary("custom");
+    });
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    gamesLibraryViewport.addEventListener("touchstart", event => {
+        const touch = event.changedTouches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+    }, { passive: true });
+    gamesLibraryViewport.addEventListener("touchend", event => {
+        const touch = event.changedTouches[0];
+        const dx = touch.clientX - touchStartX;
+        const dy = touch.clientY - touchStartY;
+        if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
+        setLibrary(dx < 0 ? "custom" : "steam");
+    }, { passive: true });
+
     refreshButton.addEventListener("click", loadGames);
     searchInput.addEventListener("input", renderGames);
     document.querySelectorAll(".filter-button").forEach(button => {
@@ -324,10 +455,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
     closeButton.addEventListener("click", closeDetails);
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !customGameModal.hidden) closeCustomGameModal();
+    });
     modalOverlay.addEventListener("click", closeDetails);
     document.addEventListener("keydown", event => {
         if (event.key === "Escape" && !modal.hidden) closeDetails();
     });
+
+    setLibrary("steam");
 
     (async function init() {
         const connected = await loadSteamAccount();
