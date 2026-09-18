@@ -597,13 +597,6 @@ body.authenticated {
 
 }
 
-
-.profile-top-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .profile-link-message {
     margin-bottom: 14px;
 }
