@@ -324,13 +324,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="game-card-meta"><span>⏱</span><strong>${escapeHtml(formatPlaytime(getMinutes(game)))}</strong></div>
                 </div>`;
 
-            card.addEventListener("click", () => openDetails(game));
+            card.addEventListener("click", event => {
+                if (event.target.closest("button")) return;
+                openDetails(game);
+            });
             card.addEventListener("keydown", event => {
                 if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
                     openDetails(game);
                 }
             });
+            const cardImage = card.querySelector(".game-card-media img");
+            if (cardImage) {
+                cardImage.addEventListener("error", () => {
+                    cardImage.remove();
+                    const placeholder = document.createElement("div");
+                    placeholder.className = "game-card-placeholder";
+                    placeholder.textContent = "🎮";
+                    card.querySelector(".game-card-media").prepend(placeholder);
+                }, { once: true });
+            }
             card.querySelector(".game-hide-button").addEventListener("click", event => {
                 event.stopPropagation();
                 if (!confirm(`„${game.name}” elrejtése?`)) return;
@@ -350,6 +363,9 @@ document.addEventListener("DOMContentLoaded", function () {
         detailsAchievementCount.textContent = "Betöltés...";
         achievementsList.innerHTML = `<div class="games-state loading-state">🏆 Achievementek betöltése...</div>`;
         if (image) {
+            detailsImage.onerror = () => {
+                detailsImage.style.display = "none";
+            };
             detailsImage.src = image;
             detailsImage.alt = game.name;
             detailsImage.style.display = "block";
@@ -361,7 +377,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.add("modal-open");
 
         try {
-            const response = await fetch(BACKEND_URL + "/api/steam/games/" + encodeURIComponent(game.appid), {
+            const response = await fetch(BACKEND_URL + "/api/steam/game/" + encodeURIComponent(game.appid), {
                 method: "GET",
                 headers: headers(),
                 credentials: "include"

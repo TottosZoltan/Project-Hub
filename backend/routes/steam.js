@@ -1,6 +1,6 @@
 const express = require("express");
 const { pool } = require("../database");
-const { FRONTEND_URL, BACKEND_URL, STEAM_API_KEY } = require("../config");
+const { FRONTEND_URL, PROJECT_HUB_URL, BACKEND_URL, STEAM_API_KEY } = require("../config");
 const { getAuthenticatedSteamUser } = require("../middleware/auth");
 const {
     getSteamAccountForUser,
@@ -11,6 +11,13 @@ const {
     getSteamImageUrls
 } = require("../services/steam");
 const router = require("express").Router();
+
+function steamProfileRedirect(status, reason) {
+    const params = new URLSearchParams();
+    params.set("steam_link", status);
+    if (reason) params.set("reason", reason);
+    return (PROJECT_HUB_URL || `${FRONTEND_URL}/Project-Hub`) + "/pages/profile/profile.html?" + params.toString();
+}
 
 router.get(
     "/api/steam/link",
@@ -38,19 +45,9 @@ router.get(
             }
 
 
-            if (!STEAM_API_KEY) {
-
-                return res.status(500).json({
-
-                    success: false,
-
-                    message:
-                        "A STEAM_API_KEY nincs beállítva."
-
-                });
-
-            }
-
+            // A Steam OpenID kapcsolat elindításához önmagában
+            // nincs szükség Steam Web API kulcsra. A kulcs csak a
+            // profil/játékkönyvtár adatok lekéréséhez szükséges.
 
             // --------------------------------------------------
             // Biztonsági state létrehozása
@@ -223,7 +220,7 @@ router.get(
             if (!state) {
 
                 return res.redirect(
-                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=missing_state"
+                    steamProfileRedirect("error", "missing_state")
                 );
 
             }
@@ -273,7 +270,7 @@ router.get(
             ) {
 
                 return res.redirect(
-                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=invalid_state"
+                    steamProfileRedirect("error", "invalid_state")
                 );
 
             }
@@ -309,7 +306,7 @@ router.get(
 
 
                 return res.redirect(
-                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=openid_failed"
+                    steamProfileRedirect("error", "openid_failed")
                 );
 
             }
@@ -344,7 +341,7 @@ router.get(
 
 
                 return res.redirect(
-                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=missing_steam_id"
+                    steamProfileRedirect("error", "missing_steam_id")
                 );
 
             }
@@ -446,7 +443,7 @@ router.get(
 
 
                 return res.redirect(
-                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=steam_verify_failed"
+                    steamProfileRedirect("error", "steam_verify_failed")
                 );
 
             }
@@ -475,7 +472,7 @@ router.get(
 
 
                 return res.redirect(
-                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=invalid_steam_login"
+                    steamProfileRedirect("error", "invalid_steam_login")
                 );
 
             }
@@ -508,7 +505,7 @@ router.get(
 
 
                 return res.redirect(
-                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=invalid_steam_id"
+                    steamProfileRedirect("error", "invalid_steam_id")
                 );
 
             }
@@ -562,7 +559,7 @@ router.get(
 
 
                 return res.redirect(
-                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=steam_already_linked"
+                    steamProfileRedirect("error", "steam_already_linked")
                 );
 
             }
@@ -696,7 +693,7 @@ router.get(
             // --------------------------------------------------
 
             return res.redirect(
-                "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=success"
+                steamProfileRedirect("success")
             );
 
         }
@@ -709,7 +706,7 @@ router.get(
 
 
             return res.redirect(
-                "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=server_error"
+                steamProfileRedirect("error", "server_error")
             );
 
         }
