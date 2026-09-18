@@ -1,648 +1,422 @@
-/* =========================
-   ALAPOK
-========================= */
+/* =========================================================
+   PROJECT HUB 1.3 — SHARED DESIGN SYSTEM
+   Mobile-first / responsive / touch friendly
+========================================================= */
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+:root {
+    --bg: #080b12;
+    --bg-soft: #0d111a;
+    --surface: rgba(18, 23, 34, 0.82);
+    --surface-strong: #121824;
+    --surface-soft: #0f141e;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.13);
+    --text: #f5f7fb;
+    --muted: #8d96a8;
+    --muted-strong: #aeb6c5;
+    --accent: #7c8cff;
+    --accent-soft: rgba(124, 140, 255, 0.13);
+    --danger: #ff737d;
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --content: 1080px;
+    --gutter: clamp(16px, 4vw, 32px);
+    --shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+    min-height: 100%;
+    background: var(--bg);
+    color-scheme: dark;
+    scroll-behavior: smooth;
 }
 
 body {
-    background: #0b0d12;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
+    background:
+        radial-gradient(circle at 85% -10%, rgba(91, 105, 255, 0.14), transparent 34rem),
+        radial-gradient(circle at -10% 25%, rgba(46, 168, 255, 0.07), transparent 30rem),
+        linear-gradient(180deg, #090c13 0%, #080b11 100%);
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Arial, sans-serif;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
-}
+body.authenticated { visibility: visible; }
 
+a { color: inherit; text-decoration: none; }
+button, input, textarea, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
 
-/* =========================
-   FEJLÉC
-========================= */
-
+/* ========================= HEADER ========================= */
 .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    min-height: 76px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-
-    padding: 20px;
-
-    border-bottom: 1px solid #20232c;
+    justify-content: space-between;
+    gap: 18px;
+    padding: max(12px, env(safe-area-inset-top)) var(--gutter) 12px;
+    background: rgba(8, 11, 18, 0.76);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px) saturate(135%);
+    -webkit-backdrop-filter: blur(20px) saturate(135%);
 }
 
-.header h1 {
-    font-size: 20px;
-    letter-spacing: 2px;
+.header > div { min-width: 0; }
+
+.header h1,
+.header-title {
+    font-size: 13px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: #f7f8fb;
 }
 
 .header p {
     margin-top: 5px;
-
-    color: #777c89;
-    font-size: 12px;
+    color: var(--muted);
+    font-size: 11px;
 }
 
-
-/* =========================
-   MENÜ GOMB
-========================= */
-
-.menu-button {
+.menu-button,
+.back-button,
+.close-button {
     width: 44px;
     height: 44px;
-
-    border: 1px solid #292d38;
-    border-radius: 12px;
-
-    background: #151820;
-    color: white;
-
-    font-size: 20px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.menu-button:active {
-    transform: scale(0.92);
-}
-
-
-/* =========================
-   FŐ TARTALOM
-========================= */
-
-main {
-    width: 100%;
-    max-width: 700px;
-
-    margin: auto;
-
-    padding: 25px 18px 50px;
-}
-
-
-/* =========================
-   ÜDVÖZLŐ RÉSZ
-========================= */
-
-.welcome {
-    padding: 25px 5px 30px;
-}
-
-.small-title {
-    color: #737987;
-
-    font-size: 11px;
-    font-weight: bold;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 8px;
-}
-
-.welcome h2 {
-    font-size: 28px;
-
-    margin-bottom: 8px;
-}
-
-.welcome p:last-child {
-    color: #858b99;
-}
-
-
-/* =========================
-   APP KÁRTYÁK
-========================= */
-
-.apps {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 12px;
-}
-
-.app-card {
-    display: flex;
-    align-items: center;
-
-    gap: 14px;
-
-    min-height: 105px;
-
-    padding: 16px;
-
-    background: #151820;
-
-    border: 1px solid #222631;
-
-    border-radius: 18px;
-
-    transition: 0.2s;
-}
-
-.app-card:active {
-    transform: scale(0.97);
-}
-
-.app-icon {
-    width: 45px;
-    height: 45px;
-
-    flex-shrink: 0;
-
-    display: flex;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-
-    background: #20242e;
-
+    padding: 0;
+    border: 1px solid var(--border-strong);
     border-radius: 14px;
-
-    font-size: 23px;
+    background: rgba(18, 24, 36, 0.88);
+    color: var(--text);
+    box-shadow: 0 7px 24px rgba(0,0,0,.16);
+    transition: transform .18s ease, background .18s ease, border-color .18s ease;
 }
 
-.app-card h3 {
-    font-size: 15px;
+.menu-button { font-size: 20px; line-height: 1; }
 
-    margin-bottom: 5px;
+.menu-button:hover,
+.back-button:hover,
+.close-button:hover {
+    background: #182031;
+    border-color: rgba(255,255,255,.19);
 }
 
-.app-card p {
-    color: #777d8a;
-
-    font-size: 11px;
-
-    line-height: 1.3;
-}
-
-
-/* =========================
-   ÁTTEKINTÉS
-========================= */
-
-.overview {
-    margin-top: 30px;
-
-    padding: 20px;
-
-    background: #151820;
-
-    border: 1px solid #222631;
-
-    border-radius: 18px;
-}
-
-.section-header {
-    display: flex;
-
-    justify-content: space-between;
-    align-items: center;
-
-    margin-bottom: 20px;
-}
-
-.section-header h2 {
-    font-size: 17px;
-}
-
-.section-header span {
-    color: #777d8a;
-
-    font-size: 12px;
-}
-
-
-/* =========================
-   STATISZTIKÁK
-========================= */
-
-.stats {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 10px;
-}
-
-.stat {
-    text-align: center;
-
-    padding: 15px 5px;
-
-    background: #101219;
-
-    border-radius: 13px;
-}
-
-.stat strong {
-    display: block;
-
-    font-size: 24px;
-
-    margin-bottom: 5px;
-}
-
-.stat span {
-    color: #777d8a;
-
-    font-size: 11px;
-}
-
-
-/* =========================
-   OLDALSÓ MENÜ
-========================= */
-
-.side-menu {
-    position: fixed;
-
-    top: 0;
-    right: 0;
-
-    width: 280px;
-    height: 100vh;
-
-    background: #151820;
-
-    border-left: 1px solid #292d38;
-
-    z-index: 1000;
-
-    padding: 25px;
-
-    transform: translateX(100%);
-
-    transition: transform 0.3s ease;
-}
-
-
-/* MENÜ NYITVA */
-
-.side-menu.open {
-    transform: translateX(0);
-}
-
-
-/* =========================
-   MENÜ FEJLÉC
-========================= */
-
-.menu-header {
-    display: flex;
-
-    justify-content: space-between;
-    align-items: center;
-
-    padding-bottom: 25px;
-
-    border-bottom: 1px solid #292d38;
-}
-
-.menu-header h2 {
-    font-size: 16px;
-
-    letter-spacing: 2px;
-}
-
-
-/* =========================
-   BEZÁRÓ GOMB
-========================= */
-
-.close-button {
-    width: 40px;
-    height: 40px;
-
-    border: 1px solid #292d38;
-
-    border-radius: 10px;
-
-    background: #20242e;
-
-    color: white;
-
-    font-size: 18px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.close-button:active {
-    transform: scale(0.9);
-}
-
-
-/* =========================
-   MENÜ LINKJEK
-========================= */
-
-.menu-links {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-
-    margin-top: 25px;
-}
-
-.menu-links a {
-    display: block;
-
-    padding: 15px;
-
-    border-radius: 12px;
-
-    color: #d5d8df;
-
-    transition: 0.2s;
-}
-
-.menu-links a:active {
-    background: #20242e;
-
-    transform: scale(0.98);
-}
-
-
-/* =========================
-   MENÜ HÁTTÉR
-========================= */
-
-.menu-overlay {
-    position: fixed;
-
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.6);
-
-    z-index: 999;
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition: opacity 0.3s ease;
-}
-
-
-/* HÁTTÉR AKTÍV */
-
-.menu-overlay.open {
-    opacity: 1;
-
-    pointer-events: auto;
-}
-
-
-/* =========================
-   NAGYOBB KIJELZŐ
-========================= */
-
-@media (min-width: 700px) {
-
-    .header {
-        padding: 20px calc((100% - 700px) / 2 + 18px);
-    }
-
-    .apps {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    .app-card {
-        flex-direction: column;
-
-        text-align: center;
-
-        justify-content: center;
-    }
-
-}
-
-/* =========================
-   VISSZA GOMB
-========================= */
+.menu-button:active,
+.back-button:active,
+.close-button:active { transform: scale(.94); }
 
 .back-button {
-    width: 46px;
-    height: 46px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-    margin: 0;
-
-    border: 1px solid #292d38;
-    border-radius: 12px;
-
-    background: #151820;
-    color: #ffffff;
-
-    font-size: 26px;
-    line-height: 46px;
-
-    text-align: center;
-    text-decoration: none;
-
     flex-shrink: 0;
-
-    transition: 0.2s;
-}
-
-.back-button:active {
-    transform: scale(0.92);
-    background: #20242e;
+    overflow: hidden;
 }
 
 .back-arrow {
     position: relative;
-
-    width: 18px;
-    height: 18px;
-
+    width: 19px;
+    height: 19px;
     display: block;
 }
 
-/* vízszintes szár */
-
 .back-arrow::after {
     content: "";
-
     position: absolute;
-
-    width: 18px;
-    height: 3px;
-
-    background: #ffffff;
-
-    left: 0;
-    top: 7px;
-
-    border-radius: 2px;
+    left: 1px;
+    top: 8px;
+    width: 17px;
+    height: 2.5px;
+    border-radius: 999px;
+    background: currentColor;
 }
-
-
-/* nyílhegy */
 
 .back-arrow::before {
     content: "";
-
     position: absolute;
-
-    width: 9px;
-    height: 9px;
-
-    border-left: 3px solid #ffffff;
-    border-bottom: 3px solid #ffffff;
-
     left: 1px;
-    top: 3px;
-
-    transform: rotate(45deg);
-
+    top: 5px;
+    width: 8px;
+    height: 8px;
+    border-left: 2.5px solid currentColor;
+    border-bottom: 2.5px solid currentColor;
     border-radius: 1px;
+    transform: rotate(45deg);
 }
 
+/* ========================= MAIN ========================= */
+main {
+    width: min(100%, var(--content));
+    margin: 0 auto;
+    padding: 30px var(--gutter) 46px;
+}
 
+.welcome,
+.page-intro {
+    padding: 10px 0 28px;
+}
 
-/* ========================================
-   APP VERZIÓ + PULL-TO-REFRESH
-======================================== */
+.small-title {
+    margin-bottom: 8px;
+    color: #7f899c;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .18em;
+}
 
-.app-version-footer {
-    width: min(100% - 32px, 700px);
-    margin: 8px auto 0;
-    padding: 13px 16px;
+.welcome h2,
+.page-intro h2 {
+    margin-bottom: 8px;
+    font-size: clamp(25px, 6vw, 34px);
+    line-height: 1.08;
+    letter-spacing: -.035em;
+}
+
+.welcome p:last-child,
+.page-intro > p:last-child {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* ========================= HOME CARDS ========================= */
+.apps {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.app-card {
+    position: relative;
+    min-width: 0;
+    min-height: 122px;
     display: flex;
     align-items: center;
+    gap: 13px;
+    padding: 17px;
+    overflow: hidden;
+    background: linear-gradient(145deg, rgba(20,26,39,.94), rgba(13,18,28,.94));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 12px 34px rgba(0,0,0,.16);
+    transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.app-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(255,255,255,.045), transparent 45%);
+}
+
+.app-card:hover { transform: translateY(-2px); border-color: var(--border-strong); }
+.app-card:active { transform: scale(.975); }
+
+.app-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    gap: 9px;
-    color: #8b93a3;
-    font-size: 12px;
-    text-align: center;
-    letter-spacing: .2px;
-    border: 1px solid #242936;
+    border: 1px solid rgba(255,255,255,.07);
     border-radius: 14px;
-    background: linear-gradient(180deg, #141821 0%, #10131a 100%);
-    box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    background: var(--accent-soft);
+    font-size: 21px;
 }
 
-.app-version-footer::before {
-    content: '✦';
-    color: #8d96a8;
-    font-size: 11px;
+.app-card h3 { font-size: 14px; margin-bottom: 4px; }
+.app-card p { color: var(--muted); font-size: 11px; line-height: 1.35; }
+
+/* ========================= OVERVIEW ========================= */
+.overview,
+.page-card,
+.page-section,
+.task-editor,
+.notes-editor,
+.collapsible-panel,
+.profile-card,
+.steam-account-box,
+.steam-game,
+.login-section {
+    background: linear-gradient(145deg, rgba(18,24,36,.92), rgba(12,17,27,.92));
+    border: 1px solid var(--border);
+    box-shadow: 0 14px 42px rgba(0,0,0,.15);
 }
 
-.app-version-footer span:first-child {
-    font-weight: 600;
-    color: #d9dde6;
+.overview {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: var(--radius-lg);
 }
 
-.app-version-footer span:last-child {
-    padding: 4px 8px;
-    color: #e8ebf2;
-    font-weight: 700;
-    border: 1px solid #303746;
-    border-radius: 999px;
-    background: #1a1f29;
+.section-header,
+.games-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 15px;
 }
+
+.section-header h2,
+.games-section-header h3 { font-size: 15px; line-height: 1.25; }
+.section-header span,
+.games-section-header p { color: var(--muted); font-size: 11px; }
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.stat {
+    padding: 13px 6px;
+    text-align: center;
+    background: rgba(7,10,16,.58);
+    border: 1px solid rgba(255,255,255,.05);
+    border-radius: 14px;
+}
+
+.stat strong { display: block; margin-bottom: 3px; font-size: 22px; letter-spacing: -.03em; }
+.stat span { color: var(--muted); font-size: 10px; }
+
+/* ========================= SIDE MENU ========================= */
+.side-menu {
+    position: fixed;
+    inset: 0 0 0 auto;
+    z-index: 1000;
+    width: min(88vw, 340px);
+    padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+    background: rgba(12,17,27,.97);
+    border-left: 1px solid var(--border-strong);
+    box-shadow: -20px 0 70px rgba(0,0,0,.38);
+    transform: translateX(100%);
+    transition: transform .28s cubic-bezier(.2,.75,.2,1);
+}
+
+.side-menu.open { transform: translateX(0); }
+
+.menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 6px 0 17px;
+    border-bottom: 1px solid var(--border);
+}
+
+.menu-header h2 { font-size: 12px; letter-spacing: .16em; }
+.menu-links { display: flex; flex-direction: column; gap: 6px; margin-top: 18px; }
+
+.menu-links a {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 13px;
+    color: #cbd1dc;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    font-size: 13px;
+    transition: background .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+.menu-links a:hover { background: rgba(255,255,255,.045); border-color: var(--border); }
+.menu-links a:active { background: rgba(124,140,255,.09); transform: scale(.985); }
+
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(2,4,8,.62);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .28s ease;
+    backdrop-filter: blur(2px);
+}
+.menu-overlay.open { opacity: 1; pointer-events: auto; }
+
+/* ========================= VERSION / REFRESH ========================= */
+.app-version-footer {
+    width: 100%;
+    padding: 5px var(--gutter) max(26px, calc(18px + env(safe-area-inset-bottom)));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    color: #626b7b;
+    font-size: 10px;
+    letter-spacing: .03em;
+}
+
+.app-version-footer span:last-child { color: #7d8798; font-weight: 700; }
 
 .pull-refresh-indicator {
     position: fixed;
     z-index: 9999;
     top: 0;
     left: 50%;
-    min-width: 210px;
+    min-width: 190px;
     padding: 10px 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    border: 1px solid #303746;
+    gap: 9px;
+    border: 1px solid var(--border-strong);
     border-top: 0;
     border-radius: 0 0 15px 15px;
-    background: rgba(18,22,30,.98);
-    color: #e5e8ef;
-    box-shadow: 0 10px 28px rgba(0,0,0,.32);
-    font-size: 12px;
+    background: rgba(15,20,30,.96);
+    color: #dce2ed;
+    box-shadow: 0 12px 28px rgba(0,0,0,.28);
+    font-size: 11px;
     pointer-events: none;
     transform: translate(-50%, -100%);
     opacity: 0;
-    transition: opacity .15s ease, top .12s ease;
+    transition: opacity .15s ease, transform .12s ease;
 }
 
 .pull-refresh-indicator.visible { opacity: 1; }
-
-.pull-refresh-icon {
-    width: 22px;
-    height: 22px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 22px;
-}
-
-.pull-refresh-icon svg {
-    width: 20px;
-    height: 20px;
-    display: block;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.pull-refresh-indicator.ready .pull-refresh-icon { transform: translateY(-2px); }
+.pull-refresh-icon { width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; }
 .pull-refresh-indicator.refreshing .pull-refresh-icon { animation: projectHubRefreshSpin .8s linear infinite; }
+@keyframes projectHubRefreshSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-.refresh-feedback {
-    position: fixed;
-    left: 50%;
-    bottom: 22px;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    max-width: calc(100% - 32px);
-    padding: 11px 15px;
-    border: 1px solid #2f3949;
-    border-radius: 12px;
-    background: rgba(19,23,31,.98);
-    color: #e8ebf2;
-    box-shadow: 0 12px 30px rgba(0,0,0,.34);
-    font-size: 12px;
-    transform: translate(-50%, 14px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .2s ease, transform .2s ease;
+/* ========================= RESPONSIVE ========================= */
+@media (min-width: 700px) {
+    .apps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .app-card { min-height: 145px; flex-direction: column; justify-content: center; text-align: center; }
+    .app-icon { width: 50px; height: 50px; min-width: 50px; }
 }
 
-.refresh-feedback.visible { opacity: 1; transform: translate(-50%, 0); }
-.refresh-feedback-icon {
-    width: 20px;
-    height: 20px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: #202733;
-    font-size: 12px;
+@media (min-width: 1040px) {
+    .apps { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .app-card { min-height: 160px; }
 }
 
-@keyframes projectHubRefreshSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@media (max-width: 520px) {
+    main { padding-top: 24px; }
+    .welcome, .page-intro { padding-bottom: 22px; }
+    .app-card { min-height: 108px; padding: 14px; }
 }
 
+@media (max-width: 360px) {
+    :root { --gutter: 13px; }
+    .apps { gap: 9px; }
+    .app-card { min-height: 102px; padding: 12px; gap: 9px; }
+    .app-icon { width: 42px; height: 42px; min-width: 42px; }
+    .app-card h3 { font-size: 13px; }
+}

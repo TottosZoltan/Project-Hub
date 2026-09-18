@@ -24,6 +24,58 @@ body.authenticated {
 }
 
 
+/* =========================================
+   HEADER
+========================================= */
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.profile-header h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 28px;
+}
+
+.profile-header p {
+    margin: 5px 0 0;
+    color: #858b99;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.profile-back-button {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid #292e3a;
+    border-radius: 10px;
+
+    background: #11141b;
+    color: #ffffff;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.profile-back-button:hover {
+    background: #181c25;
+    border-color: #3b4250;
+}
+
 
 /* =========================================
    SECTION
@@ -546,6 +598,12 @@ body.authenticated {
 }
 
 
+.profile-top-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .profile-link-message {
     margin-bottom: 14px;
 }
@@ -570,17 +628,82 @@ body.authenticated {
     border: 1px solid #713737;
 }
 
-/* Unified page header: matches the other Project Hub tabs. */
-.profile-page-header {
-    margin-bottom: 0;
-}
+/* =========================================================
+   PROJECT HUB 1.3 — PROFILE VISUAL LAYER
+========================================================= */
 
 .profile-page {
-    padding-top: 25px;
+    max-width: 1080px;
+    padding: 30px clamp(16px, 4vw, 32px) 48px;
 }
 
+.profile-top-header {
+    position: sticky;
+    top: 0;
+    min-height: 58px;
+    padding: max(12px, env(safe-area-inset-top)) clamp(16px, 4vw, 32px) 12px;
+    background: rgba(8,11,18,.76);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(20px) saturate(135%);
+    -webkit-backdrop-filter: blur(20px) saturate(135%);
+}
+
+.profile-header {
+    gap: 13px;
+    margin-bottom: 24px;
+}
+
+.profile-header h1 { font-size: clamp(23px, 5vw, 30px); letter-spacing: -.03em; }
+.profile-header p { font-size: 12px; }
+
+.profile-back-button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px;
+    background: rgba(18,24,36,.88);
+    color: #fff;
+    font-size: 23px;
+    line-height: 1;
+}
+
+.profile-section { margin-bottom: 20px; }
+.section-title { margin-bottom: 10px; }
+.section-title > span { font-size: 20px; }
+.section-title h2 { font-size: 15px; }
+.section-title p { font-size: 10px; }
+
+.profile-card {
+    padding: 17px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(18,24,36,.92), rgba(12,17,27,.92));
+    border-color: rgba(255,255,255,.08);
+}
+
+.profile-user { gap: 14px; }
+.profile-avatar-wrapper, .profile-avatar { width: 70px; height: 70px; flex-basis: 70px; }
+.profile-user-name { font-size: 18px; }
+.profile-user-email { font-size: 11px; }
+.profile-button { min-height: 44px; border-radius: 13px; }
+
+.steam-profile { gap: 13px; }
+.steam-avatar { width: 70px; height: 70px; flex-basis: 70px; border-radius: 17px; }
+.profile-status { border-radius: 9px; }
+
+.steam-not-connected-icon,
+.blacklist-number { border-radius: 14px; background: rgba(255,255,255,.035); }
+
 @media (max-width: 600px) {
-    .profile-page-header {
-        padding: 20px 18px;
-    }
+    .profile-page { padding: 24px 16px 42px; }
+    .profile-card { padding: 15px; }
+    .profile-user { align-items: flex-start; }
+    .profile-avatar-wrapper, .profile-avatar { width: 60px; height: 60px; flex-basis: 60px; }
+    .steam-avatar { width: 60px; height: 60px; flex-basis: 60px; }
+    .profile-button { width: 100%; }
 }

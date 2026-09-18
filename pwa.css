@@ -1,6 +1,7 @@
-/* Project Hub - iPhone / PWA enhancements */
+/* Project Hub 1.3 — PWA / iPhone polish */
 html {
-    background: #0b0d12;
+    background: #080b12;
+    overscroll-behavior-y: none;
 }
 
 body {
@@ -9,28 +10,14 @@ body {
     overscroll-behavior-y: none;
 }
 
-button,
-a,
-input,
-textarea,
-select {
+button, a, input, textarea, select {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Safe areas used by iPhone when the site runs as a standalone PWA. */
-body {
-    padding-bottom: env(safe-area-inset-bottom);
-}
-
-.header,
-.side-menu,
-.menu-header {
-    padding-top: max(0px, env(safe-area-inset-top));
-}
-
-/* Prevent iOS from zooming form controls when their text is smaller than 16px. */
-input,
-textarea,
-select {
+input, textarea, select {
     font-size: max(16px, 1em);
+}
+
+@supports (-webkit-touch-callout: none) {
+    body { min-height: -webkit-fill-available; }
 }
