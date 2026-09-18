@@ -11,14 +11,6 @@
 
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="profile.css">
-    <link rel="manifest" href="../../manifest.webmanifest">
-    <link rel="apple-touch-icon" href="../../icons/icon-192.png">
-    <meta name="theme-color" content="#0b0d12">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Project Hub">
-    <link rel="stylesheet" href="../../pwa.css">
-
 </head>
 
 <body>
@@ -1047,16 +1039,175 @@
 
                 <div class="profile-actions">
 
-                    <a
-                        href="${BACKEND_URL}/api/steam/link"
+                    <button
+                        type="button"
+                        id="steamConnectButton"
                         class="profile-button primary"
                     >
                         🎮 Steam összekötése
-                    </a>
+                    </button>
 
                 </div>
 
             `;
+
+
+            document
+                .getElementById(
+                    "steamConnectButton"
+                )
+                .addEventListener(
+                    "click",
+                    connectSteam
+                );
+
+        }
+
+
+        // =========================================
+        // STEAM CONNECT
+        // =========================================
+
+        async function connectSteam() {
+
+            const button =
+                document.getElementById(
+                    "steamConnectButton"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            button.disabled = true;
+            button.textContent =
+                "⏳ Steam megnyitása...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        BACKEND_URL + "/api/steam/link",
+                        {
+                            method: "GET",
+                            headers: authHeaders()
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok ||
+                    !data.success ||
+                    !data.url) {
+
+                    throw new Error(
+                        data.message ||
+                        data.error ||
+                        "Nem sikerült elindítani a Steam összekapcsolását."
+                    );
+
+                }
+
+
+                window.location.href = data.url;
+
+
+            } catch (error) {
+
+                console.error(
+                    "connectSteam error:",
+                    error
+                );
+
+                button.disabled = false;
+                button.textContent =
+                    "🎮 Steam összekötése";
+
+                alert(
+                    error.message ||
+                    "Nem sikerült elindítani a Steam összekapcsolását."
+                );
+
+            }
+
+        }
+
+
+        // =========================================
+        // STEAM LINK RESULT
+        // =========================================
+
+        function handleSteamLinkResult() {
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+
+            const steamLink =
+                params.get("steam_link");
+
+
+            const reason =
+                params.get("reason");
+
+
+            if (!steamLink) {
+                return;
+            }
+
+
+            if (steamLink === "success") {
+
+                alert(
+                    "✓ A Steam fiók sikeresen össze lett kötve a Project Hub profiloddal."
+                );
+
+            } else if (steamLink === "error") {
+
+                const messages = {
+                    steam_already_linked:
+                        "Ez a Steam-fiók már egy másik Project Hub-fiókhoz van kapcsolva.",
+                    invalid_state:
+                        "A Steam összekapcsolási munkamenete lejárt vagy érvénytelen.",
+                    openid_failed:
+                        "A Steam bejelentkezés megszakadt.",
+                    missing_steam_id:
+                        "A Steam nem adott vissza érvényes azonosítót.",
+                    steam_verify_failed:
+                        "A Steam kapcsolat ellenőrzése sikertelen.",
+                    invalid_steam_login:
+                        "A Steam bejelentkezés ellenőrzése sikertelen.",
+                    invalid_steam_id:
+                        "A Steam azonosító érvénytelen.",
+                    server_error:
+                        "Szerverhiba történt a Steam összekapcsolásakor."
+                };
+
+                alert(
+                    "❌ " +
+                    (messages[reason] ||
+                        "Nem sikerült összekapcsolni a Steam-fiókot.")
+                );
+
+            }
+
+
+            const cleanUrl =
+                window.location.pathname;
+
+            window.history.replaceState(
+                {},
+                document.title,
+                cleanUrl
+            );
 
         }
 
@@ -1268,21 +1419,12 @@
         // INIT
         // =========================================
 
+        handleSteamLinkResult();
         loadProfile();
         loadSteamProfile();
         loadBlacklistInfo();
 
     </script>
 
-
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("../../sw.js", { scope: "../../" }).catch((error) => {
-                    console.warn("Project Hub PWA service worker hiba:", error);
-                });
-            });
-        }
-    </script>
 </body>
 </html>

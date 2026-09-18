@@ -223,7 +223,7 @@ router.get(
             if (!state) {
 
                 return res.redirect(
-    "https://tottoszoltan.github.io/Project-Hub/index.html?steam_link=success"
+    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=success"
 );
 
             }
@@ -273,8 +273,7 @@ router.get(
             ) {
 
                 return res.redirect(
-                    FRONTEND_URL +
-                    "/?steam_link=error&reason=invalid_state"
+                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=invalid_state"
                 );
 
             }
@@ -310,8 +309,7 @@ router.get(
 
 
                 return res.redirect(
-                    FRONTEND_URL +
-                    "/?steam_link=error&reason=openid_failed"
+                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=openid_failed"
                 );
 
             }
@@ -346,8 +344,7 @@ router.get(
 
 
                 return res.redirect(
-                    FRONTEND_URL +
-                    "/?steam_link=error&reason=missing_steam_id"
+                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=missing_steam_id"
                 );
 
             }
@@ -449,8 +446,7 @@ router.get(
 
 
                 return res.redirect(
-                    FRONTEND_URL +
-                    "/?steam_link=error&reason=steam_verify_failed"
+                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=steam_verify_failed"
                 );
 
             }
@@ -479,8 +475,7 @@ router.get(
 
 
                 return res.redirect(
-                    FRONTEND_URL +
-                    "/?steam_link=error&reason=invalid_steam_login"
+                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=invalid_steam_login"
                 );
 
             }
@@ -513,8 +508,7 @@ router.get(
 
 
                 return res.redirect(
-                    FRONTEND_URL +
-                    "/?steam_link=error&reason=invalid_steam_id"
+                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=invalid_steam_id"
                 );
 
             }
@@ -568,8 +562,7 @@ router.get(
 
 
                 return res.redirect(
-                    FRONTEND_URL +
-                    "/?steam_link=error&reason=steam_already_linked"
+                    "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=steam_already_linked"
                 );
 
             }
@@ -703,7 +696,7 @@ router.get(
             // --------------------------------------------------
 
             return res.redirect(
-                "https://tottoszoltan.github.io/Project-Hub/index.html?steam_link=success"
+                "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=success"
             );
 
         }
@@ -716,8 +709,7 @@ router.get(
 
 
             return res.redirect(
-                FRONTEND_URL +
-                "/?steam_link=error&reason=server_error"
+                "https://tottoszoltan.github.io/Project-Hub/pages/profile/profile.html?steam_link=error&reason=server_error"
             );
 
         }
