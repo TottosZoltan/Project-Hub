@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.add("modal-open");
 
         try {
-            const response = await fetch(BACKEND_URL + "/api/steam/games/" + encodeURIComponent(game.appid), {
+            const response = await fetch(BACKEND_URL + "/api/steam/game/" + encodeURIComponent(game.appid), {
                 method: "GET",
                 headers: headers(),
                 credentials: "include"

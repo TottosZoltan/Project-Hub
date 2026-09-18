@@ -1,4 +1,4 @@
-const CACHE_NAME = "project-hub-v2";
+const CACHE_NAME = "project-hub-v3";
 
 const APP_SHELL = [
     "./",
@@ -6,6 +6,8 @@ const APP_SHELL = [
     "./style.css",
     "./pwa.css",
     "./script.js",
+    "./debug.js",
+    "./refresh.js",
     "./pages/pages.css",
     "./pages/auth/login.html",
     "./pages/auth/login.css",
