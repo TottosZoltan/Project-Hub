@@ -16,12 +16,17 @@ function steamProfileRedirect(status, reason) {
     const params = new URLSearchParams();
     params.set("steam_link", status);
     if (reason) params.set("reason", reason);
-    return (PROJECT_HUB_URL || `${FRONTEND_URL}/Project-Hub`) + "/pages/profile/profile.html?" + params.toString();
+    const base = (PROJECT_HUB_URL || `${FRONTEND_URL}/Project-Hub`).replace(/\/$/, "");
+    return base + "/pages/profile/profile.html?" + params.toString();
 }
 
 router.get(
     "/api/steam/link",
     async function (req, res) {
+
+        res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+        res.set("Pragma", "no-cache");
+        res.set("Expires", "0");
 
         try {
 
@@ -119,8 +124,7 @@ router.get(
             // --------------------------------------------------
 
             const returnTo =
-                BACKEND_URL +
-                "/api/steam/callback";
+                new URL("/api/steam/callback", BACKEND_URL).toString();
 
 
             // --------------------------------------------------

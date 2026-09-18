@@ -983,58 +983,91 @@
         // STEAM CONNECT
         // =========================================
 
-        async function connectSteam() {
+        let steamConnectInProgress = false;
 
-            const button =
-                document.getElementById(
-                    "steamConnectButton"
-                );
+        async function connectSteam(event) {
 
-            if (!button) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            if (steamConnectInProgress) {
                 return;
             }
 
+            const button =
+                document.getElementById("steamConnectButton");
+
+            if (!button) {
+                console.error("Steam connect button not found.");
+                return;
+            }
+
+            if (!AUTH_TOKEN) {
+                alert("A Steam összekapcsolásához előbb be kell jelentkezned.");
+                window.location.href = "../../index.html";
+                return;
+            }
+
+            steamConnectInProgress = true;
             button.disabled = true;
+            button.setAttribute("aria-busy", "true");
             button.textContent = "⏳ Steam megnyitása...";
+
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 30000);
 
             try {
 
-                const response =
-                    await fetch(
-                        BACKEND_URL + "/api/steam/link",
-                        {
-                            method: "GET",
-                            headers: authHeaders(),
-                            credentials: "include"
-                        }
-                    );
+                const response = await fetch(
+                    BACKEND_URL + "/api/steam/link",
+                    {
+                        method: "GET",
+                        headers: authHeaders(),
+                        credentials: "include",
+                        mode: "cors",
+                        cache: "no-store",
+                        signal: controller.signal
+                    }
+                );
 
-                const data = await response.json();
+                const contentType =
+                    response.headers.get("content-type") || "";
+
+                const data = contentType.includes("application/json")
+                    ? await response.json()
+                    : { message: await response.text() };
 
                 if (!response.ok || !data.success || !data.url) {
                     throw new Error(
                         data.message ||
                         data.error ||
-                        "Nem sikerült elindítani a Steam összekapcsolását."
+                        `Steam kapcsolat indítása sikertelen (${response.status}).`
                     );
                 }
 
-                window.location.href = data.url;
+                // A Steam OpenID teljes oldalas navigációt igényel.
+                // Nem iframe-ben és nem új ablakban indítjuk.
+                window.location.assign(data.url);
 
             } catch (error) {
 
-                console.error(
-                    "connectSteam error:",
-                    error
-                );
+                console.error("connectSteam error:", error);
 
+                clearTimeout(timeout);
+                steamConnectInProgress = false;
                 button.disabled = false;
+                button.removeAttribute("aria-busy");
                 button.textContent = "🎮 Steam összekötése";
 
-                alert(
-                    error.message ||
-                    "Nem sikerült elindítani a Steam összekapcsolását."
-                );
+                const message = error?.name === "AbortError"
+                    ? "A szerver túl sokáig nem válaszolt. Próbáld meg újra pár másodperc múlva."
+                    : (error?.message || "Nem sikerült elindítani a Steam összekapcsolását.");
+
+                alert(message);
+            } finally {
+                clearTimeout(timeout);
             }
         }
 
@@ -1101,10 +1134,6 @@
                         </button>
                     </div>
                 `;
-
-                document
-                    .getElementById("steamConnectButton")
-                    ?.addEventListener("click", connectSteam);
 
             } else {
 
@@ -1331,9 +1360,14 @@
         // INIT
         // =========================================
 
-        document
-            .getElementById("steamConnectButton")
-            ?.addEventListener("click", connectSteam);
+        // Delegált eseménykezelő: akkor is működik, ha a callback
+        // vagy a profil renderelése újragenerálja a gombot.
+        document.addEventListener("click", function (event) {
+            const button = event.target.closest?.("#steamConnectButton");
+            if (button) {
+                connectSteam(event);
+            }
+        });
 
         handleSteamCallbackMessage();
 
