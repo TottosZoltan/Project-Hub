@@ -31,14 +31,6 @@
         }
     </style>
 
-    <link rel="manifest" href="manifest.webmanifest">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <meta name="theme-color" content="#0b0d12">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Project Hub">
-    <link rel="stylesheet" href="pwa.css">
-
 </head>
 
 <body>
@@ -407,15 +399,8 @@
     <script src="script.js"></script>
 
 
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("sw.js", { scope: "" }).catch((error) => {
-                    console.warn("Project Hub PWA service worker hiba:", error);
-                });
-            });
-        }
-    </script>
+    <script src="refresh.js"></script>
+
 </body>
 
 </html>
