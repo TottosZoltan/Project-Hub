@@ -517,75 +517,27 @@ main {
 
 
 
-/* ========================================
-   APP VERZIÓ + PULL-TO-REFRESH
-======================================== */
 
-.app-version-footer {
-    width: 100%;
-    padding: 22px 16px 28px;
+/* =========================
+   APP VERZIÓ / FEJLESZTŐI FOOTER
+========================= */
+
+.app-footer {
+    width: min(100% - 36px, 700px);
+    margin: 28px auto 22px;
+    padding: 14px 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    color: #737b8b;
+    gap: 7px;
+    box-sizing: border-box;
+    border-top: 1px solid #292d38;
+    color: #777d8b;
     font-size: 12px;
     text-align: center;
-    letter-spacing: 0.2px;
 }
 
-.app-version-footer span:last-child {
-    color: #9aa2b1;
-    font-weight: 600;
-}
-
-.pull-refresh-indicator {
-    position: fixed;
-    z-index: 9999;
-    top: 0;
-    left: 50%;
-    min-width: 190px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    border: 1px solid #292e3a;
-    border-top: 0;
-    border-radius: 0 0 14px 14px;
-    background: rgba(21, 24, 32, 0.96);
-    color: #dfe3eb;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
-    font-size: 12px;
-    pointer-events: none;
-    transform: translate(-50%, -100%);
-    opacity: 0;
-    transition: opacity 0.15s ease, transform 0.12s ease;
-}
-
-.pull-refresh-indicator.visible {
-    opacity: 1;
-}
-
-.pull-refresh-icon {
-    width: 20px;
-    height: 20px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 19px;
-    line-height: 1;
-}
-
-.pull-refresh-indicator.ready .pull-refresh-icon {
-    transform: translateY(-2px);
-}
-
-.pull-refresh-indicator.refreshing .pull-refresh-icon {
-    animation: projectHubRefreshSpin 0.8s linear infinite;
-}
-
-@keyframes projectHubRefreshSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+.app-footer strong {
+    color: #ffffff;
+    font-weight: 700;
 }
