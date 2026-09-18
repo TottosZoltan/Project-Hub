@@ -24,58 +24,6 @@ body.authenticated {
 }
 
 
-/* =========================================
-   HEADER
-========================================= */
-
-.profile-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 30px;
-}
-
-.profile-header h1 {
-    margin: 0;
-    color: #ffffff;
-    font-size: 28px;
-}
-
-.profile-header p {
-    margin: 5px 0 0;
-    color: #858b99;
-    font-size: 14px;
-}
-
-
-/* =========================================
-   BACK BUTTON
-========================================= */
-
-.profile-back-button {
-    width: 42px;
-    height: 42px;
-
-    border: 1px solid #292e3a;
-    border-radius: 10px;
-
-    background: #11141b;
-    color: #ffffff;
-
-    font-size: 20px;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
-}
-
-.profile-back-button:hover {
-    background: #181c25;
-    border-color: #3b4250;
-}
-
 
 /* =========================================
    SECTION
@@ -598,12 +546,6 @@ body.authenticated {
 }
 
 
-.profile-top-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .profile-link-message {
     margin-bottom: 14px;
 }
@@ -628,20 +570,17 @@ body.authenticated {
     border: 1px solid #713737;
 }
 
-
-.steam-link-message-long p {
-    margin: 10px 0 0;
-    color: #d8a8a8;
+/* Unified page header: matches the other Project Hub tabs. */
+.profile-page-header {
+    margin-bottom: 0;
 }
 
-.steam-link-message-long strong {
-    display: block;
-    color: #ffb0b0;
+.profile-page {
+    padding-top: 25px;
 }
 
 @media (max-width: 600px) {
-    .steam-link-message-long {
-        font-size: 13px;
-        line-height: 1.55;
+    .profile-page-header {
+        padding: 20px 18px;
     }
 }
