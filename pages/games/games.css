@@ -1,555 +1,212 @@
 /* =========================================
-   PROJECT HUB
-   GAMES.CSS
-
-   STEAM JÁTÉKOK
+   PROJECT HUB - GAMES REDESIGN
 ========================================= */
 
-
-/* =========================================
-   JÁTÉKOK SZEKCIÓ
-========================================= */
-
-.games-section {
-
-    width: 100%;
-
-    box-sizing: border-box;
-
+:root {
+    --games-bg: #090b10;
+    --games-panel: #11151d;
+    --games-panel-2: #151a23;
+    --games-border: #252c38;
+    --games-muted: #858d9c;
+    --games-soft: #b8bfca;
+    --games-accent: #69a8ff;
 }
 
-
-/* =========================================
-   SZEKCIÓ FEJLÉC
-========================================= */
-
-.games-section-header {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 15px;
-
-    margin-bottom: 18px;
-
+body {
+    background:
+        radial-gradient(circle at 10% 0%, rgba(64, 112, 180, .14), transparent 32%),
+        radial-gradient(circle at 90% 10%, rgba(99, 66, 164, .10), transparent 28%),
+        var(--games-bg);
 }
 
+body.modal-open { overflow: hidden; }
 
-.games-section-header h3 {
-
-    margin: 0 0 5px;
-
-    color: #ffffff;
-
-    font-size: 18px;
-
-    line-height: 1.3;
-
+.games-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 14px 18px;
+    background: rgba(9, 11, 16, .82);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
 
-
-.games-section-header p {
-
-    margin: 0;
-
-    color: #737987;
-
-    font-size: 12px;
-
-}
-
-
-/* =========================================
-   JÁTÉKLISTA
-========================================= */
-
-.games-list {
-
+.games-topbar-inner {
+    width: min(1080px, 100%);
+    margin: 0 auto;
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(280px, 1fr));
-
-    gap: 14px;
-
-    width: 100%;
-
-    box-sizing: border-box;
-
-}
-
-
-/* =========================================
-   JÁTÉK KÁRTYA
-========================================= */
-
-.steam-game {
-
-    display: flex;
-
-    flex-direction: column;
-
-    width: 100%;
-
-    min-width: 0;
-
-    overflow: hidden;
-
-    box-sizing: border-box;
-
-    background: #10131a;
-
-    border: 1px solid #222631;
-
-    border-radius: 14px;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.15s ease;
-
-}
-
-
-.steam-game:hover {
-
-    background: #151922;
-
-    border-color: #303644;
-
-    transform: translateY(-2px);
-
-}
-
-
-.steam-game:active {
-
-    transform: scale(0.99);
-
-}
-
-
-/* =========================================
-   JÁTÉK KÉP WRAPPER
-========================================= */
-
-.steam-game-image-wrapper {
-
-    position: relative;
-
-    width: 100%;
-
-    aspect-ratio: 460 / 215;
-
-    overflow: hidden;
-
-    background: #080a0f;
-
-}
-
-
-/* =========================================
-   JÁTÉK KÉP
-========================================= */
-
-.steam-game-image {
-
-    display: block;
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: cover;
-
-    background: #080a0f;
-
-}
-
-
-/* =========================================
-   JÁTÉK ELREJTÉSE GOMB
-========================================= */
-
-.steam-game-hide {
-
-    position: absolute;
-
-    top: 8px;
-
-    right: 8px;
-
-    width: 34px;
-
-    height: 34px;
-
-    display: flex;
-
+    grid-template-columns: 42px 1fr auto;
     align-items: center;
-
-    justify-content: center;
-
-    padding: 0;
-
-    box-sizing: border-box;
-
-    border: 1px solid rgba(255, 255, 255, 0.16);
-
-    border-radius: 9px;
-
-    background: rgba(5, 7, 12, 0.82);
-
-    color: #ffffff;
-
-    font-size: 21px;
-
-    line-height: 1;
-
-    cursor: pointer;
-
-    backdrop-filter: blur(6px);
-
-    -webkit-backdrop-filter: blur(6px);
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.15s ease;
-
+    gap: 14px;
 }
 
-
-.steam-game-hide:hover {
-
-    background: rgba(25, 29, 40, 0.96);
-
-    border-color: rgba(255, 255, 255, 0.25);
-
-    transform: scale(1.05);
-
-}
-
-
-.steam-game-hide:active {
-
-    transform: scale(0.94);
-
-}
-
-
-/* =========================================
-   JÁTÉK INFORMÁCIÓ
-========================================= */
-
-.steam-game-info {
-
-    width: 100%;
-
-    min-width: 0;
-
-    padding: 14px;
-
-    box-sizing: border-box;
-
-}
-
-
-.steam-game-name {
-
-    color: #ffffff;
-
-    font-size: 14px;
-
-    font-weight: bold;
-
-    line-height: 1.4;
-
-    overflow-wrap: anywhere;
-
-    word-break: break-word;
-
-}
-
-
-.steam-game-playtime {
-
-    margin-top: 6px;
-
-    color: #858b99;
-
-    font-size: 12px;
-
-    line-height: 1.4;
-
-}
-
-
-/* =========================================
-   BETÖLTÉS
-========================================= */
-
-.games-loading {
-
-    width: 100%;
-
-    padding: 25px 15px;
-
-    box-sizing: border-box;
-
-    color: #858b99;
-
-    text-align: center;
-
-    font-size: 13px;
-
-    grid-column: 1 / -1;
-
-}
-
-
-/* =========================================
-   HIBA
-========================================= */
-
-.games-error {
-
-    width: 100%;
-
-    padding: 18px 15px;
-
-    box-sizing: border-box;
-
-    color: #ff8d8d;
-
-    background: #1b1316;
-
-    border: 1px solid #3a2227;
-
-    border-radius: 12px;
-
-    text-align: center;
-
-    font-size: 13px;
-
-    grid-column: 1 / -1;
-
-}
-
-
-/* =========================================
-   ÜRES LISTA
-========================================= */
-
-.games-empty {
-
-    width: 100%;
-
-    padding: 25px 15px;
-
-    box-sizing: border-box;
-
-    color: #858b99;
-
-    text-align: center;
-
-    font-size: 13px;
-
-    grid-column: 1 / -1;
-
-}
-
-
-/* =========================================
-   TABLET
-========================================= */
-
-@media (max-width: 700px) {
-
-    .games-list {
-
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 10px;
-
-    }
-
-
-    .steam-game {
-
-        border-radius: 12px;
-
-    }
-
-
-    .steam-game-info {
-
-        padding: 12px;
-
-    }
-
-
-    .steam-game-name {
-
-        font-size: 13px;
-
-    }
-
-
-    .steam-game-hide {
-
-        top: 7px;
-
-        right: 7px;
-
-        width: 32px;
-
-        height: 32px;
-
-    }
-
-}
-
-
-/* =========================================
-   MOBIL
-========================================= */
-
-@media (max-width: 500px) {
-
-    .games-section-header {
-
-        margin-bottom: 14px;
-
-    }
-
-
-    .games-section-header h3 {
-
-        font-size: 17px;
-
-    }
-
-
-    .games-list {
-
-        grid-template-columns: 1fr;
-
-        gap: 10px;
-
-    }
-
-
-    .steam-game {
-
-        border-radius: 12px;
-
-    }
-
-
-    .steam-game-info {
-
-        padding: 12px;
-
-    }
-
-
-    .steam-game-name {
-
-        font-size: 14px;
-
-        line-height: 1.35;
-
-    }
-
-
-    .steam-game-playtime {
-
-        font-size: 12px;
-
-    }
-
-
-    .steam-game-hide {
-
-        top: 8px;
-
-        right: 8px;
-
-        width: 34px;
-
-        height: 34px;
-
-    }
-
-}
-
-
-/* =========================================
-   EXTRA KIS MOBIL
-========================================= */
-
-@media (max-width: 360px) {
-
-    .games-list {
-
-        gap: 8px;
-
-    }
-
-
-    .steam-game-info {
-
-        padding: 11px;
-
-    }
-
-
-    .steam-game-name {
-
-        font-size: 13px;
-
-    }
-
-
-    .steam-game-playtime {
-
-        font-size: 11px;
-
-    }
-
-
-    .steam-game-hide {
-
-        top: 6px;
-
-        right: 6px;
-
-        width: 31px;
-
-        height: 31px;
-
-        font-size: 19px;
-
-    }
-
-}
-
-
-.steam-management-hint {
-    margin: 14px 0 0;
-    color: #858b99;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.steam-account-info .steam-connect-button {
+.games-back,
+.games-profile-link {
     display: inline-flex;
-    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 42px;
+    padding: 0 13px;
+    box-sizing: border-box;
+    color: #fff;
     text-decoration: none;
+    background: rgba(255,255,255,.05);
+    border: 1px solid var(--games-border);
+    border-radius: 12px;
+    transition: .2s ease;
+}
+
+.games-back { font-size: 24px; }
+.games-profile-link { font-size: 13px; font-weight: 700; }
+.games-back:hover,
+.games-profile-link:hover { background: rgba(255,255,255,.09); border-color: #3a4352; }
+
+.eyebrow {
+    margin: 0 0 5px;
+    color: var(--games-muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .16em;
+}
+
+.games-topbar h1 { margin: 0; color: #fff; font-size: 18px; }
+
+.games-page {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+    padding: 24px 18px 60px;
+    box-sizing: border-box;
+}
+
+.games-hero {
+    min-height: 190px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 16px;
+    padding: 28px;
+    box-sizing: border-box;
+    border: 1px solid var(--games-border);
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(31, 44, 65, .88), rgba(16, 19, 27, .96));
+    overflow: hidden;
+}
+
+.games-hero-copy { max-width: 700px; }
+.games-hero h2 { margin: 0 0 9px; color: #fff; font-size: clamp(28px, 5vw, 44px); line-height: 1.02; letter-spacing: -.035em; }
+.games-hero p:not(.eyebrow) { margin: 0; color: var(--games-soft); line-height: 1.55; max-width: 620px; }
+.games-hero-badge { font-size: 68px; opacity: .85; filter: drop-shadow(0 14px 25px rgba(0,0,0,.35)); }
+
+.steam-account-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding: 17px 19px;
+    background: rgba(17,21,29,.88);
+    border: 1px solid var(--games-border);
+    border-radius: 18px;
+}
+
+.steam-account-main { display: flex; align-items: center; gap: 13px; min-width: 0; }
+.steam-account-avatar { width: 54px; height: 54px; flex: 0 0 54px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 15px; background: #090c12; border: 1px solid var(--games-border); font-size: 25px; }
+.steam-account-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.steam-account-copy { min-width: 0; }
+.steam-account-copy h2 { margin: 0 0 3px; color: #fff; font-size: 16px; }
+.steam-account-copy p:last-child { margin: 0; color: var(--games-muted); font-size: 12px; line-height: 1.4; }
+.profile-action-link { color: var(--games-accent); text-decoration: none; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.profile-action-link:hover { text-decoration: underline; }
+
+.library-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 15px; }
+.library-header h2 { margin: 0 0 4px; color: #fff; font-size: 24px; }
+.library-header p:last-child { margin: 0; color: var(--games-muted); font-size: 12px; }
+.library-refresh { width: 42px; height: 42px; flex: 0 0 42px; border: 1px solid var(--games-border); border-radius: 12px; background: var(--games-panel); color: #fff; font-size: 22px; cursor: pointer; transition: .2s ease; }
+.library-refresh:hover { background: var(--games-panel-2); transform: rotate(20deg); }
+.library-refresh:disabled { opacity: .5; cursor: wait; }
+
+.games-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+.games-search { min-width: 190px; flex: 1; display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 42px; background: var(--games-panel); border: 1px solid var(--games-border); border-radius: 12px; color: var(--games-muted); }
+.games-search input { width: 100%; border: 0; outline: 0; background: transparent; color: #fff; font: inherit; font-size: 13px; }
+.games-search input::placeholder { color: #667080; }
+.games-filter { display: flex; gap: 5px; padding: 4px; background: var(--games-panel); border: 1px solid var(--games-border); border-radius: 12px; }
+.filter-button { border: 0; border-radius: 8px; padding: 8px 10px; background: transparent; color: var(--games-muted); font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }
+.filter-button.active { background: #242b37; color: #fff; }
+
+.games-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; }
+.game-card { min-width: 0; overflow: hidden; background: var(--games-panel); border: 1px solid var(--games-border); border-radius: 16px; cursor: pointer; outline: none; transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+.game-card:hover, .game-card:focus-visible { transform: translateY(-3px); border-color: #3b4656; background: var(--games-panel-2); }
+.game-card-media { position: relative; aspect-ratio: 460 / 215; overflow: hidden; background: #07090d; }
+.game-card-media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
+.game-card:hover .game-card-media img { transform: scale(1.04); }
+.game-card-gradient { position: absolute; inset: 35% 0 0; background: linear-gradient(transparent, rgba(0,0,0,.62)); pointer-events: none; }
+.game-card-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #778092; font-size: 42px; }
+.game-card-body { padding: 13px; }
+.game-card-body h3 { margin: 0 0 9px; color: #fff; font-size: 14px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.game-card-meta { display: flex; align-items: center; gap: 6px; color: var(--games-muted); font-size: 11px; }
+.game-card-meta strong { color: #c7cdd7; font-weight: 600; }
+.game-hide-button { position: absolute; top: 8px; right: 8px; z-index: 2; width: 32px; height: 32px; border: 1px solid rgba(255,255,255,.15); border-radius: 9px; background: rgba(5,7,12,.78); color: #fff; cursor: pointer; letter-spacing: 2px; }
+.game-hide-button:hover { background: rgba(30,35,45,.95); }
+.recent-badge { position: absolute; left: 9px; bottom: 8px; padding: 5px 7px; border: 1px solid rgba(255,255,255,.13); border-radius: 7px; background: rgba(6,8,12,.74); color: #dce2eb; font-size: 9px; backdrop-filter: blur(5px); }
+
+.games-state { grid-column: 1 / -1; min-height: 190px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px; box-sizing: border-box; text-align: center; background: var(--games-panel); border: 1px dashed var(--games-border); border-radius: 18px; color: var(--games-muted); }
+.games-state strong { margin-top: 8px; color: #e8ebf0; font-size: 14px; }
+.games-state p { max-width: 520px; margin: 6px 0 0; color: #70798a; font-size: 12px; line-height: 1.5; }
+.state-icon { font-size: 24px; color: #aeb6c3; }
+.loading-state .state-icon { animation: spin 1.2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-state { border-color: #513039; background: #171013; }
+.error-state .state-icon { color: #ff9d9d; }
+
+.game-details-modal[hidden] { display: none; }
+.game-details-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 18px; box-sizing: border-box; }
+.game-details-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.72); backdrop-filter: blur(7px); }
+.game-details-content { position: relative; z-index: 1; width: min(720px, 100%); max-height: min(88vh, 820px); overflow: auto; background: #10141c; border: 1px solid #2c3441; border-radius: 22px; box-shadow: 0 24px 80px rgba(0,0,0,.45); }
+.game-details-close { position: absolute; top: 12px; right: 12px; z-index: 4; width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.16); border-radius: 11px; background: rgba(5,7,12,.78); color: #fff; font-size: 24px; cursor: pointer; }
+.game-details-cover { aspect-ratio: 460 / 215; background: #080a0f; overflow: hidden; }
+.game-details-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.game-details-body { padding: 22px; }
+.game-details-body h2 { margin: 0 0 5px; color: #fff; font-size: 26px; }
+.game-details-subtitle { margin: 0; color: var(--games-muted); font-size: 12px; }
+.game-details-stats { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin: 18px 0 22px; }
+.game-stat-box { padding: 13px; background: #161b24; border: 1px solid #252d39; border-radius: 12px; }
+.game-stat-box span { display: block; margin-bottom: 4px; color: var(--games-muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+.game-stat-box strong { color: #fff; font-size: 17px; }
+.achievement-heading { margin-bottom: 10px; }
+.achievement-heading h3 { margin: 0; color: #fff; font-size: 16px; }
+.game-achievements-list { display: grid; gap: 8px; }
+.achievement-row { display: grid; grid-template-columns: 42px 1fr auto; gap: 10px; align-items: center; padding: 9px; border: 1px solid #252d39; border-radius: 11px; background: #141922; }
+.achievement-row.locked { opacity: .6; }
+.achievement-row img, .achievement-placeholder { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; background: #0b0e14; }
+.achievement-placeholder { display: flex; align-items: center; justify-content: center; }
+.achievement-copy { min-width: 0; }
+.achievement-copy strong { color: #e9edf3; font-size: 12px; }
+.achievement-copy p { margin: 3px 0 0; color: #737d8d; font-size: 10px; line-height: 1.4; }
+.achievement-status { color: #8f98a8; font-size: 9px; white-space: nowrap; }
+.achievement-row.unlocked .achievement-status { color: #81d9a3; }
+
+@media (max-width: 900px) { .games-list { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (max-width: 680px) {
+    .games-page { padding: 17px 12px 45px; }
+    .games-hero { min-height: 165px; padding: 21px; border-radius: 19px; }
+    .games-hero-badge { font-size: 48px; }
+    .steam-account-card { align-items: flex-start; flex-direction: column; }
+    .games-controls { align-items: stretch; flex-direction: column; }
+    .games-filter { overflow-x: auto; }
+    .filter-button { flex: 1; white-space: nowrap; }
+    .games-list { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+}
+@media (max-width: 430px) {
+    .games-topbar { padding: 11px 12px; }
+    .games-topbar-inner { grid-template-columns: 40px 1fr auto; gap: 9px; }
+    .games-back, .games-profile-link { min-width: 40px; height: 40px; }
+    .games-profile-link { padding: 0 10px; }
+    .games-hero h2 { font-size: 29px; }
+    .games-hero-badge { display: none; }
+    .games-list { grid-template-columns: 1fr; }
+    .game-card-media { aspect-ratio: 460 / 205; }
+    .game-details-body { padding: 17px; }
 }

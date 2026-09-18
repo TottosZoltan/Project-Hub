@@ -1,604 +1,133 @@
 <!DOCTYPE html>
 <html lang="hu">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Játékok - Project Hub</title>
-
-    <link
-        rel="stylesheet"
-        href="../../style.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../pages.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="games.css"
-    >
-
-
-    <!-- =========================================
-         APP VÉDELEM
-    ========================================== -->
-
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../pages.css">
+    <link rel="stylesheet" href="games.css">
     <style>
-
-        body {
-            visibility: hidden;
-        }
-
-        body.authenticated {
-            visibility: visible;
-        }
-
+        body { visibility: hidden; }
+        body.authenticated { visibility: visible; }
     </style>
-
 </head>
-
-
 <body>
-
-
-    <!-- =========================================
-         FEJLÉC
-    ========================================== -->
-
-    <header class="header">
-
-        <div>
-
-            <h1>JÁTÉKOK</h1>
-
-            <p>
-                Project Hub
-            </p>
-
+    <header class="games-topbar">
+        <div class="games-topbar-inner">
+            <a href="../../index.html" class="games-back" aria-label="Vissza a főoldalra">←</a>
+            <div>
+                <p class="eyebrow">PROJECT HUB</p>
+                <h1>Játékok</h1>
+            </div>
+            <a href="../profile/profile.html" class="games-profile-link">Profil</a>
         </div>
-
-
-        <a
-            href="../../index.html"
-            class="back-button"
-            aria-label="Vissza"
-        >
-
-            <span class="back-arrow"></span>
-
-        </a>
-
     </header>
 
-
-
-    <!-- =========================================
-         FŐ TARTALOM
-    ========================================== -->
-
-    <main class="page-content games-page">
-
-
-        <!-- =====================================
-             BEVEZETŐ
-        ====================================== -->
-
-        <section class="page-intro">
-
-            <p class="small-title">
-                PROJECT HUB
-            </p>
-
-            <h2>
-                🎮 Játékok
-            </h2>
-
-            <p>
-                A Steam könyvtárad és játékadataid egy helyen.
-            </p>
-
+    <main class="games-page">
+        <section class="games-hero">
+            <div class="games-hero-copy">
+                <p class="eyebrow">STEAM KÖNYVTÁR</p>
+                <h2>A játékaid, egy helyen.</h2>
+                <p>Játékidő, könyvtár és achievementek egy gyors, mobilbarát nézetben.</p>
+            </div>
+            <div class="games-hero-badge" aria-hidden="true">🎮</div>
         </section>
 
+        <section class="steam-account-card" aria-labelledby="steamAccountTitle">
+            <div class="steam-account-main">
+                <div class="steam-account-avatar" id="steamAccountAvatar">🎮</div>
+                <div class="steam-account-copy">
+                    <p class="eyebrow">STEAM</p>
+                    <h2 id="steamAccountTitle">Steam-fiók</h2>
+                    <p id="steamAccountStatus">Kapcsolat ellenőrzése...</p>
+                </div>
+            </div>
+            <div class="steam-account-action">
+                <a href="../profile/profile.html" class="profile-action-link">Steam kapcsolat kezelése →</a>
+            </div>
+        </section>
 
-
-        <!-- =====================================
-             STEAM FIÓK
-        ====================================== -->
-
-        <section class="page-section steam-account-section">
-
-            <div class="steam-account-header">
-
+        <section id="steamGamesSection" class="games-library" aria-labelledby="libraryTitle">
+            <div class="library-header">
                 <div>
-
-                    <h3>
-                        🎮 Steam-fiók
-                    </h3>
-
-                    <p id="steamAccountStatus">
-                        Steam-fiók ellenőrzése...
-                    </p>
-
+                    <p class="eyebrow">KÖNYVTÁR</p>
+                    <h2 id="libraryTitle">Steam játékaid</h2>
+                    <p id="libraryMeta">Betöltés...</p>
                 </div>
-
+                <button id="refreshGamesButton" class="library-refresh" type="button" aria-label="Játéklista frissítése">↻</button>
             </div>
 
-
-            <!-- =================================
-                 NINCS ÖSSZEKÖTVE
-            ================================== -->
-
-            <div
-                id="steamNotConnected"
-                class="steam-account-box"
-                style="display: none;"
-            >
-
-                <div class="steam-account-info">
-
-                    <strong>
-                        Nincs Steam-fiók összekötve
-                    </strong>
-
-                    <p>
-                        Kösd össze a Project Hub-fiókodat a Steam-fiókoddal,
-                        hogy automatikusan lekérhessük a saját játékaidat,
-                        játékidődet és achievementjeidet.
-                    </p>
-
-                    <a
-                        href="../profile/profile.html"
-                        class="steam-connect-button"
-                    >
-                        👤 Ugrás a Profil → Steam részhez
-                    </a>
-
+            <div id="gamesControls" class="games-controls" style="display:none;">
+                <label class="games-search">
+                    <span aria-hidden="true">⌕</span>
+                    <input id="gamesSearchInput" type="search" placeholder="Játék keresése..." autocomplete="off">
+                </label>
+                <div class="games-filter" role="group" aria-label="Játéklista rendezése">
+                    <button class="filter-button active" type="button" data-sort="playtime">Játékidő</button>
+                    <button class="filter-button" type="button" data-sort="name">Név</button>
+                    <button class="filter-button" type="button" data-sort="recent">Legutóbbi</button>
                 </div>
-</div>
-
-
-
-            <!-- =================================
-                 ÖSSZEKÖTVE
-            ================================== -->
-
-            <div
-                id="steamConnected"
-                class="steam-account-box"
-                style="display: none;"
-            >
-
-                <div class="steam-profile">
-
-                    <img
-                        id="steamAvatar"
-                        class="steam-avatar"
-                        src=""
-                        alt="Steam profilkép"
-                    >
-
-
-                    <div class="steam-profile-info">
-
-                        <strong
-                            id="steamPersonaName"
-                        >
-                            Steam felhasználó
-                        </strong>
-
-                        <span
-                            id="steamId"
-                        >
-                            SteamID betöltése...
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <p class="steam-management-hint">
-                    A Steam-fiók kezelését (összekapcsolás és leválasztás) a Profil fül → Steam részén találod.
-                </p>
-
             </div>
 
+            <div id="gamesList" class="games-list">
+                <div class="games-state loading-state"><span class="state-icon">◌</span><strong>Steam játékok betöltése...</strong></div>
+            </div>
         </section>
-
-
-
-        <!-- =====================================
-             STEAM JÁTÉKOK
-        ====================================== -->
-
-        <section
-            id="steamGamesSection"
-            class="page-section games-section"
-        >
-
-            <div class="games-section-header">
-
-                <div>
-
-                    <h3>
-                        Steam könyvtár
-                    </h3>
-
-                    <p>
-                        Játékidő alapján rendezve
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================
-                 JÁTÉKOK
-            ================================== -->
-
-            <div
-                id="gamesList"
-                class="games-list"
-            >
-
-                <div class="games-loading">
-
-                    Steam játékok betöltése...
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
     </main>
 
-
-
-    <!-- =========================================
-         JÁTÉK RÉSZLETEK MODAL
-    ========================================== -->
-
-    <div
-        id="gameDetailsModal"
-        class="game-details-modal"
-        style="display: none;"
-    >
-
+    <div id="gameDetailsModal" class="game-details-modal" hidden>
         <div class="game-details-overlay"></div>
-
-
-        <div
-            class="game-details-content"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="gameDetailsTitle"
-        >
-
-            <!-- =================================
-                 BEZÁRÁS
-            ================================== -->
-
-            <button
-                id="closeGameDetailsButton"
-                class="game-details-close"
-                type="button"
-                aria-label="Bezárás"
-            >
-
-                ×
-
-            </button>
-
-
-
-            <!-- =================================
-                 JÁTÉK FEJLÉC
-            ================================== -->
-
-            <div class="game-details-header">
-
-                <img
-                    id="gameDetailsImage"
-                    class="game-details-image"
-                    src=""
-                    alt=""
-                >
-
-
-                <div class="game-details-title-area">
-
-                    <h2
-                        id="gameDetailsTitle"
-                    >
-                        Játék
-                    </h2>
-
-                    <p
-                        id="gameDetailsPlaytime"
-                    >
-                        Játékidő betöltése...
-                    </p>
-
-                </div>
-
+        <div class="game-details-content" role="dialog" aria-modal="true" aria-labelledby="gameDetailsTitle">
+            <button id="closeGameDetailsButton" class="game-details-close" type="button" aria-label="Bezárás">×</button>
+            <div class="game-details-cover">
+                <img id="gameDetailsImage" src="" alt="">
             </div>
-
-
-
-            <!-- =================================
-                 STATISZTIKÁK
-            ================================== -->
-
-            <div class="game-details-stats">
-
-                <div class="game-stat-box">
-
-                    <span class="game-stat-label">
-                        Játékidő
-                    </span>
-
-                    <strong id="gameDetailsHours">
-                        0 óra
-                    </strong>
-
+            <div class="game-details-body">
+                <p class="eyebrow">JÁTÉK RÉSZLETEI</p>
+                <h2 id="gameDetailsTitle">Játék</h2>
+                <p id="gameDetailsPlaytime" class="game-details-subtitle">Játékidő betöltése...</p>
+                <div class="game-details-stats">
+                    <div class="game-stat-box"><span>Játékidő</span><strong id="gameDetailsHours">0 óra</strong></div>
+                    <div class="game-stat-box"><span>Achievementek</span><strong id="gameDetailsAchievementCount">Betöltés...</strong></div>
                 </div>
-
-
-                <div class="game-stat-box">
-
-                    <span class="game-stat-label">
-                        Achievementek
-                    </span>
-
-                    <strong id="gameDetailsAchievementCount">
-                        0 / 0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================
-                 ACHIEVEMENTEK
-            ================================== -->
-
-            <div class="game-achievements-section">
-
-                <h3>
-                    🏆 Achievementek
-                </h3>
-
-
-                <div
-                    id="gameAchievements"
-                    class="game-achievements-list"
-                >
-
-                    <div class="games-loading">
-
-                        Achievementek betöltése...
-
+                <div class="game-achievements-section">
+                    <div class="achievement-heading"><h3>🏆 Achievementek</h3></div>
+                    <div id="gameAchievements" class="game-achievements-list">
+                        <div class="games-state loading-state">Achievementek betöltése...</div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-
-
-    <!-- =========================================
-         AUTH ELLENŐRZÉS
-    ========================================== -->
-
     <script>
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            async function () {
-
-                const BACKEND_URL =
-                    "https://project-hub-backend-1.onrender.com";
-
-
-                const LOGIN_PAGE =
-                    "../auth/login.html";
-
-
-                // =====================================
-                // TOKEN
-                // =====================================
-
-                const token =
-                    localStorage.getItem(
-                        "projectHubAuthToken"
-                    );
-
-
-                // =====================================
-                // NINCS TOKEN
-                // =====================================
-
-                if (!token) {
-
-                    sessionStorage.setItem(
-                        "projectHubAuthMessage",
-                        "🔐 A Játékok használatához be kell jelentkezned."
-                    );
-
-                    window.location.href =
-                        LOGIN_PAGE;
-
-                    return;
-
-                }
-
-
-                // =====================================
-                // AUTH ELLENŐRZÉS
-                // =====================================
-
-                try {
-
-                    const response =
-                        await fetch(
-                            BACKEND_URL +
-                            "/api/auth/me",
-                            {
-                                method: "GET",
-
-                                headers: {
-                                    "Authorization":
-                                        "Bearer " + token
-                                },
-
-                                credentials:
-                                    "include"
-                            }
-                        );
-
-
-                    let result;
-
-
-                    try {
-
-                        result =
-                            await response.json();
-
-                    } catch (jsonError) {
-
-                        console.error(
-                            "Auth válasz feldolgozási hiba:",
-                            jsonError
-                        );
-
-                        localStorage.removeItem(
-                            "projectHubAuthToken"
-                        );
-
-                        sessionStorage.setItem(
-                            "projectHubAuthMessage",
-                            "⚠️ A munkamenetet nem sikerült ellenőrizni. Jelentkezz be újra."
-                        );
-
-                        window.location.href =
-                            LOGIN_PAGE;
-
-                        return;
-
-                    }
-
-
-                    console.log(
-                        "JÁTÉKOK AUTH ELLENŐRZÉS:",
-                        result
-                    );
-
-
-                    // =================================
-                    // SIKERES AUTH
-                    // =================================
-
-                    if (
-                        response.ok &&
-                        result.success &&
-                        result.user
-                    ) {
-
-                        console.log(
-                            "Játékok oldal engedélyezve:",
-                            result.user.username
-                        );
-
-
-                        document.body.classList.add(
-                            "authenticated"
-                        );
-
-
-                        return;
-
-                    }
-
-
-                    // =================================
-                    // ÉRVÉNYTELEN TOKEN
-                    // =================================
-
-                    localStorage.removeItem(
-                        "projectHubAuthToken"
-                    );
-
-
-                    sessionStorage.setItem(
-                        "projectHubAuthMessage",
-                        "🔐 A munkameneted lejárt. Kérlek jelentkezz be újra."
-                    );
-
-
-                    window.location.href =
-                        LOGIN_PAGE;
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Játékok auth ellenőrzési hiba:",
-                        error
-                    );
-
-
-                    localStorage.removeItem(
-                        "projectHubAuthToken"
-                    );
-
-
-                    sessionStorage.setItem(
-                        "projectHubAuthMessage",
-                        "⚠️ A munkamenetet nem sikerült ellenőrizni. Jelentkezz be újra."
-                    );
-
-
-                    window.location.href =
-                        LOGIN_PAGE;
-
-                }
-
+        document.addEventListener("DOMContentLoaded", async function () {
+            const BACKEND_URL = "https://project-hub-backend-1.onrender.com";
+            const LOGIN_PAGE = "../auth/login.html";
+            const token = localStorage.getItem("projectHubAuthToken");
+            if (!token) {
+                window.location.href = LOGIN_PAGE;
+                return;
             }
-        );
-
+            try {
+                const response = await fetch(BACKEND_URL + "/api/auth/me", {
+                    method: "GET",
+                    headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+                    credentials: "include"
+                });
+                if (!response.ok) throw new Error("invalid_auth");
+                const result = await response.json();
+                if (!result.success || !result.user) throw new Error("invalid_auth");
+                document.body.classList.add("authenticated");
+            } catch (error) {
+                localStorage.removeItem("projectHubAuthToken");
+                sessionStorage.setItem("projectHubAuthMessage", "🔐 A munkameneted lejárt. Kérlek jelentkezz be újra.");
+                window.location.href = LOGIN_PAGE;
+            }
+        });
     </script>
-
-
-
-    <!-- =========================================
-         JAVASCRIPT
-    ========================================== -->
-
     <script src="games.js"></script>
-
-
-
     <script src="../../refresh.js"></script>
-
 </body>
-
 </html>

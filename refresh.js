@@ -5,7 +5,7 @@
 (function () {
     "use strict";
 
-    const APP_VERSION = "1.2.5";
+    const APP_VERSION = "1.2.6";
     const PULL_THRESHOLD = 72;
 
     // Verziószám az app alján.
