@@ -16,82 +16,11 @@
 <body>
 
     <!-- =========================================
-         SIDE MENU
-    ========================================== -->
-
-    <div id="menuOverlay" class="menu-overlay"></div>
-
-    <aside id="sideMenu" class="side-menu">
-
-        <button
-            id="closeMenu"
-            class="close-menu"
-            type="button"
-        >
-            ×
-        </button>
-
-        <div class="menu-title">
-            PROJECT HUB
-        </div>
-
-        <nav class="menu-nav">
-
-            <a href="../../index.html">
-                📝 Jegyzetek
-            </a>
-
-            <a href="../../index.html">
-                ✅ Feladatok
-            </a>
-
-            <a href="../../pages/games/games.html">
-                🎮 Játékok
-            </a>
-
-            <a href="../../index.html">
-                📍 Helyek
-            </a>
-
-            <div class="menu-divider"></div>
-
-            <a
-                href="profile.html"
-                class="menu-profile-link active"
-            >
-                👤 Profil
-            </a>
-
-            <button
-                id="logoutButton"
-                class="menu-logout"
-                type="button"
-            >
-                🚪 Kijelentkezés
-            </button>
-
-        </nav>
-    </aside>
-
-
-    <!-- =========================================
          HEADER
     ========================================== -->
 
-    <header class="top-header">
-
-        <button
-            id="menuButton"
-            class="menu-button"
-            type="button"
-        >
-            ☰
-        </button>
-
-        <div class="header-title">
-            PROFIL
-        </div>
-
+    <header class="top-header profile-top-header">
+        <div class="header-title">PROFIL</div>
     </header>
 
 
@@ -103,13 +32,13 @@
 
         <div class="profile-header">
 
-            <button
+            <a
                 class="profile-back-button"
-                onclick="history.back()"
-                type="button"
+                href="../../index.html"
+                aria-label="Vissza a főoldalra"
             >
                 ←
-            </button>
+            </a>
 
             <div>
                 <h1>Profil</h1>
@@ -1040,9 +969,9 @@
                 <div class="profile-actions">
 
                     <button
-                        type="button"
                         id="steamConnectButton"
                         class="profile-button primary"
+                        type="button"
                     >
                         🎮 Steam összekötése
                     </button>
@@ -1050,16 +979,6 @@
                 </div>
 
             `;
-
-
-            document
-                .getElementById(
-                    "steamConnectButton"
-                )
-                .addEventListener(
-                    "click",
-                    connectSteam
-                );
 
         }
 
@@ -1075,16 +994,12 @@
                     "steamConnectButton"
                 );
 
-
             if (!button) {
                 return;
             }
 
-
             button.disabled = true;
-            button.textContent =
-                "⏳ Steam megnyitása...";
-
+            button.textContent = "⏳ Steam megnyitása...";
 
             try {
 
@@ -1093,30 +1008,22 @@
                         BACKEND_URL + "/api/steam/link",
                         {
                             method: "GET",
-                            headers: authHeaders()
+                            headers: authHeaders(),
+                            credentials: "include"
                         }
                     );
 
+                const data = await response.json();
 
-                const data =
-                    await response.json();
-
-
-                if (!response.ok ||
-                    !data.success ||
-                    !data.url) {
-
+                if (!response.ok || !data.success || !data.url) {
                     throw new Error(
                         data.message ||
                         data.error ||
                         "Nem sikerült elindítani a Steam összekapcsolását."
                     );
-
                 }
 
-
                 window.location.href = data.url;
-
 
             } catch (error) {
 
@@ -1126,89 +1033,98 @@
                 );
 
                 button.disabled = false;
-                button.textContent =
-                    "🎮 Steam összekötése";
+                button.textContent = "🎮 Steam összekötése";
 
                 alert(
                     error.message ||
                     "Nem sikerült elindítani a Steam összekapcsolását."
                 );
-
             }
-
         }
 
 
         // =========================================
-        // STEAM LINK RESULT
+        // STEAM CALLBACK ÜZENET
         // =========================================
 
-        function handleSteamLinkResult() {
+        function handleSteamCallbackMessage() {
 
             const params =
                 new URLSearchParams(
                     window.location.search
                 );
 
-
             const steamLink =
                 params.get("steam_link");
-
-
-            const reason =
-                params.get("reason");
-
 
             if (!steamLink) {
                 return;
             }
 
+            const reason =
+                params.get("reason");
+
+            const container =
+                document.getElementById(
+                    "steamProfile"
+                );
 
             if (steamLink === "success") {
 
-                alert(
-                    "✓ A Steam fiók sikeresen össze lett kötve a Project Hub profiloddal."
+                container.insertAdjacentHTML(
+                    "afterbegin",
+                    `<div class="steam-link-message success">✓ A Steam fiók sikeresen összekapcsolva.</div>`
                 );
 
-            } else if (steamLink === "error") {
+                loadSteamProfile();
 
-                const messages = {
-                    steam_already_linked:
-                        "Ez a Steam-fiók már egy másik Project Hub-fiókhoz van kapcsolva.",
-                    invalid_state:
-                        "A Steam összekapcsolási munkamenete lejárt vagy érvénytelen.",
-                    openid_failed:
-                        "A Steam bejelentkezés megszakadt.",
-                    missing_steam_id:
-                        "A Steam nem adott vissza érvényes azonosítót.",
-                    steam_verify_failed:
-                        "A Steam kapcsolat ellenőrzése sikertelen.",
-                    invalid_steam_login:
-                        "A Steam bejelentkezés ellenőrzése sikertelen.",
-                    invalid_steam_id:
-                        "A Steam azonosító érvénytelen.",
-                    server_error:
-                        "Szerverhiba történt a Steam összekapcsolásakor."
-                };
+            } else if (reason === "steam_already_linked") {
 
-                alert(
-                    "❌ " +
-                    (messages[reason] ||
-                        "Nem sikerült összekapcsolni a Steam-fiókot.")
+                container.innerHTML = `
+                    <div class="steam-link-message error">
+                        ❌ Ez a Steam fiók már egy másik Project Hub fiókhoz van kapcsolva.
+                    </div>
+
+                    <div class="steam-not-connected">
+                        <div class="steam-not-connected-icon">🎮</div>
+                        <div>
+                            <h3>Nincs Steam fiók összekötve</h3>
+                            <p class="steam-not-connected-text">
+                                Próbálj meg egy másik Steam fiókot összekapcsolni.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions">
+                        <button
+                            id="steamConnectButton"
+                            class="profile-button primary"
+                            type="button"
+                        >
+                            🎮 Steam összekötése
+                        </button>
+                    </div>
+                `;
+
+                document
+                    .getElementById("steamConnectButton")
+                    ?.addEventListener("click", connectSteam);
+
+            } else {
+
+                container.insertAdjacentHTML(
+                    "afterbegin",
+                    `<div class="steam-link-message error">❌ A Steam összekapcsolása nem sikerült. (${escapeHtml(reason || "ismeretlen hiba")})</div>`
                 );
 
+                loadSteamProfile();
             }
-
-
-            const cleanUrl =
-                window.location.pathname;
 
             window.history.replaceState(
                 {},
                 document.title,
-                cleanUrl
+                window.location.pathname
             );
-
         }
 
 
@@ -1419,7 +1335,12 @@
         // INIT
         // =========================================
 
-        handleSteamLinkResult();
+        document
+            .getElementById("steamConnectButton")
+            ?.addEventListener("click", connectSteam);
+
+        handleSteamCallbackMessage();
+
         loadProfile();
         loadSteamProfile();
         loadBlacklistInfo();
