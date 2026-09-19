@@ -1,110 +1,254 @@
-## 🚀 Project Hub
+# 🚀 Project Hub — v1.3
 
-Saját személyes dashboard, ahol a jegyzetek, feladatok és egyéb hasznos funkciók egy helyen érhetők el.
+A Project Hub egy személyes, mobil-first dashboard és játékközpont, amely a jegyzeteket, feladatokat, profilkezelést, Steam-integrációt és saját játékgyűjteményt egyetlen felületen fogja össze.
 
-### ✅ Jelenlegi funkciók
+## ✨ v1.3 fő újdonságai
 
-* 📝 **Jegyzetek**
+- 🎮 teljes Steam-kapcsolati folyamat a Profil oldalon
+- 📚 külön Steam és Egyéni játék könyvtár
+- 🏆 Steam játék achievementek megjelenítése
+- 👤 megújult Profil oldal és Steam státusz
+- 📱 mobil-first, reszponzív felület
+- 👆 mobilos gesztusok tesztverziója
+- 🔄 pull-to-refresh és appon belüli frissítési visszajelzés
+- 📲 PWA / iPhone telepíthetőség
+- 🖥️ fejlesztői Console és diagnosztikai információk
+- 🎨 egységesített belső oldalak és kártyás UI
+- 🔢 egységes Project Hub v1.3 verziójelölés
 
-  * ➕ Létrehozás
-  * ✏️ Szerkesztés
-  * 🗑️ Törlés
-  * 📌 Rögzítés
-  * 🔍 Keresés
-  * 🏷️ Kategóriaszűrés
-  * ↕️ Rendezés
-  * 📖 Teljes jegyzet megnyitása
-  * 💾 Automatikus mentés
+## 🧩 Funkciók
 
-* ✅ **Feladatok**
+### 🏠 Főoldal
 
-  * ➕ Létrehozás
-  * ✏️ Szerkesztés
-  * 🗑️ Törlés
-  * ☑️ Kész / nincs kész
-  * ⭐ Fontos feladatok
-  * 📌 Rögzítés
-  * 🔍 Keresés
-  * 🏷️ Státusz- és kategóriaszűrés
-  * ↕️ Rendezés
-  * 📊 Statisztika
-  * 📈 Haladási sáv
-  * 💾 Automatikus mentés
+- gyors áttekintés a fontos modulokról
+- Jegyzetek, Feladatok, Játékok, Helyek és Profil elérése
+- statisztikai kártyák
+- mobilbarát navigáció
+- alkalmazásverzió megjelenítése
 
-* 🔐 **Bejelentkezés**
+### 📝 Jegyzetek
 
-  * 👤 Regisztráció
-  * 🔑 Bejelentkezés
-  * 🚪 Kijelentkezés
-  * 🪪 Felhasználónév megjelenítése
-  * 🔄 Munkamenet ellenőrzése
-  * 🛡️ Token alapú hitelesítés
+- ➕ létrehozás
+- ✏️ szerkesztés
+- 🗑️ törlés
+- 📌 rögzítés
+- 🔍 keresés
+- 🏷️ kategóriák és szűrés
+- ↕️ rendezés
+- 📖 teljes jegyzet nézet
+- 💾 automatikus mentés
 
-* ☰ **Navigáció**
+### ✅ Feladatok
 
-  * ☰ Hamburger menü
-  * 📂 Oldalsó navigáció
-  * 👆 Háttérre kattintással bezárás
-  * ⌨️ ESC billentyűvel bezárás
-  * 📱 Mobilon is működő navigáció
+- ➕ létrehozás
+- ✏️ szerkesztés
+- 🗑️ törlés
+- ☑️ kész / nincs kész állapot
+- ⭐ fontos feladatok
+- 📌 rögzítés
+- 🔍 keresés
+- 🏷️ státusz- és kategóriaszűrés
+- ↕️ rendezés
+- 📊 statisztikák
+- 📈 haladási sáv
+- 💾 automatikus mentés
 
-* 📱 **Reszponzív felület**
+### 🎮 Játékok
 
-  * 🖥️ Desktop támogatás
-  * 📱 Mobil támogatás
-  * 🍎 iPhone / iOS támogatás
-  * 🤖 Android támogatás
+#### Steam könyvtár
 
-* 🔙 **Vissza navigáció**
+- 🔗 Steam-fiók összekapcsolása
+- 👤 Steam profil megjelenítése
+- 🖼️ Steam profilkép
+- 🆔 SteamID
+- 🎮 Steam játéklista
+- ⏱️ játékidő
+- 🔍 játékkeresés
+- 📊 játékadatok
+- 🏆 achievementek
+- 🔗 Steam profil megnyitása
 
-  * ↩️ Egyszerű navigáció az oldalak között
+#### 📚 Egyéni könyvtár
 
-* 🌐 **Online működés**
+- saját játék hozzáadása
+- játék neve
+- játék képe
+- saját játékidő
+- külön Egyéni könyvtár
+- váltás a Steam és Egyéni könyvtár között
 
-  * 🚀 GitHub Pages frontend
-  * ☁️ Render backend
-  * 🔗 Frontend–backend kommunikáció
+### 👤 Profil
 
-### 🚧 Fejlesztés alatt
+- felhasználónév
+- email
+- profilkép
+- profilkép módosítása
+- kijelentkezés
+- Steam-fiók összekapcsolása
+- Steam-fiók leválasztása
+- Steam kapcsolat állapotának megjelenítése
+- Steam hibák kezelése és visszajelzése
 
-* 🎮 **Játékok**
+A Steam összekapcsolás a Project Hubban kizárólag a Profil → Steam részen keresztül történik.
 
-  * 🎮 Játékok megjelenítése
-  * 📋 Saját játéklista
-  * 🔗 Steam integráció
+### 🔐 Hitelesítés
 
-* 📍 **Helyek**
+- 👤 regisztráció
+- 🔑 bejelentkezés
+- 🚪 kijelentkezés
+- 🔄 munkamenet-ellenőrzés
+- 🛡️ token alapú hitelesítés
 
-  * 🗺️ Érdekes helyek külön felületen
-  * 📌 Helyek kezelése
+### 📍 Helyek
 
-### 🔮 Tervek
+- külön Helyek modul
+- helyek alapvető kezelési felülete
+- előkészítve a későbbi térképes és kedvences funkciókhoz
 
-* 🐘 Jegyzetek átköltöztetése PostgreSQL adatbázisba
-* 👤 Felhasználónként külön jegyzetek
-* ☁️ Jegyzetek szinkronizálása több eszköz között
-* 💾 Feladatok adatbázisba mentése
-* 🎮 Steam integráció befejezése
-* 📍 Helyek teljes funkcionalitásának elkészítése
-* 🗺️ Térképes helymegjelenítés
-* 🔎 További keresési és szűrési lehetőségek
-* 📊 Bővített statisztikák
-* ⚙️ További személyre szabási lehetőségek
+### 📱 Mobil / PWA
 
-### 🛠️ Technológiák
+- 📱 iPhone / iOS támogatás
+- 🤖 Android támogatás
+- 🖥️ desktop reszponzivitás
+- 📲 telepíthető PWA
+- ☰ mobil hamburger navigáció
+- 👆 jobb szélről húzva menü megnyitása
+- ↔️ bal szélről húzva visszanavigálás támogatása
+- ⬇️ pull-to-refresh tesztfunkció
+- 📐 túlcsordulás és mobilos szövegilleszkedés javításai
 
-* 🌐 HTML
-* 🎨 CSS
-* ⚡ JavaScript
-* 🟢 Node.js
-* 🚂 Express
-* 🐘 PostgreSQL
-* 🎮 Steam API
-* 🚀 GitHub Pages
-* ☁️ Render
+> A gesztusok v1.3-ban tesztjellegűek, ezért a következő kiadásokban finomíthatók vagy bővíthetők.
 
-### 📌 Projekt állapota
+### 🔄 Frissítési rendszer
 
-🟢 **Aktív fejlesztés alatt**
+- alkalmazásverzió megjelenítése
+- pull-to-refresh visszajelzés
+- PWA service worker frissítés
+- új verzió esetén cache frissítése
+- vizuális frissítési állapotok
 
-🚧 A Project Hub folyamatosan fejlődik és új funkciókkal bővül.
+### 🖥️ Fejlesztői Console
+
+A desktopon használható fejlesztői diagnosztikai rendszer többek között megjeleníti:
+
+- Project Hub verzió
+- aktuális oldal
+- URL
+- online / offline állapot
+- képernyőméret
+- user agent
+- hálózati hibák
+- JavaScript hibák
+- Promise hibák
+
+## 🛠️ Technológiák
+
+- HTML5
+- CSS3
+- JavaScript
+- Node.js
+- Express
+- PostgreSQL
+- Steam API / Steam OpenID
+- GitHub Pages
+- Render
+- PWA / Service Worker
+
+## 🗂️ Projektstruktúra
+
+```text
+Project-Hub-main/
+├── index.html
+├── script.js
+├── style.css
+├── pwa.css
+├── debug.js
+├── refresh.js
+├── sw.js
+├── manifest.webmanifest
+├── icons/
+├── pages/
+│   ├── auth/
+│   ├── profile/
+│   ├── notes/
+│   ├── tasks/
+│   ├── games/
+│   └── places/
+└── backend/
+    ├── server.js
+    ├── database.js
+    ├── config.js
+    └── services/
+```
+
+## 🚀 v1.3 kiadás
+
+A v1.3 a Project Hub első nagyobb, mobilközpontú mérföldköve. A kiadás fő fókusza a Games modul, a Steam-integráció, a Profil oldal, a PWA és az egységes mobilos felhasználói élmény.
+
+### Stabilitási fókusz
+
+- Steam callback és kapcsolási hibák kezelése
+- Steam már másik Project Hub-fiókhoz kapcsolva állapot kezelése
+- játéklista és achievement adatbetöltés hibakezelése
+- mobilos szöveg- és kártya-túlcsordulás javítása
+- PWA cache frissítés
+- egységes verziójelölés
+
+## 🔮 Következő tervek
+
+### v1.4 — Stabilitás és finomhangolás
+
+- további Steam edge case-ek kezelése
+- mobil gesztusok véglegesítése
+- PWA frissítési folyamat további finomítása
+- UI/UX hibajavítások
+- teljes mobilos regressziós teszt
+
+### v1.5 — Games 2.0
+
+- ⭐ kedvenc játékok
+- saját értékelés
+- játékstátuszok
+- kategóriák
+- „Játszani szeretnék” lista
+- „Játszom” / „Végigjátszottam” állapotok
+- bővített játékadatlap
+
+### v1.6 — Cloud Sync
+
+- ☁️ PostgreSQL-alapú tartós adatmentés
+- felhasználónként elkülönített adatok
+- jegyzetek szinkronizálása
+- feladatok szinkronizálása
+- saját játékok szinkronizálása
+- több eszköz közötti adatmegosztás
+
+### v1.7 — Helyek 2.0
+
+- 🗺️ térképes megjelenítés
+- 📌 helyek mentése
+- ⭐ kedvencek
+- 🏷️ kategóriák
+- részletes helyoldal
+
+### 2.0 — Project Hub teljes személyes központ
+
+Hosszabb távon a Project Hub célja egyetlen személyes rendszer létrehozása a következő fő területekkel:
+
+```text
+🏠 Főoldal
+├── 📝 Jegyzetek
+├── ✅ Feladatok
+├── 🎮 Játékok
+│   ├── Steam
+│   └── Egyéni könyvtár
+├── 📍 Helyek
+├── 👤 Profil
+└── ⚙️ Beállítások
+```
+
+## 📌 Projekt állapota
+
+🟢 **v1.3 — kiadásra előkészítve**
+
+A Project Hub aktív fejlesztés alatt áll. A verziószámokat a projekt minden felhasználói és fejlesztői felületén egységesen kezeljük.
