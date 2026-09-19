@@ -584,3 +584,9 @@ main {
 
 .uicons-credit { color: #626b7b; text-decoration: none; }
 .uicons-credit:hover { text-decoration: underline; }
+
+
+/* 1.5 overview statistics */
+.overview .section-header h2 { display: flex; align-items: center; gap: 8px; }
+.overview .section-header h2 .fi { font-size: 18px; line-height: 1; }
+.overview .section-header > span { white-space: nowrap; }
