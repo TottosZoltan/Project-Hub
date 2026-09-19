@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Project Hub</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <!--
+        Az app alapból rejtve van.
+        Csak sikeres bejelentkezés után
+        jeleníti meg a script.js.
+    -->
+    <style>
+        body {
+            visibility: hidden;
+        }
+
+        body.authenticated {
+            visibility: visible;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =========================================
+         OLDALSÓ MENÜ
+    ========================================== -->
+
+    <nav
+        class="side-menu"
+        id="sideMenu"
+    >
+
+        <div class="menu-header">
+
+            <h2>PROJECT HUB</h2>
+
+            <button
+                type="button"
+                id="closeMenu"
+                class="close-button"
+            >
+                <i class="fi fi-br-cross" aria-hidden="true"></i>
+            </button>
+
+        </div>
+
+
+        <div class="menu-links">
+
+            <a href="pages/notes/notes.html">
+                <i class="fi fi-br-note-sticky" aria-hidden="true"></i> Jegyzetek
+            </a>
+
+            <a href="pages/tasks/tasks.html">
+                <i class="fi fi-br-list-check" aria-hidden="true"></i> Feladatok
+            </a>
+
+            <a href="pages/games/games.html">
+                <i class="fi fi-br-gamepad" aria-hidden="true"></i> Játékok
+            </a>
+
+            <a href="pages/places/places.html">
+    <i class="fi fi-br-marker" aria-hidden="true"></i> Helyek
+</a>
+
+            <!-- BEJELENTKEZÉS -->
+
+            <a
+                href="pages/auth/login.html"
+                id="loginMenuItem"
+            >
+                <i class="fi fi-br-lock" aria-hidden="true"></i> Bejelentkezés
+            </a>
+
+
+            <!-- FELHASZNÁLÓ -->
+
+            <a
+    href="pages/profile/profile.html"
+    id="userMenuItem"
+    style="display: none;"
+>
+    <i class="fi fi-br-user" aria-hidden="true"></i>
+    <span id="usernameDisplay"></span>
+</a>
+
+
+            <!-- KIJELENTKEZÉS -->
+
+            <a
+                href="#"
+                id="logoutButton"
+                style="display: none;"
+            >
+                <i class="fi fi-br-sign-out-alt" aria-hidden="true"></i> Kijelentkezés
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         MENÜ HÁTTÉR
+    ========================================== -->
+
+    <div
+        class="menu-overlay"
+        id="menuOverlay"
+    ></div>
+
+
+    <!-- =========================================
+         FEJLÉC
+    ========================================== -->
+
+    <header class="header">
+
+        <div>
+
+            <h1>PROJECT HUB</h1>
+
+            <p>
+                Saját személyes dashboard
+            </p>
+
+        </div>
+
+
+        <!-- HAMBURGER -->
+
+        <button
+            type="button"
+            id="menuButton"
+            class="menu-button"
+            aria-label="Menü megnyitása"
+        >
+            ☰
+        </button>
+
+    </header>
+
+
+    <!-- =========================================
+         FŐ TARTALOM
+    ========================================== -->
+
+    <main>
+
+        <!-- ÜDVÖZLŐ RÉSZ -->
+
+        <section class="welcome">
+
+            <p class="small-title">
+                ÜDV ÚJRA
+            </p>
+
+            <h2>
+                Mit csináljunk ma?
+            </h2>
+
+            <p>
+                Minden fontos dolgod egy helyen.
+            </p>
+
+        </section>
+
+
+        <!-- =========================================
+             APP KÁRTYÁK
+        ========================================== -->
+
+        <section class="apps">
+
+
+            <!-- JEGYZETEK -->
+
+            <a
+                href="pages/notes/notes.html"
+                class="app-card"
+            >
+
+                <span class="app-icon">
+                    <i class="fi fi-br-note-sticky" aria-hidden="true"></i>
+                </span>
+
+                <div>
+
+                    <h3>
+                        Jegyzetek
+                    </h3>
+
+                    <p>
+                        Ötletek és jegyzetek
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- FELADATOK -->
+
+            <a
+                href="pages/tasks/tasks.html"
+                class="app-card"
+            >
+
+                <span class="app-icon">
+                    <i class="fi fi-br-list-check" aria-hidden="true"></i>
+                </span>
+
+                <div>
+
+                    <h3>
+                        Feladatok
+                    </h3>
+
+                    <p>
+                        Amit el kell intézni
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- JÁTÉKOK -->
+
+            <a
+                href="pages/games/games.html"
+                class="app-card"
+            >
+
+                <span class="app-icon">
+                    <i class="fi fi-br-gamepad" aria-hidden="true"></i>
+                </span>
+
+                <div>
+
+                    <h3>
+                        Játékok
+                    </h3>
+
+                    <p>
+                        Játékaim és értékelések
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- HELYEK -->
+
+            <a
+                href="pages/places/places.html"
+                class="app-card"
+            >
+
+                <span class="app-icon">
+                    <i class="fi fi-br-marker" aria-hidden="true"></i>
+                </span>
+
+                <div>
+
+                    <h3>
+                        Helyek
+                    </h3>
+
+                    <p>
+                        Érdekes helyek
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- PROFIL -->
+
+            <a
+                href="pages/profile/profile.html"
+                class="app-card"
+            >
+
+                <span class="app-icon">
+                    <i class="fi fi-br-user" aria-hidden="true"></i>
+                </span>
+
+                <div>
+
+                    <h3>
+                        Profil
+                    </h3>
+
+                    <p>
+                        Fiók és beállítások
+                    </p>
+
+                </div>
+
+            </a>
+
+        </section>
+
+
+        <!-- =========================================
+             ÁTTEKINTÉS
+        ========================================== -->
+
+        <section class="overview">
+
+            <div class="section-header">
+
+                <h2>
+                    <i class="fi fi-br-chart-simple" aria-hidden="true"></i> Áttekintés
+                </h2>
+
+                <span id="overviewStatsStatus">Betöltés...</span>
+
+            </div>
+
+
+            <div class="stats">
+                <div class="stat"><strong id="taskCount">—</strong><span><i class="fi fi-br-list-check" aria-hidden="true"></i> Feladat</span></div>
+                <div class="stat"><strong id="noteCount">—</strong><span><i class="fi fi-br-note-sticky" aria-hidden="true"></i> Jegyzet</span></div>
+                <div class="stat"><strong id="gameCount">—</strong><span><i class="fi fi-br-gamepad" aria-hidden="true"></i> Játék</span></div>
+                <div class="stat"><strong id="placeCount">—</strong><span><i class="fi fi-br-marker" aria-hidden="true"></i> Hely</span></div>
+            </div>
+
+            <div class="overview-progress" aria-label="Feladatok készültsége">
+                <div class="overview-progress-head">
+                    <span><i class="fi fi-br-chart-simple" aria-hidden="true"></i> Feladatok készültsége</span>
+                    <strong id="taskProgress">0%</strong>
+                </div>
+                <div class="overview-progress-track"><span id="taskProgressBar"></span></div>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script src="debug.js"></script>
+
+    <script src="script.js"></script>
+    <script src="refresh.js"></script>
+    <script src="overview-stats.js"></script>
+
+</body>
+
+</html>
