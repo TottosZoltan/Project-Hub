@@ -15,7 +15,7 @@
 <body>
     <header class="games-topbar">
         <div class="games-topbar-inner">
-            <a href="../../index.html" class="games-back" aria-label="Vissza a főoldalra">←</a>
+            <a href="../../index.html" class="games-back" aria-label="Vissza a főoldalra"><i class="fi fi-br-arrow-left ui-icon" aria-hidden="true"></i></a>
             <div>
                 <p class="eyebrow">PROJECT HUB</p>
                 <h1>Játékok</h1>
@@ -36,7 +36,7 @@
 
         <section class="steam-account-card" aria-labelledby="steamAccountTitle">
             <div class="steam-account-main">
-                <div class="steam-account-avatar" id="steamAccountAvatar">🎮</div>
+                <div class="steam-account-avatar" id="steamAccountAvatar"><i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i></div>
                 <div class="steam-account-copy">
                     <p class="eyebrow">STEAM</p>
                     <h2 id="steamAccountTitle">Steam-fiók</h2>
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="steam-account-action">
-                <a href="../profile/profile.html" class="profile-action-link">Steam kapcsolat kezelése →</a>
+                <a href="../profile/profile.html" class="profile-action-link">Steam kapcsolat kezelése <i class="fi fi-br-arrow-right ui-icon" aria-hidden="true"></i></a>
             </div>
         </section>
 
@@ -65,13 +65,13 @@
                 </div>
                 <div class="library-header-actions">
                     <button id="addCustomGameButton" class="library-add" type="button" hidden>+ Játék hozzáadása</button>
-                    <button id="refreshGamesButton" class="library-refresh" type="button" aria-label="Játéklista frissítése">↻</button>
+                    <button id="refreshGamesButton" class="library-refresh" type="button" aria-label="Játéklista frissítése"><i class="fi fi-br-refresh ui-icon" aria-hidden="true"></i></button>
                 </div>
             </div>
 
             <div id="gamesControls" class="games-controls" style="display:none;">
                 <label class="games-search">
-                    <span aria-hidden="true">⌕</span>
+                    <span aria-hidden="true"><i class="fi fi-br-search ui-icon" aria-hidden="true"></i></span>
                     <input id="gamesSearchInput" type="search" placeholder="Játék keresése..." autocomplete="off">
                 </label>
                 <div class="games-filter" role="group" aria-label="Játéklista rendezése">
@@ -85,7 +85,7 @@
                 <div id="gamesLibraryTrack" class="games-library-track">
                     <div class="games-library-panel" data-library="steam">
                         <div id="gamesList" class="games-list">
-                            <div class="games-state loading-state"><span class="state-icon">◌</span><strong>Steam játékok betöltése...</strong></div>
+                            <div class="games-state loading-state"><span class="state-icon"><i class="fi fi-br-spinner ui-icon" aria-hidden="true"></i></span><strong>Steam játékok betöltése...</strong></div>
                         </div>
                     </div>
                     <div class="games-library-panel" data-library="custom">
@@ -99,7 +99,7 @@
     <div id="customGameModal" class="custom-game-modal" hidden>
         <div class="custom-game-overlay"></div>
         <div class="custom-game-content" role="dialog" aria-modal="true" aria-labelledby="customGameTitle">
-            <button id="closeCustomGameButton" class="game-details-close" type="button" aria-label="Bezárás">×</button>
+            <button id="closeCustomGameButton" class="game-details-close" type="button" aria-label="Bezárás"><i class="fi fi-br-cross-small ui-icon" aria-hidden="true"></i></button>
             <p class="eyebrow">EGYÉNI KÖNYVTÁR</p>
             <h2 id="customGameTitle">Játék hozzáadása</h2>
             <p>Adj hozzá olyan játékot is, ami nincs a Steam könyvtáradban.</p>
@@ -107,15 +107,9 @@
                 <label>Játék neve<input id="customGameName" name="name" type="text" maxlength="80" required placeholder="Pl. Minecraft"></label>
                 <label>Kép URL-je <span>(opcionális)</span><input id="customGameImage" name="image" type="url" maxlength="500" placeholder="https://..."></label>
                 <label>Játékidő percben <span>(opcionális)</span><input id="customGameMinutes" name="minutes" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></label>
-                <label>Állapot<select id="customGameStatus" name="status">
-                    <option value="backlog">Játszani szeretném</option>
-                    <option value="playing">Játszom</option>
-                    <option value="completed">Végigjátszva</option>
-                </select></label>
-                <label class="custom-game-check"><input id="customGameFavorite" name="favorite" type="checkbox"> Kedvenc játék</label>
                 <div class="custom-game-form-actions">
                     <button id="cancelCustomGameButton" type="button" class="secondary-action">Mégse</button>
-                    <button type="submit" class="primary-action" id="customGameSubmitButton">Mentés</button>
+                    <button type="submit" class="primary-action">Hozzáadás</button>
                 </div>
             </form>
         </div>
@@ -124,7 +118,7 @@
     <div id="gameDetailsModal" class="game-details-modal" hidden>
         <div class="game-details-overlay"></div>
         <div class="game-details-content" role="dialog" aria-modal="true" aria-labelledby="gameDetailsTitle">
-            <button id="closeGameDetailsButton" class="game-details-close" type="button" aria-label="Bezárás">×</button>
+            <button id="closeGameDetailsButton" class="game-details-close" type="button" aria-label="Bezárás"><i class="fi fi-br-cross-small ui-icon" aria-hidden="true"></i></button>
             <div class="game-details-cover">
                 <img id="gameDetailsImage" src="" alt="">
             </div>
@@ -139,7 +133,7 @@
                 <div class="game-details-tabs" role="tablist" aria-label="Játék részletei">
                     <button type="button" class="game-details-tab active" data-details-tab="overview">Áttekintés</button>
                     <button type="button" class="game-details-tab" data-details-tab="info">Egyéb infók</button>
-                    <button type="button" class="game-details-tab" data-details-tab="achievements">🏆 Achievementek</button>
+                    <button type="button" class="game-details-tab" data-details-tab="achievements"><i class="fi fi-br-trophy ui-icon" aria-hidden="true"></i> Achievementek</button>
                 </div>
                 <section class="game-details-panel" data-details-panel="overview">
                     <div class="game-details-overview">
@@ -149,7 +143,7 @@
                 </section>
                 <section class="game-details-panel" data-details-panel="info" hidden>
                     <div id="gameDetailsInfo" class="game-info-list">
-                        <div class="games-state loading-state">ℹ️ További információk betöltése...</div>
+                        <div class="games-state loading-state"><i class="fi fi-br-info ui-icon" aria-hidden="true"></i> További információk betöltése...</div>
                     </div>
                 </section>
                 <section class="game-details-panel" data-details-panel="achievements" hidden>
@@ -182,7 +176,7 @@
                 document.body.classList.add("authenticated");
             } catch (error) {
                 localStorage.removeItem("projectHubAuthToken");
-                sessionStorage.setItem("projectHubAuthMessage", "🔐 A munkameneted lejárt. Kérlek jelentkezz be újra.");
+                sessionStorage.setItem("projectHubAuthMessage", "A munkameneted lejárt. Kérlek jelentkezz be újra.");
                 window.location.href = LOGIN_PAGE;
             }
         });

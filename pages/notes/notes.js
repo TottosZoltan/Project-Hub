@@ -264,7 +264,7 @@ async function loadNotes() {
         if (!token) {
 
             redirectToLogin(
-                "🔐 A Jegyzetek használatához be kell jelentkezned."
+                "A Jegyzetek használatához be kell jelentkezned."
             );
 
             return;
@@ -293,7 +293,7 @@ async function loadNotes() {
         ) {
 
             redirectToLogin(
-                "🔐 A munkameneted lejárt. Kérlek jelentkezz be újra."
+                "A munkameneted lejárt. Kérlek jelentkezz be újra."
             );
 
             return;
@@ -367,7 +367,7 @@ async function loadNotes() {
 
         noSearchResults.innerHTML = `
             <div class="empty-icon">
-                ⚠️
+                <i class="fi fi-br-triangle-warning ui-icon" aria-hidden="true"></i>
             </div>
 
             <h3>
@@ -513,24 +513,24 @@ function getCategoryIcon(category) {
 
     const icons = {
 
-        "Ötlet": "💡",
+        "Ötlet": '<i class="fi fi-br-lightbulb ui-icon" aria-hidden="true"></i>',
 
-        "Munka": "💼",
+        "Munka": '<i class="fi fi-br-briefcase ui-icon" aria-hidden="true"></i>',
 
-        "Személyes": "👤",
+        "Személyes": '<i class="fi fi-br-user ui-icon" aria-hidden="true"></i>',
 
-        "Fontos": "⭐",
+        "Fontos": '<i class="fi fi-br-star ui-icon" aria-hidden="true"></i>',
 
-        "Projekt": "🚀",
+        "Projekt": '<i class="fi fi-br-rocket ui-icon" aria-hidden="true"></i>',
 
-        "Egyéb": "📁"
+        "Egyéb": '<i class="fi fi-br-folder ui-icon" aria-hidden="true"></i>'
 
     };
 
 
     return (
         icons[category] ||
-        "📁"
+        '<i class="fi fi-br-folder ui-icon" aria-hidden="true"></i>'
     );
 
 }
@@ -922,8 +922,8 @@ function renderNotes() {
                     "pin-indicator";
 
 
-                pinIcon.textContent =
-                    "📌";
+                pinIcon.innerHTML =
+                    '<i class="fi fi-br-thumbtack ui-icon" aria-hidden="true"></i>';
 
 
                 pinIcon.title =
@@ -988,10 +988,10 @@ function renderNotes() {
                 "button";
 
 
-            pinButton.textContent =
+            pinButton.innerHTML =
                 note.pinned
-                    ? "📌"
-                    : "📍";
+                    ? '<i class="fi fi-br-thumbtack ui-icon" aria-hidden="true"></i>'
+                    : '<i class="fi fi-br-marker ui-icon" aria-hidden="true"></i>';
 
 
             pinButton.title =
@@ -1028,8 +1028,8 @@ function renderNotes() {
                 "edit-note";
 
 
-            editButton.textContent =
-                "✏️";
+            editButton.innerHTML =
+                '<i class="fi fi-br-pencil ui-icon" aria-hidden="true"></i>';
 
 
             editButton.type =
@@ -1068,8 +1068,8 @@ function renderNotes() {
                 "delete-note";
 
 
-            deleteButton.textContent =
-                "🗑️";
+            deleteButton.innerHTML =
+                '<i class="fi fi-br-trash ui-icon" aria-hidden="true"></i>';
 
 
             deleteButton.type =
@@ -1304,7 +1304,7 @@ async function createNote() {
         ) {
 
             redirectToLogin(
-                "🔐 A munkameneted lejárt. Kérlek jelentkezz be újra."
+                "A munkameneted lejárt. Kérlek jelentkezz be újra."
             );
 
             return;
@@ -1501,7 +1501,7 @@ async function updateNote(
         ) {
 
             redirectToLogin(
-                "🔐 A munkameneted lejárt. Kérlek jelentkezz be újra."
+                "A munkameneted lejárt. Kérlek jelentkezz be újra."
             );
 
             return;
@@ -1566,7 +1566,7 @@ async function updateNote(
 
 
         saveNoteButton.textContent =
-            "💾 Jegyzet mentése";
+            '<i class="fi fi-br-disk ui-icon" aria-hidden="true"></i> Jegyzet mentése';
 
 
         noteTitle.value =
@@ -1698,7 +1698,7 @@ function editNote(id) {
 
 
     saveNoteButton.textContent =
-        "💾 Módosítás mentése";
+        '<i class="fi fi-br-disk ui-icon" aria-hidden="true"></i> Módosítás mentése';
 
 
     if (noteEditor) {
@@ -1798,7 +1798,7 @@ async function togglePinNote(id) {
         ) {
 
             redirectToLogin(
-                "🔐 A munkameneted lejárt. Kérlek jelentkezz be újra."
+                "A munkameneted lejárt. Kérlek jelentkezz be újra."
             );
 
             return;
@@ -1924,7 +1924,7 @@ async function deleteNote(id) {
         ) {
 
             redirectToLogin(
-                "🔐 A munkameneted lejárt. Kérlek jelentkezz be újra."
+                "A munkameneted lejárt. Kérlek jelentkezz be újra."
             );
 
             return;
@@ -1991,7 +1991,7 @@ async function deleteNote(id) {
                 "Egyéb";
 
             saveNoteButton.textContent =
-                "💾 Jegyzet mentése";
+                '<i class="fi fi-br-disk ui-icon" aria-hidden="true"></i> Jegyzet mentése';
 
         }
 
@@ -2261,7 +2261,7 @@ toggleNoteFilters.addEventListener(
         if (isOpen) {
 
             toggleNoteFilters.textContent =
-                "🔎 Keresés és szűrés";
+                '<i class="fi fi-br-search ui-icon" aria-hidden="true"></i> Keresés és szűrés';
 
         }
 

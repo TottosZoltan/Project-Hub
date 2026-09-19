@@ -64,7 +64,7 @@
             </p>
 
             <h2>
-                🔐 Üdv újra!
+                <i class="fi fi-br-lock ui-icon" aria-hidden="true"></i> Üdv újra!
             </h2>
 
             <p>
@@ -120,7 +120,7 @@
                             aria-label="Jelszó megjelenítése"
                             aria-pressed="false"
                         >
-                            👁
+                            <i class="fi fi-br-eye ui-icon" aria-hidden="true"></i>
                         </button>
 
                     </div>
@@ -268,8 +268,8 @@
                         passwordInput.type =
                             isPassword ? "text" : "password";
 
-                        passwordToggleButton.textContent =
-                            isPassword ? "🙈" : "👁";
+                        passwordToggleButton.innerHTML =
+                            isPassword ? '<i class="fi fi-br-eye-crossed ui-icon" aria-hidden="true"></i>' : '<i class="fi fi-br-eye ui-icon" aria-hidden="true"></i>';
 
                         passwordToggleButton.setAttribute(
                             "aria-label",
@@ -407,7 +407,7 @@
 
 
                             showSuccess(
-                                "✅ Sikeres bejelentkezés!"
+                                "Sikeres bejelentkezés!"
                             );
 
 

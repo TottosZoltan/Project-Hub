@@ -1,21 +1,11 @@
-# Project Hub — Changelog
-
-## 1.5.0 — 2026-09-19
-- 🏠 A főmenü Áttekintés része teljesen új dashboard megjelenést kapott.
-- 📊 Élő feladat-, jegyzet-, játék- és helyszámok jelennek meg.
-- ✅ A feladatok készültségi aránya vizuális haladási sávval látható.
-- 📱 Az Áttekintés mobilon és asztali nézetben is reszponzív.
-- 🔗 A statisztikai kártyák közvetlenül a kapcsolódó modulokra vezetnek.
-- 🔢 Az alkalmazás verziója 1.5.0.0-ra frissítve.
-
-# Changelog
+# Project Hub – CHANGELOG
 
 ## 1.4.2 — 2026-09-19
 
-- 🎮 Újratervezett játékkereső és rendező szűrők a Games oldalon.
-- ✏️ Javítva az „Egyéb játékaid” szerkesztése: a szerkesztőablak most megfelelően betölti és menti az állapotot és kedvenc jelölést is.
-- 📱 A Games szűrők mobilon is rendezett, érintésbarát elrendezést kaptak.
-- 🔢 A megjelenített alkalmazásverzió 1.4.2.0-ra frissítve.
+### 🎨 Ikonfrissítés
+- A felületen használt emoji és karakterikonok egységes Flaticon UIcons Bold Rounded ikonokra lettek cserélve.
+- Frissítve a főoldal, játékok, feladatok, jegyzetek, helyek, profil és bejelentkezési felületek ikonhasználata.
+- Az ikonok mérete és igazítása mobilon is egységesebb lett.
 
 ## 1.4.1 — Steam játék részletek javítása
 
@@ -23,8 +13,6 @@
 - A frontend most a backend tényleges `/api/steam/game/:appid` végpontját használja.
 - A részletes nézet a backend által visszaadott játékadatokból is frissíti a játékidőt és a borítóképet.
 - Stabilabb achievement betöltés és hibakezelés.
-
-# Project Hub – CHANGELOG
 
 ## 1.4.0 — 2026-09-19
 

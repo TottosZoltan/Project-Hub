@@ -1,3 +1,5 @@
+@import url("https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css");
+
 /* =========================================================
    PROJECT HUB 1.4 — SHARED DESIGN SYSTEM
    Mobile-first / responsive / touch friendly
@@ -365,6 +367,8 @@ main {
 }
 
 .app-version-footer span:last-child { color: #7d8798; font-weight: 700; }
+.app-version-footer a { color: #7d8798; text-decoration: none; font-size: 10px; opacity: .85; }
+.app-version-footer a:hover { text-decoration: underline; opacity: 1; }
 
 .pull-refresh-indicator {
     position: fixed;
@@ -558,57 +562,18 @@ main {
     }
 }
 
-/* ========================= HOME OVERVIEW 1.5 ========================= */
-.overview {
-    margin-top: 20px;
-    padding: clamp(16px, 3vw, 22px);
-    border-radius: 24px;
-    background:
-        radial-gradient(circle at 100% 0%, rgba(124,140,255,.12), transparent 32%),
-        linear-gradient(145deg, rgba(18,24,36,.96), rgba(10,15,24,.96));
-    border: 1px solid rgba(255,255,255,.09);
-    box-shadow: 0 18px 50px rgba(0,0,0,.22);
+/* ========================= UICONS ========================= */
+.ui-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-size: 1em;
+    flex: 0 0 auto;
+    vertical-align: -0.08em;
 }
-
-.overview-top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px; }
-.overview-kicker { color:#8993a7; font-size:9px; font-weight:800; letter-spacing:.18em; margin-bottom:5px; }
-.overview-top h2 { font-size:clamp(18px,4vw,22px); line-height:1.1; letter-spacing:-.03em; }
-.overview-top p:last-child { margin-top:5px; color:var(--muted); font-size:11px; }
-.overview-live { display:inline-flex; align-items:center; gap:7px; padding:7px 9px; border:1px solid rgba(255,255,255,.07); border-radius:999px; color:var(--muted-strong); font-size:9px; white-space:nowrap; background:rgba(255,255,255,.025); }
-.overview-live i { width:6px; height:6px; border-radius:50%; background:#72d6a1; box-shadow:0 0 10px rgba(114,214,161,.7); }
-.overview-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
-.overview-stat { min-width:0; display:flex; align-items:center; gap:10px; padding:12px; border:1px solid rgba(255,255,255,.065); border-radius:17px; background:rgba(7,10,16,.48); transition:transform .18s ease,border-color .18s ease,background .18s ease; }
-.overview-stat:hover { transform:translateY(-2px); border-color:rgba(255,255,255,.14); background:rgba(255,255,255,.045); }
-.overview-stat-icon { width:34px; height:34px; min-width:34px; display:grid; place-items:center; border-radius:11px; background:var(--accent-soft); border:1px solid rgba(255,255,255,.06); font-size:15px; }
-.overview-stat-copy { min-width:0; display:flex; flex-direction:column; gap:1px; }
-.overview-stat-copy small { color:var(--muted); font-size:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.overview-stat-copy strong { font-size:20px; line-height:1; letter-spacing:-.04em; }
-.overview-stat-arrow { margin-left:auto; color:#6f788b; font-size:15px; }
-.overview-bottom { display:grid; grid-template-columns:1fr auto; align-items:stretch; gap:9px; margin-top:9px; }
-.overview-progress-card { padding:14px; border:1px solid rgba(255,255,255,.065); border-radius:17px; background:rgba(7,10,16,.38); }
-.overview-progress-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
-.overview-progress-head div { display:flex; flex-direction:column; gap:2px; }
-.overview-progress-head span:first-child { color:var(--muted); font-size:9px; }
-.overview-progress-head strong { font-size:12px; }
-.overview-progress-head > span { font-size:11px; color:var(--muted-strong); }
-.overview-progress-track { height:7px; overflow:hidden; border-radius:999px; background:rgba(255,255,255,.07); }
-.overview-progress-track span { display:block; width:0; height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--accent),#7dd3fc); transition:width .45s ease; }
-.overview-progress-card p { margin-top:8px; color:var(--muted); font-size:9px; }
-.overview-cta { min-width:165px; display:flex; align-items:center; justify-content:space-between; gap:18px; padding:14px; border:1px solid rgba(124,140,255,.22); border-radius:17px; background:linear-gradient(145deg,rgba(124,140,255,.13),rgba(124,140,255,.05)); transition:transform .18s ease,border-color .18s ease; }
-.overview-cta:hover { transform:translateY(-2px); border-color:rgba(124,140,255,.4); }
-.overview-cta span { font-size:10px; font-weight:700; }
-.overview-cta strong { font-size:18px; color:#aeb7ff; }
-
-@media (max-width: 720px) {
-    .overview-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
-    .overview-bottom { grid-template-columns:1fr; }
-    .overview-cta { min-height:52px; }
-}
-
-@media (max-width: 420px) {
-    .overview { padding:14px; }
-    .overview-top { gap:10px; }
-    .overview-live { padding:6px 8px; }
-    .overview-stat { padding:11px 10px; }
-    .overview-stat-icon { width:31px; height:31px; min-width:31px; }
-}
+.app-icon .ui-icon { font-size: 1.35em; }
+.menu-button .ui-icon, .close-button .ui-icon, .back-button .ui-icon { font-size: 1.15em; }
+.priority-low { opacity: .72; }
+.priority-normal { opacity: .86; }
+.priority-high { opacity: 1; }

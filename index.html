@@ -53,7 +53,7 @@
                 id="closeMenu"
                 class="close-button"
             >
-                ✕
+                <i class="fi fi-br-cross-small ui-icon" aria-hidden="true"></i>
             </button>
 
         </div>
@@ -62,19 +62,19 @@
         <div class="menu-links">
 
             <a href="pages/notes/notes.html">
-                📝 Jegyzetek
+                <i class="fi fi-br-notebook ui-icon" aria-hidden="true"></i> Jegyzetek
             </a>
 
             <a href="pages/tasks/tasks.html">
-                ✅ Feladatok
+                <i class="fi fi-br-check ui-icon" aria-hidden="true"></i> Feladatok
             </a>
 
             <a href="pages/games/games.html">
-                🎮 Játékok
+                <i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i> Játékok
             </a>
 
             <a href="pages/places/places.html">
-    📍 Helyek
+    <i class="fi fi-br-marker ui-icon" aria-hidden="true"></i> Helyek
 </a>
 
             <!-- BEJELENTKEZÉS -->
@@ -83,7 +83,7 @@
                 href="pages/auth/login.html"
                 id="loginMenuItem"
             >
-                🔐 Bejelentkezés
+                <i class="fi fi-br-lock ui-icon" aria-hidden="true"></i> Bejelentkezés
             </a>
 
 
@@ -94,7 +94,7 @@
     id="userMenuItem"
     style="display: none;"
 >
-    👤
+    <i class="fi fi-br-user ui-icon" aria-hidden="true"></i>
     <span id="usernameDisplay"></span>
 </a>
 
@@ -106,7 +106,7 @@
                 id="logoutButton"
                 style="display: none;"
             >
-                🚪 Kijelentkezés
+                <i class="fi fi-br-sign-out-alt ui-icon" aria-hidden="true"></i> Kijelentkezés
             </a>
 
         </div>
@@ -149,7 +149,7 @@
             class="menu-button"
             aria-label="Menü megnyitása"
         >
-            ☰
+            <i class="fi fi-br-menu-burger ui-icon" aria-hidden="true"></i>
         </button>
 
     </header>
@@ -166,7 +166,7 @@
         <section class="welcome">
 
             <p class="small-title">
-                ÜDV ÚJRA 👋
+                ÜDV ÚJRA <i class="fi fi-br-hand-wave ui-icon" aria-hidden="true"></i>
             </p>
 
             <h2>
@@ -195,7 +195,7 @@
             >
 
                 <span class="app-icon">
-                    📝
+                    <i class="fi fi-br-notebook ui-icon" aria-hidden="true"></i>
                 </span>
 
                 <div>
@@ -221,7 +221,7 @@
             >
 
                 <span class="app-icon">
-                    ✅
+                    <i class="fi fi-br-check ui-icon" aria-hidden="true"></i>
                 </span>
 
                 <div>
@@ -247,7 +247,7 @@
             >
 
                 <span class="app-icon">
-                    🎮
+                    <i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i>
                 </span>
 
                 <div>
@@ -273,7 +273,7 @@
             >
 
                 <span class="app-icon">
-                    📍
+                    <i class="fi fi-br-marker ui-icon" aria-hidden="true"></i>
                 </span>
 
                 <div>
@@ -299,7 +299,7 @@
             >
 
                 <span class="app-icon">
-                    👤
+                    <i class="fi fi-br-user ui-icon" aria-hidden="true"></i>
                 </span>
 
                 <div>
@@ -323,53 +323,68 @@
              ÁTTEKINTÉS
         ========================================== -->
 
-        <section class="overview" aria-labelledby="overviewTitle">
+        <section class="overview">
 
-            <div class="overview-top">
-                <div>
-                    <p class="overview-kicker">MAI ÁTTEKINTÉS</p>
-                    <h2 id="overviewTitle">A te Project Hubod</h2>
-                    <p id="overviewDate">Összesített adatok betöltése…</p>
-                </div>
-                <span class="overview-live"><i></i> Élő adatok</span>
+            <div class="section-header">
+
+                <h2>
+                    <i class="fi fi-br-chart-pie-simple ui-icon" aria-hidden="true"></i> Áttekintés
+                </h2>
+
+                <span>
+                    Ma
+                </span>
+
             </div>
 
-            <div class="overview-stats">
-                <a class="overview-stat overview-stat-task" href="pages/tasks/tasks.html">
-                    <span class="overview-stat-icon">✓</span>
-                    <span class="overview-stat-copy"><small>Aktív feladatok</small><strong id="activeTaskCount">—</strong></span>
-                    <span class="overview-stat-arrow">→</span>
-                </a>
-                <a class="overview-stat overview-stat-note" href="pages/notes/notes.html">
-                    <span class="overview-stat-icon">✎</span>
-                    <span class="overview-stat-copy"><small>Jegyzetek</small><strong id="noteCount">—</strong></span>
-                    <span class="overview-stat-arrow">→</span>
-                </a>
-                <a class="overview-stat overview-stat-game" href="pages/games/games.html">
-                    <span class="overview-stat-icon">🎮</span>
-                    <span class="overview-stat-copy"><small>Játékok</small><strong id="gameCount">—</strong></span>
-                    <span class="overview-stat-arrow">→</span>
-                </a>
-                <a class="overview-stat overview-stat-place" href="pages/places/places.html">
-                    <span class="overview-stat-icon">⌖</span>
-                    <span class="overview-stat-copy"><small>Helyek</small><strong id="placeCount">—</strong></span>
-                    <span class="overview-stat-arrow">→</span>
-                </a>
-            </div>
 
-            <div class="overview-bottom">
-                <div class="overview-progress-card">
-                    <div class="overview-progress-head">
-                        <div><span>Feladatok haladása</span><strong id="taskProgressLabel">—</strong></div>
-                        <span id="taskProgressPercent">—</span>
-                    </div>
-                    <div class="overview-progress-track"><span id="taskProgressBar"></span></div>
-                    <p id="taskProgressText">A feladatok állapota itt jelenik meg.</p>
+            <div class="stats">
+
+
+                <!-- FELADATOK -->
+
+                <div class="stat">
+
+                    <strong id="taskCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Feladat
+                    </span>
+
                 </div>
-                <a class="overview-cta" href="pages/tasks/tasks.html">
-                    <span>Feladatok megnyitása</span>
-                    <strong>→</strong>
-                </a>
+
+
+                <!-- JEGYZETEK -->
+
+                <div class="stat">
+
+                    <strong id="noteCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Jegyzet
+                    </span>
+
+                </div>
+
+
+                <!-- JÁTÉKOK -->
+
+                <div class="stat">
+
+                    <strong id="gameCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Játék
+                    </span>
+
+                </div>
+
             </div>
 
         </section>

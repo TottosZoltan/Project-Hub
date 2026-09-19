@@ -51,7 +51,7 @@
         <section class="profile-section">
 
             <div class="section-title">
-                <span>👤</span>
+                <span><i class="fi fi-br-user ui-icon" aria-hidden="true"></i></span>
                 <div>
                     <h2>Project Hub profil</h2>
                     <p>A saját profilod</p>
@@ -77,7 +77,7 @@
                             id="hubProfileAvatarPlaceholder"
                             class="profile-avatar profile-avatar-placeholder"
                         >
-                            👤
+                            <i class="fi fi-br-user ui-icon" aria-hidden="true"></i>
                         </div>
 
                     </div>
@@ -109,7 +109,7 @@
                         for="profileImageInput"
                         class="profile-button primary"
                     >
-                        📷 Profilkép feltöltése
+                        <i class="fi fi-br-camera ui-icon" aria-hidden="true"></i> Profilkép feltöltése
                     </label>
 
                     <input
@@ -124,7 +124,7 @@
                         class="profile-button danger"
                         type="button"
                     >
-                        🗑 Profilkép törlése
+                        <i class="fi fi-br-trash ui-icon" aria-hidden="true"></i> Profilkép törlése
                     </button>
 
                 </div>
@@ -147,7 +147,7 @@
 
             <div class="section-title">
 
-                <span>🎮</span>
+                <span><i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i></span>
 
                 <div>
                     <h2>Steam</h2>
@@ -163,7 +163,7 @@
             >
 
                 <div class="profile-loading">
-                    🎮 Steam kapcsolat ellenőrzése...
+                    <i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i> Steam kapcsolat ellenőrzése...
                 </div>
 
             </div>
@@ -179,7 +179,7 @@
 
             <div class="section-title">
 
-                <span>🚫</span>
+                <span><i class="fi fi-br-ban ui-icon" aria-hidden="true"></i></span>
 
                 <div>
                     <h2>Elrejtett játékok</h2>
@@ -860,7 +860,7 @@
                     `
                     : `
                         <div class="steam-avatar steam-avatar-placeholder">
-                            🎮
+                            <i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i>
                         </div>
                     `;
 
@@ -882,7 +882,7 @@
                         </div>
 
                         <div class="profile-status connected">
-                            ✓ Steam összekötve
+                            <i class="fi fi-br-check ui-icon" aria-hidden="true"></i> Steam összekötve
                         </div>
 
                     </div>
@@ -898,7 +898,7 @@
                         rel="noopener noreferrer"
                         class="profile-button"
                     >
-                        🔗 Steam profil
+                        <i class="fi fi-br-link ui-icon" aria-hidden="true"></i> Steam profil
                     </a>
 
                     <button
@@ -906,7 +906,7 @@
                         class="profile-button danger"
                         type="button"
                     >
-                        🔓 Steam leválasztása
+                        <i class="fi fi-br-unlock ui-icon" aria-hidden="true"></i> Steam leválasztása
                     </button>
 
                 </div>
@@ -943,7 +943,7 @@
                 <div class="steam-not-connected">
 
                     <div class="steam-not-connected-icon">
-                        🎮
+                        <i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i>
                     </div>
 
                     <div>
@@ -969,7 +969,7 @@
                         class="profile-button primary"
                         type="button"
                     >
-                        🎮 Steam összekötése
+                        <i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i> Steam összekötése
                     </button>
 
                 </div>
@@ -1013,7 +1013,7 @@
             steamConnectInProgress = true;
             button.disabled = true;
             button.setAttribute("aria-busy", "true");
-            button.textContent = "⏳ Steam megnyitása...";
+            button.innerHTML = '<i class="fi fi-br-spinner ui-icon" aria-hidden="true"></i> Steam megnyitása...';
 
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), 30000);
@@ -1059,7 +1059,7 @@
                 steamConnectInProgress = false;
                 button.disabled = false;
                 button.removeAttribute("aria-busy");
-                button.textContent = "🎮 Steam összekötése";
+                button.innerHTML = '<i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i> Steam összekötése';
 
                 const message = error?.name === "AbortError"
                     ? "A szerver túl sokáig nem válaszolt. Próbáld meg újra pár másodperc múlva."
@@ -1102,7 +1102,7 @@
 
                 container.insertAdjacentHTML(
                     "afterbegin",
-                    `<div class="steam-link-message success">✓ A Steam fiók sikeresen összekapcsolva.</div>`
+                    `<div class="steam-link-message success"><i class="fi fi-br-check ui-icon" aria-hidden="true"></i> A Steam fiók sikeresen összekapcsolva.</div>`
                 );
 
                 loadSteamProfile();
@@ -1115,7 +1115,7 @@
                     </div>
 
                     <div class="steam-not-connected">
-                        <div class="steam-not-connected-icon">🎮</div>
+                        <div class="steam-not-connected-icon"><i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i></div>
                         <div>
                             <h3>Nincs Steam fiók összekötve</h3>
                             <p class="steam-not-connected-text">
@@ -1130,7 +1130,7 @@
                             class="profile-button primary"
                             type="button"
                         >
-                            🎮 Steam összekötése
+                            <i class="fi fi-br-gamepad ui-icon" aria-hidden="true"></i> Steam összekötése
                         </button>
                     </div>
                 `;
@@ -1184,8 +1184,8 @@
 
             button.disabled = true;
 
-            button.textContent =
-                "⏳ Leválasztás...";
+            button.innerHTML =
+                '<i class="fi fi-br-spinner ui-icon" aria-hidden="true"></i> Leválasztás...';
 
 
             try {
@@ -1230,8 +1230,8 @@
 
                 button.disabled = false;
 
-                button.textContent =
-                    "🔓 Steam leválasztása";
+                button.innerHTML =
+                    '<i class="fi fi-br-unlock ui-icon" aria-hidden="true"></i> Steam leválasztása';
 
 
                 alert(

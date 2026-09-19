@@ -1,11 +1,11 @@
 // =========================================================
-// PROJECT HUB 1.5.0 — APP FRISSÍTÉS / VERZIÓ
+// PROJECT HUB 1.4.2 — APP FRISSÍTÉS / VERZIÓ
 // =========================================================
 
 (function () {
     "use strict";
 
-    const APP_VERSION = "1.5.0.0";
+    const APP_VERSION = "1.4.2";
     const PULL_THRESHOLD = 72;
     const EDGE_SWIPE_THRESHOLD = 55;
     const EDGE_ZONE = 28;
@@ -33,13 +33,13 @@
     function mountVersionFooter() {
         const existing = document.querySelector(".app-version-footer");
         if (existing) {
-            existing.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span>`;
+            existing.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span><a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>`;
             return;
         }
 
         const footer = document.createElement("footer");
         footer.className = "app-version-footer";
-        footer.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span>`;
+        footer.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span><a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>`;
         document.body.appendChild(footer);
     }
 
