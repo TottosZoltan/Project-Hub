@@ -1,6 +1,12 @@
 # Changelog
 
-## 1.5.0 — 2026-09-19
+## 1.5.0.0 — 2026-09-19
+
+### 🏠 Áttekintés / dashboard
+- Élőben mutatja az aktív feladatokat, jegyzeteket, játékokat és helyeket.
+- Feladat-készültségi százalék és modern haladási sáv.
+- A statisztikai kártyák közvetlenül a megfelelő modulokra nyitnak.
+- Reszponzív mobil- és asztali elrendezés.
 
 ### 🎨 Ikonrendszer frissítés
 - Az alkalmazás látható UI-ikonjai egységes Flaticon UIcons Bold Rounded készletre váltottak.
@@ -8,7 +14,7 @@
 - Az ikonok méretezése és igazítása mobilon és asztali nézetben is egységesítve.
 - A dinamikusan renderelt játék-, hely-, feladat- és jegyzetikonok is az új ikonrendszert használják.
 - Service worker cache frissítve `v10`-re.
-- Az alkalmazás verziója egységesítve `1.5.0`-ra.
+- Az alkalmazás verziója egységesítve `1.5.0.0`-ra.
 
 ## 1.4.1 — Steam játék részletek javítása
 

@@ -12,7 +12,7 @@ A Project Hub egy személyes, mobil-first dashboard jegyzetekkel, feladatokkal, 
 - ⭐ Kedvenc helyek
 - ☁️ PostgreSQL alapú felhasználói adatszinkronizáció a saját játékokhoz és helyekhez
 - 📱 Mobilbarát modalok és gesztusbarát kezelőfelület
-- 🔄 PWA frissítési rendszer 1.5.0
+- 🔄 PWA frissítési rendszer 1.5.0.0
 
 ## Fő modulok
 
@@ -45,4 +45,4 @@ A backend Node.js + Express + PostgreSQL alapú. A felhasználói adatok token a
 
 ## Verzió
 
-**Project Hub 1.5.0**
+**Project Hub 1.5.0.0**
