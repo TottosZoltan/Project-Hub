@@ -48,6 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const detailsHours = document.getElementById("gameDetailsHours");
     const detailsAchievementCount = document.getElementById("gameDetailsAchievementCount");
     const achievementsList = document.getElementById("gameAchievements");
+    const detailsInfoList = document.getElementById("gameDetailsInfo");
+    const detailsStoreLink = document.getElementById("gameDetailsStoreLink");
 
     let allGames = [];
     let currentSort = "playtime";
@@ -128,17 +130,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function renderCustomGames() {
         const games = customGames();
-        libraryMeta.textContent = games.length + (games.length === 1 ? " játék az Egyéni könyvtárban" : " játék az Egyéni könyvtárban");
-        if (!games.length) { customGamesList.innerHTML = `<div class="games-state empty-state"><span class="state-icon">+</span><strong>Még nincs játékod az Egyéni könyvtárban.</strong><p>Adj hozzá egy játékot, és az Egyéni könyvtárban fog megjelenni.</p></div>`; return; }
+        libraryMeta.textContent = games.length + (games.length === 1 ? " saját játék" : " saját játék");
+        if (!games.length) { customGamesList.innerHTML = `<div class="games-state empty-state"><span class="state-icon">+</span><strong>Még nincs saját játékod.</strong><p>Adj hozzá egy játékot, és külön könyvtárban fog megjelenni.</p></div>`; return; }
         customGamesList.innerHTML = ""; const fragment = document.createDocumentFragment();
         const labels={backlog:"Játszani szeretném",playing:"Játszom",completed:"Végigjátszva"};
         games.forEach(game=>{
             const card=document.createElement("article"); card.className="game-card custom-game-card";
-            card.tabIndex = 0;
             const image=game.image||"", minutes=Number(game.minutes)||0;
-            card.innerHTML=`<div class="game-card-media">${image?`<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">`:`<div class="game-card-placeholder">${escapeHtml(String(game.name||"?").slice(0,1).toUpperCase())}</div>`}<div class="game-card-gradient"></div><div class="custom-game-tools"><button class="custom-edit" type="button" title="Szerkesztés">✎</button><button class="custom-delete-button" type="button" title="Törlés">×</button></div></div><div class="game-card-body"><h3>${escapeHtml(game.name)}</h3><div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>${game.favorite?'⭐ ':''}Egyéni játék</span></div><div class="custom-status">${escapeHtml(labels[game.status]||"Játszani szeretném")}</div></div>`;
-            card.querySelector('.custom-edit').onclick=e=>{e.preventDefault();e.stopPropagation();openCustomGameModal({...game})};
-            card.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('button')) { e.preventDefault(); openCustomGameModal({...game}); } });
+            card.innerHTML=`<div class="game-card-media">${image?`<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">`:`<div class="game-card-placeholder">${escapeHtml(String(game.name||"?").slice(0,1).toUpperCase())}</div>`}<div class="game-card-gradient"></div><div class="custom-game-tools"><button class="custom-edit" type="button" title="Szerkesztés">✎</button><button class="custom-delete-button" type="button" title="Törlés">×</button></div></div><div class="game-card-body"><h3>${escapeHtml(game.name)}</h3><div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>${game.favorite?'⭐ ':''}Saját játék</span></div><div class="custom-status">${escapeHtml(labels[game.status]||"Játszani szeretném")}</div></div>`;
+            card.querySelector('.custom-edit').onclick=e=>{e.stopPropagation();openCustomGameModal(game)};
             card.querySelector('.custom-delete-button').onclick=async e=>{e.stopPropagation();if(!confirm(`„${game.name}” törlése a saját könyvtárból?`))return;saveCustomGames(customGames().filter(x=>String(x.id)!==String(game.id)));renderCustomGames();try{await fetch(CUSTOM_API+"/"+encodeURIComponent(game.id),{method:"DELETE",headers:headers(),credentials:"include"})}catch{}};
             fragment.appendChild(card);
         }); customGamesList.appendChild(fragment);
@@ -368,6 +368,8 @@ document.addEventListener("DOMContentLoaded", function () {
         detailsHours.textContent = formatHours(getMinutes(game));
         detailsAchievementCount.textContent = "Betöltés...";
         achievementsList.innerHTML = `<div class="games-state loading-state">🏆 Achievementek betöltése...</div>`;
+        detailsInfoList.innerHTML = `<div class="games-state loading-state">ℹ️ További információk betöltése...</div>`;
+        detailsStoreLink.hidden = true;
         if (image) {
             detailsImage.src = image;
             detailsImage.alt = game.name;
@@ -378,38 +380,48 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         modal.hidden = false;
         document.body.classList.add("modal-open");
+        setDetailsTab("overview");
 
         try {
             const response = await fetch(BACKEND_URL + "/api/steam/game/" + encodeURIComponent(game.appid), {
                 method: "GET",
                 headers: headers(),
-                credentials: "include"
+                credentials: "include",
+                cache: "no-store"
             });
             if (response.status === 401) return showAuthError();
             const result = await response.json();
-            if (!response.ok) throw new Error(result.message || "Nem sikerült betölteni az achievementeket.");
-            if (result.game) {
-                const detailGame = result.game;
-                detailsTitle.textContent = detailGame.name || game.name;
-                const totalMinutes = Number(detailGame.playtimeForever ?? detailGame.playtime_forever ?? getMinutes(game)) || 0;
-                detailsPlaytime.textContent = "⏱ " + formatPlaytime(totalMinutes);
-                detailsHours.textContent = formatHours(totalMinutes);
-
-                const detailImage = detailGame.images?.header || detailGame.images?.header_image || detailGame.header_image || image;
-                if (detailImage) {
-                    detailsImage.src = detailImage;
-                    detailsImage.alt = detailGame.name || game.name;
-                    detailsImage.style.display = "block";
-                }
-            }
-
+            if (!response.ok || !result.success) throw new Error(result.message || "Nem sikerült betölteni a játék adatait.");
             const achievements = Array.isArray(result.achievements) ? result.achievements : [];
             renderAchievements(achievements);
+            renderGameInfo(result.game || {}, result.store || {});
         } catch (error) {
             console.error("Game details error:", error);
             detailsAchievementCount.textContent = "Nem elérhető";
-            achievementsList.innerHTML = `<div class="games-state error-state"><span class="state-icon">!</span><strong>Az achievementek nem tölthetők be.</strong><p>${escapeHtml(error.message || "Próbáld újra később.")}</p></div>`;
+            achievementsList.innerHTML = `<div class="games-state error-state"><span class="state-icon">!</span><strong>A részletek nem tölthetők be.</strong><p>${escapeHtml(error.message || "Próbáld újra később.")}</p></div>`;
+            detailsInfoList.innerHTML = `<div class="games-state error-state"><span class="state-icon">!</span><strong>Az egyéb információk nem tölthetők be.</strong><p>Próbáld újra megnyitni a játékot.</p></div>`;
         }
+    }
+
+    function renderGameInfo(game, store) {
+        const rows = [
+            ["Fejlesztő", Array.isArray(store.developers) ? store.developers.join(", ") : "Nem elérhető"],
+            ["Kiadó", Array.isArray(store.publishers) ? store.publishers.join(", ") : "Nem elérhető"],
+            ["Megjelenés", store.releaseDate || "Nem elérhető"],
+            ["Műfaj", Array.isArray(store.genres) ? store.genres.join(", ") : "Nem elérhető"],
+            ["Játékidő", formatPlaytime(game.playtimeForever || 0)],
+            ["Utolsó 2 hét", formatPlaytime(game.playtime2Weeks || 0)]
+        ];
+        detailsInfoList.innerHTML = rows.map(([label, value]) => `<div class="game-info-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+        if (store.storeUrl) {
+            detailsStoreLink.href = store.storeUrl;
+            detailsStoreLink.hidden = false;
+        }
+    }
+
+    function setDetailsTab(tab) {
+        document.querySelectorAll("[data-details-tab]").forEach(button => button.classList.toggle("active", button.dataset.detailsTab === tab));
+        document.querySelectorAll("[data-details-panel]").forEach(panel => panel.hidden = panel.dataset.detailsPanel !== tab);
     }
 
     function renderAchievements(achievements) {
@@ -486,6 +498,9 @@ document.addEventListener("DOMContentLoaded", function () {
     closeButton.addEventListener("click", closeDetails);
     document.addEventListener("keydown", event => {
         if (event.key === "Escape" && !customGameModal.hidden) closeCustomGameModal();
+    });
+    document.querySelectorAll("[data-details-tab]").forEach(button => {
+        button.addEventListener("click", () => setDetailsTab(button.dataset.detailsTab));
     });
     modalOverlay.addEventListener("click", closeDetails);
     document.addEventListener("keydown", event => {

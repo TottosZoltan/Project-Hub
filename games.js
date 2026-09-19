@@ -128,17 +128,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function renderCustomGames() {
         const games = customGames();
-        libraryMeta.textContent = games.length + (games.length === 1 ? " játék az Egyéni könyvtárban" : " játék az Egyéni könyvtárban");
-        if (!games.length) { customGamesList.innerHTML = `<div class="games-state empty-state"><span class="state-icon">+</span><strong>Még nincs játékod az Egyéni könyvtárban.</strong><p>Adj hozzá egy játékot, és az Egyéni könyvtárban fog megjelenni.</p></div>`; return; }
+        libraryMeta.textContent = games.length + (games.length === 1 ? " saját játék" : " saját játék");
+        if (!games.length) { customGamesList.innerHTML = `<div class="games-state empty-state"><span class="state-icon">+</span><strong>Még nincs saját játékod.</strong><p>Adj hozzá egy játékot, és külön könyvtárban fog megjelenni.</p></div>`; return; }
         customGamesList.innerHTML = ""; const fragment = document.createDocumentFragment();
         const labels={backlog:"Játszani szeretném",playing:"Játszom",completed:"Végigjátszva"};
         games.forEach(game=>{
             const card=document.createElement("article"); card.className="game-card custom-game-card";
-            card.tabIndex = 0;
             const image=game.image||"", minutes=Number(game.minutes)||0;
-            card.innerHTML=`<div class="game-card-media">${image?`<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">`:`<div class="game-card-placeholder">${escapeHtml(String(game.name||"?").slice(0,1).toUpperCase())}</div>`}<div class="game-card-gradient"></div><div class="custom-game-tools"><button class="custom-edit" type="button" title="Szerkesztés">✎</button><button class="custom-delete-button" type="button" title="Törlés">×</button></div></div><div class="game-card-body"><h3>${escapeHtml(game.name)}</h3><div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>${game.favorite?'⭐ ':''}Egyéni játék</span></div><div class="custom-status">${escapeHtml(labels[game.status]||"Játszani szeretném")}</div></div>`;
-            card.querySelector('.custom-edit').onclick=e=>{e.preventDefault();e.stopPropagation();openCustomGameModal({...game})};
-            card.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('button')) { e.preventDefault(); openCustomGameModal({...game}); } });
+            card.innerHTML=`<div class="game-card-media">${image?`<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">`:`<div class="game-card-placeholder">${escapeHtml(String(game.name||"?").slice(0,1).toUpperCase())}</div>`}<div class="game-card-gradient"></div><div class="custom-game-tools"><button class="custom-edit" type="button" title="Szerkesztés">✎</button><button class="custom-delete-button" type="button" title="Törlés">×</button></div></div><div class="game-card-body"><h3>${escapeHtml(game.name)}</h3><div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>${game.favorite?'⭐ ':''}Saját játék</span></div><div class="custom-status">${escapeHtml(labels[game.status]||"Játszani szeretném")}</div></div>`;
+            card.querySelector('.custom-edit').onclick=e=>{e.stopPropagation();openCustomGameModal(game)};
             card.querySelector('.custom-delete-button').onclick=async e=>{e.stopPropagation();if(!confirm(`„${game.name}” törlése a saját könyvtárból?`))return;saveCustomGames(customGames().filter(x=>String(x.id)!==String(game.id)));renderCustomGames();try{await fetch(CUSTOM_API+"/"+encodeURIComponent(game.id),{method:"DELETE",headers:headers(),credentials:"include"})}catch{}};
             fragment.appendChild(card);
         }); customGamesList.appendChild(fragment);

@@ -1248,6 +1248,39 @@ router.get(
 
 
             // --------------------------------------------------
+            // Steam Store adatok (az „Egyéb infók” fülhöz)
+            // --------------------------------------------------
+            let store = {
+                developers: [],
+                publishers: [],
+                releaseDate: "",
+                genres: [],
+                storeUrl: `https://store.steampowered.com/app/${appId}/`
+            };
+
+            try {
+                const storeResponse = await fetch(
+                    `https://store.steampowered.com/api/appdetails?appids=${encodeURIComponent(appId)}&l=hungarian`
+                );
+                if (storeResponse.ok) {
+                    const storeData = await storeResponse.json();
+                    const app = storeData?.[String(appId)]?.data;
+                    if (app) {
+                        store = {
+                            developers: Array.isArray(app.developers) ? app.developers : [],
+                            publishers: Array.isArray(app.publishers) ? app.publishers : [],
+                            releaseDate: app.release_date?.date || "",
+                            genres: Array.isArray(app.genres) ? app.genres.map(item => item.description).filter(Boolean) : [],
+                            storeUrl: `https://store.steampowered.com/app/${appId}/`
+                        };
+                    }
+                }
+            } catch (storeError) {
+                console.warn("STEAM STORE ADATOK HIBA:", storeError.message);
+            }
+
+
+            // --------------------------------------------------
             // Achievementek
             // --------------------------------------------------
 
@@ -1420,6 +1453,9 @@ router.get(
                         images
 
                 },
+
+                store:
+                    store,
 
                 achievements:
                     achievements,

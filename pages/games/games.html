@@ -107,14 +107,6 @@
                 <label>Játék neve<input id="customGameName" name="name" type="text" maxlength="80" required placeholder="Pl. Minecraft"></label>
                 <label>Kép URL-je <span>(opcionális)</span><input id="customGameImage" name="image" type="url" maxlength="500" placeholder="https://..."></label>
                 <label>Játékidő percben <span>(opcionális)</span><input id="customGameMinutes" name="minutes" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></label>
-                <label>Állapot
-                    <select id="customGameStatus" name="status">
-                        <option value="backlog">Játszani szeretném</option>
-                        <option value="playing">Játszom</option>
-                        <option value="completed">Végigjátszva</option>
-                    </select>
-                </label>
-                <label class="custom-game-check"><input id="customGameFavorite" name="favorite" type="checkbox"> Kedvenc játék</label>
                 <div class="custom-game-form-actions">
                     <button id="cancelCustomGameButton" type="button" class="secondary-action">Mégse</button>
                     <button type="submit" class="primary-action">Hozzáadás</button>
@@ -138,12 +130,27 @@
                     <div class="game-stat-box"><span>Játékidő</span><strong id="gameDetailsHours">0 óra</strong></div>
                     <div class="game-stat-box"><span>Achievementek</span><strong id="gameDetailsAchievementCount">Betöltés...</strong></div>
                 </div>
-                <div class="game-achievements-section">
-                    <div class="achievement-heading"><h3>🏆 Achievementek</h3></div>
+                <div class="game-details-tabs" role="tablist" aria-label="Játék részletei">
+                    <button type="button" class="game-details-tab active" data-details-tab="overview">Áttekintés</button>
+                    <button type="button" class="game-details-tab" data-details-tab="info">Egyéb infók</button>
+                    <button type="button" class="game-details-tab" data-details-tab="achievements">🏆 Achievementek</button>
+                </div>
+                <section class="game-details-panel" data-details-panel="overview">
+                    <div class="game-details-overview">
+                        <div class="game-stat-box"><span>Steam játék</span><strong>Összekötve</strong></div>
+                        <a id="gameDetailsStoreLink" class="game-store-link" target="_blank" rel="noopener" hidden>Megnyitás Steamen ↗</a>
+                    </div>
+                </section>
+                <section class="game-details-panel" data-details-panel="info" hidden>
+                    <div id="gameDetailsInfo" class="game-info-list">
+                        <div class="games-state loading-state">ℹ️ További információk betöltése...</div>
+                    </div>
+                </section>
+                <section class="game-details-panel" data-details-panel="achievements" hidden>
                     <div id="gameAchievements" class="game-achievements-list">
                         <div class="games-state loading-state">Achievementek betöltése...</div>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     </div>
