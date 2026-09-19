@@ -107,6 +107,14 @@
                 <label>Játék neve<input id="customGameName" name="name" type="text" maxlength="80" required placeholder="Pl. Minecraft"></label>
                 <label>Kép URL-je <span>(opcionális)</span><input id="customGameImage" name="image" type="url" maxlength="500" placeholder="https://..."></label>
                 <label>Játékidő percben <span>(opcionális)</span><input id="customGameMinutes" name="minutes" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></label>
+                <label>Állapot
+                    <select id="customGameStatus" name="status">
+                        <option value="backlog">Játszani szeretném</option>
+                        <option value="playing">Játszom</option>
+                        <option value="completed">Végigjátszva</option>
+                    </select>
+                </label>
+                <label class="custom-game-check"><input id="customGameFavorite" name="favorite" type="checkbox"> Kedvenc játék</label>
                 <div class="custom-game-form-actions">
                     <button id="cancelCustomGameButton" type="button" class="secondary-action">Mégse</button>
                     <button type="submit" class="primary-action">Hozzáadás</button>
