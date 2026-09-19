@@ -117,7 +117,12 @@ document.addEventListener("DOMContentLoaded", function () {
         editingCustomId = game?.id ?? null;
         customGameForm.reset();
         document.getElementById("customGameTitle").textContent = game ? "Játék szerkesztése" : "Játék hozzáadása";
-        customGameName.value = game?.name || ""; customGameImage.value = game?.image || ""; customGameMinutes.value = game?.minutes || 0; customGameStatus.value = game?.status || "backlog"; customGameFavorite.checked = !!game?.favorite;
+        document.getElementById("customGameSubmitButton").textContent = game ? "Változtatások mentése" : "Játék hozzáadása";
+        customGameName.value = game?.name || "";
+        customGameImage.value = game?.image || "";
+        customGameMinutes.value = game?.minutes || 0;
+        customGameStatus.value = game?.status || "backlog";
+        customGameFavorite.checked = !!game?.favorite;
         customGameModal.hidden = false;
         document.body.classList.add("modal-open");
         setTimeout(() => customGameName.focus(), 30);
@@ -468,7 +473,7 @@ document.addEventListener("DOMContentLoaded", function () {
         else { const localItem={id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),...payload}; games.unshift(localItem); saveCustomGames(games); }
         const saved=await saveCustomGameCloud(payload, editingCustomId && !String(editingCustomId).startsWith("local-") ? editingCustomId : null);
         if(saved){ const current=customGames(); if(editingCustomId){const i=current.findIndex(x=>String(x.id)===String(editingCustomId));if(i>=0)current[i]=saved;}else{current[0]=saved;} saveCustomGames(current); }
-        editingCustomId=null; closeCustomGameModal(); setLibrary("custom");
+        editingCustomId=null; closeCustomGameModal(); renderCustomGames(); setLibrary("custom");
     });
 
     let touchStartX = 0;

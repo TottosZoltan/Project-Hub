@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.2 — 2026-09-19
+
+- 🎮 Újratervezett játékkereső és rendező szűrők a Games oldalon.
+- ✏️ Javítva az „Egyéb játékaid” szerkesztése: a szerkesztőablak most megfelelően betölti és menti az állapotot és kedvenc jelölést is.
+- 📱 A Games szűrők mobilon is rendezett, érintésbarát elrendezést kaptak.
+- 🔢 A megjelenített alkalmazásverzió 1.4.2.0-ra frissítve.
+
 ## 1.4.1 — Steam játék részletek javítása
 
 - Javítva a Steam játék részletes nézetének API végpontja.

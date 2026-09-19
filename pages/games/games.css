@@ -142,21 +142,30 @@
  .library-header-actions { display: flex; align-items: center; gap: 7px; }
 .games-controls {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
+    grid-template-columns: minmax(220px, 1fr) minmax(0, 1.35fr);
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 14px;
 }
 .games-search {
     min-width: 0;
+    min-height: 46px;
     display: flex;
     align-items: center;
-    min-height: 40px;
-    padding: 0 12px;
+    gap: 9px;
+    padding: 0 13px;
     border: 1px solid var(--border-strong);
-    border-radius: 12px;
-    background: var(--surface-strong);
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+    transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
 }
+.games-search:focus-within {
+    border-color: rgba(124,140,255,.55);
+    background: rgba(124,140,255,.06);
+    box-shadow: 0 0 0 3px rgba(124,140,255,.08);
+}
+.games-search > span { color: #8993a8; font-size: 18px; line-height: 1; }
 .games-search input {
     width: 100%;
     min-width: 0;
@@ -167,26 +176,39 @@
     font: inherit;
     font-size: 11px;
 }
-.games-search input::placeholder { color: var(--muted); }
+.games-search input::placeholder { color: #727d91; }
 .games-filter {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 40px;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
     padding: 4px;
     border: 1px solid var(--border-strong);
-    border-radius: 12px;
-    background: var(--surface-strong);
+    border-radius: 14px;
+    background: rgba(255,255,255,.028);
 }
-.games-filter select {
-    min-width: 118px;
-    height: 30px;
-    border: 0;
-    outline: 0;
+.filter-button {
+    min-width: 0;
+    min-height: 36px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    border-radius: 10px;
     background: transparent;
-    color: var(--text);
+    color: #7d879a;
     font-size: 10px;
+    font-weight: 750;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
 }
+.filter-button:hover { color: var(--text); background: rgba(255,255,255,.045); }
+.filter-button.active {
+    color: var(--text);
+    background: rgba(124,140,255,.14);
+    border-color: rgba(124,140,255,.3);
+    box-shadow: 0 5px 15px rgba(0,0,0,.16);
+}
+.filter-button:active { transform: scale(.97); }
 .library-refresh, .library-add { min-height: 40px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--surface-strong); color: var(--text); }
 .library-refresh { width: 40px; font-size: 20px; }
 .library-add { padding: 0 12px; font-size: 11px; font-weight: 750; }
@@ -221,7 +243,7 @@
 .custom-game-form { display: grid; gap: 12px; margin-top: 18px; }
 .custom-game-form label { display: grid; gap: 6px; color: var(--muted-strong); font-size: 11px; font-weight: 650; }
 .custom-game-form label span { color: #687286; font-weight: 500; }
-.custom-game-form input { width: 100%; min-height: 46px; padding: 0 12px; border: 1px solid var(--border-strong); border-radius: 12px; outline: 0; background: #0b1018; color: var(--text); }
+.custom-game-form input, .custom-game-form select { width: 100%; min-height: 46px; padding: 0 12px; border: 1px solid var(--border-strong); border-radius: 12px; outline: 0; background: #0b1018; color: var(--text); }
 .custom-game-form input:focus { border-color: rgba(124,140,255,.6); }
 .custom-game-form-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; }
 .secondary-action, .primary-action { min-height: 44px; border-radius: 12px; border: 1px solid var(--border-strong); font-size: 11px; font-weight: 750; }
@@ -240,9 +262,9 @@
     .games-library { padding: 12px; }
     .library-header { align-items: flex-start; }
     .library-add { padding: 0 10px; }
-    .games-controls { grid-template-columns: 1fr; }
+    .games-controls { grid-template-columns: 1fr; gap: 8px; }
     .games-filter { width: 100%; }
-    .games-filter select { width: 100%; min-width: 0; }
+    .filter-button { min-height: 38px; }
     .games-list { grid-template-columns: 1fr; gap: 10px; }
     .game-card-media { aspect-ratio: 460 / 215; }
 }
