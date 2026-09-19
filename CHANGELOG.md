@@ -1,3 +1,12 @@
+# Changelog
+
+## 1.4.1 — Steam játék részletek javítása
+
+- Javítva a Steam játék részletes nézetének API végpontja.
+- A frontend most a backend tényleges `/api/steam/game/:appid` végpontját használja.
+- A részletes nézet a backend által visszaadott játékadatokból is frissíti a játékidőt és a borítóképet.
+- Stabilabb achievement betöltés és hibakezelés.
+
 # Project Hub – CHANGELOG
 
 ## 1.4.0 — 2026-09-19

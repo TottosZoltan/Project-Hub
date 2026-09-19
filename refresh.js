@@ -1,11 +1,11 @@
 // =========================================================
-// PROJECT HUB 1.4 — APP FRISSÍTÉS / VERZIÓ
+// PROJECT HUB 1.4.1 — APP FRISSÍTÉS / VERZIÓ
 // =========================================================
 
 (function () {
     "use strict";
 
-    const APP_VERSION = "1.4.0";
+    const APP_VERSION = "1.4.1.1";
     const PULL_THRESHOLD = 72;
     const EDGE_SWIPE_THRESHOLD = 55;
     const EDGE_ZONE = 28;
