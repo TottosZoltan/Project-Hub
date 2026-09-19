@@ -1,11 +1,14 @@
-# Project Hub – CHANGELOG
+# Changelog
 
-## 1.4.2 — 2026-09-19
+## 1.5.0 — 2026-09-19
 
-### 🎨 Ikonfrissítés
-- A felületen használt emoji és karakterikonok egységes Flaticon UIcons Bold Rounded ikonokra lettek cserélve.
-- Frissítve a főoldal, játékok, feladatok, jegyzetek, helyek, profil és bejelentkezési felületek ikonhasználata.
-- Az ikonok mérete és igazítása mobilon is egységesebb lett.
+### 🎨 Ikonrendszer frissítés
+- Az alkalmazás látható UI-ikonjai egységes Flaticon UIcons Bold Rounded készletre váltottak.
+- Az emoji-alapú navigációs, keresési, műveleti, profil-, játék-, hely- és állapotikonok egységes vektoros ikonokra cserélve.
+- Az ikonok méretezése és igazítása mobilon és asztali nézetben is egységesítve.
+- A dinamikusan renderelt játék-, hely-, feladat- és jegyzetikonok is az új ikonrendszert használják.
+- Service worker cache frissítve `v10`-re.
+- Az alkalmazás verziója egységesítve `1.5.0`-ra.
 
 ## 1.4.1 — Steam játék részletek javítása
 
@@ -13,6 +16,8 @@
 - A frontend most a backend tényleges `/api/steam/game/:appid` végpontját használja.
 - A részletes nézet a backend által visszaadott játékadatokból is frissíti a játékidőt és a borítóképet.
 - Stabilabb achievement betöltés és hibakezelés.
+
+# Project Hub – CHANGELOG
 
 ## 1.4.0 — 2026-09-19
 

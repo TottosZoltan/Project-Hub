@@ -367,8 +367,6 @@ main {
 }
 
 .app-version-footer span:last-child { color: #7d8798; font-weight: 700; }
-.app-version-footer a { color: #7d8798; text-decoration: none; font-size: 10px; opacity: .85; }
-.app-version-footer a:hover { text-decoration: underline; opacity: 1; }
 
 .pull-refresh-indicator {
     position: fixed;
@@ -562,18 +560,27 @@ main {
     }
 }
 
-/* ========================= UICONS ========================= */
-.ui-icon {
+/* =========================================
+   1.5.0 — FLATICON UICONS / BOLD ROUNDED
+========================================= */
+.fi {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
-    font-size: 1em;
+    vertical-align: middle;
     flex: 0 0 auto;
-    vertical-align: -0.08em;
 }
-.app-icon .ui-icon { font-size: 1.35em; }
-.menu-button .ui-icon, .close-button .ui-icon, .back-button .ui-icon { font-size: 1.15em; }
-.priority-low { opacity: .72; }
-.priority-normal { opacity: .86; }
-.priority-high { opacity: 1; }
+.app-icon .fi { font-size: 24px; }
+.menu-links .fi { width: 1.2em; font-size: 1.05em; }
+.section-title > span > .fi,
+.section-title > .fi { font-size: 21px; }
+.icon-action .fi,
+.game-details-close .fi,
+.place-close .fi { font-size: 17px; }
+.games-back .fi, .places-back .fi { font-size: 20px; }
+.library-refresh .fi { font-size: 17px; }
+.state-icon .fi, .empty-icon .fi { font-size: inherit; }
+
+.uicons-credit { color: #626b7b; text-decoration: none; }
+.uicons-credit:hover { text-decoration: underline; }

@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
         games.forEach(game=>{
             const card=document.createElement("article"); card.className="game-card custom-game-card";
             const image=game.image||"", minutes=Number(game.minutes)||0;
-            card.innerHTML=`<div class="game-card-media">${image?`<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">`:`<div class="game-card-placeholder">${escapeHtml(String(game.name||"?").slice(0,1).toUpperCase())}</div>`}<div class="game-card-gradient"></div><div class="custom-game-tools"><button class="custom-edit" type="button" title="Szerkesztés">✎</button><button class="custom-delete-button" type="button" title="Törlés">×</button></div></div><div class="game-card-body"><h3>${escapeHtml(game.name)}</h3><div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>${game.favorite?'⭐ ':''}Egyéb játék</span></div><div class="custom-status">${escapeHtml(labels[game.status]||"Játszani szeretném")}</div></div>`;
+            card.innerHTML=`<div class="game-card-media">${image?`<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">`:`<div class="game-card-placeholder">${escapeHtml(String(game.name||"?").slice(0,1).toUpperCase())}</div>`}<div class="game-card-gradient"></div><div class="custom-game-tools"><button class="custom-edit" type="button" title="Szerkesztés"><i class="fi fi-br-pencil" aria-hidden="true"></i></button><button class="custom-delete-button" type="button" title="Törlés"><i class="fi fi-br-cross" aria-hidden="true"></i></button></div></div><div class="game-card-body"><h3>${escapeHtml(game.name)}</h3><div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>${game.favorite?'<i class="fi fi-br-star" aria-hidden="true"></i> ':''}Egyéb játék</span></div><div class="custom-status">${escapeHtml(labels[game.status]||"Játszani szeretném")}</div></div>`;
             card.querySelector('.custom-edit').onclick=e=>{e.stopPropagation();openCustomGameModal(game)};
             card.querySelector('.custom-delete-button').onclick=async e=>{e.stopPropagation();if(!confirm(`„${game.name}” törlése az egyéb játékaid közül?`))return;saveCustomGames(customGames().filter(x=>String(x.id)!==String(game.id)));renderCustomGames();try{await fetch(CUSTOM_API+"/"+encodeURIComponent(game.id),{method:"DELETE",headers:headers(),credentials:"include"})}catch{}};
             fragment.appendChild(card);
@@ -333,7 +333,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const recent = getRecentMinutes(game);
             card.innerHTML = `
                 <div class="game-card-media">
-                    ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">` : `<div class="game-card-placeholder">🎮</div>`}
+                    ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">` : `<div class="game-card-placeholder"><i class="fi fi-br-gamepad" aria-hidden="true"></i></div>`}
                     <div class="game-card-gradient"></div>
                     <button class="game-hide-button" type="button" aria-label="${escapeHtml(game.name)} elrejtése" title="Játék elrejtése">•••</button>
                     ${recent ? `<span class="recent-badge">${escapeHtml(formatPlaytime(recent))} az elmúlt 2 hétben</span>` : ""}
@@ -367,8 +367,8 @@ document.addEventListener("DOMContentLoaded", function () {
         detailsPlaytime.textContent = "⏱ " + formatPlaytime(getMinutes(game));
         detailsHours.textContent = formatHours(getMinutes(game));
         detailsAchievementCount.textContent = "Betöltés...";
-        achievementsList.innerHTML = `<div class="games-state loading-state">🏆 Achievementek betöltése...</div>`;
-        detailsInfoList.innerHTML = `<div class="games-state loading-state">ℹ️ További információk betöltése...</div>`;
+        achievementsList.innerHTML = `<div class="games-state loading-state"><i class="fi fi-br-trophy" aria-hidden="true"></i> Achievementek betöltése...</div>`;
+        detailsInfoList.innerHTML = `<div class="games-state loading-state"><i class="fi fi-br-info" aria-hidden="true"></i> További információk betöltése...</div>`;
         detailsStoreLink.hidden = true;
         if (image) {
             detailsImage.src = image;
@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function renderAchievements(achievements) {
         if (!achievements.length) {
             detailsAchievementCount.textContent = "0 / 0";
-            achievementsList.innerHTML = `<div class="games-state empty-state"><span class="state-icon">🏆</span><strong>Nincs elérhető achievement adat.</strong></div>`;
+            achievementsList.innerHTML = `<div class="games-state empty-state"><span class="state-icon"><i class="fi fi-br-trophy" aria-hidden="true"></i></span><strong>Nincs elérhető achievement adat.</strong></div>`;
             return;
         }
         const unlocked = achievements.filter(item => item.achieved === 1 || item.achieved === true).length;
@@ -439,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
             row.className = "achievement-row " + (unlockedItem ? "unlocked" : "locked");
             const icon = item.icon || item.icongray || "";
             row.innerHTML = `
-                ${icon ? `<img src="${escapeHtml(icon)}" alt="" loading="lazy">` : `<div class="achievement-placeholder">🏆</div>`}
+                ${icon ? `<img src="${escapeHtml(icon)}" alt="" loading="lazy">` : `<div class="achievement-placeholder"><i class="fi fi-br-trophy" aria-hidden="true"></i></div>`}
                 <div class="achievement-copy">
                     <strong>${escapeHtml(item.name || item.displayName || item.apiname || "Achievement")}</strong>
                     ${item.description ? `<p>${escapeHtml(item.description)}</p>` : ""}

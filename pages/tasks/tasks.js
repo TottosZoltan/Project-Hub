@@ -199,16 +199,16 @@ function getPriorityIcon(priority) {
 
     const icons = {
 
-        low: '<i class="fi fi-br-circle ui-icon priority-low" aria-hidden="true"></i>',
+        low: `<i class="fi fi-br-circle-small" aria-hidden="true"></i>`,
 
-        normal: '<i class="fi fi-br-circle ui-icon priority-normal" aria-hidden="true"></i>',
+        normal: `<i class="fi fi-br-circle-small" aria-hidden="true"></i>`,
 
-        high: '<i class="fi fi-br-circle ui-icon priority-high" aria-hidden="true"></i>'
+        high: "🔴"
 
     };
 
     return icons[priority] ||
-        '<i class="fi fi-br-circle ui-icon priority-normal" aria-hidden="true"></i>';
+        "🟡";
 
 }
 
@@ -221,20 +221,20 @@ function getCategoryIcon(category) {
 
     const icons = {
 
-        "Munka": '<i class="fi fi-br-briefcase ui-icon" aria-hidden="true"></i>',
+        "Munka": `<i class="fi fi-br-briefcase" aria-hidden="true"></i>`,
 
-        "Személyes": '<i class="fi fi-br-user ui-icon" aria-hidden="true"></i>',
+        "Személyes": `<i class="fi fi-br-user" aria-hidden="true"></i>`,
 
-        "Projekt": '<i class="fi fi-br-rocket ui-icon" aria-hidden="true"></i>',
+        "Projekt": `<i class="fi fi-br-rocket" aria-hidden="true"></i>`,
 
-        "Fontos": "⭐",
+        "Fontos": `<i class="fi fi-br-star" aria-hidden="true"></i>`,
 
-        "Egyéb": '<i class="fi fi-br-folder ui-icon" aria-hidden="true"></i>'
+        "Egyéb": `<i class="fi fi-br-folder" aria-hidden="true"></i>`
 
     };
 
     return icons[category] ||
-        '<i class="fi fi-br-folder ui-icon" aria-hidden="true"></i>';
+        `<i class="fi fi-br-folder" aria-hidden="true"></i>`;
 
 }
 
@@ -1109,9 +1109,9 @@ function renderTasks() {
                     : "Feladat készre jelölése"
             );
 
-            checkbox.innerHTML =
+            checkbox.textContent =
                 task.completed
-                    ? '<i class="fi fi-br-check ui-icon" aria-hidden="true"></i>'
+                    ? "✓"
                     : "";
 
 
@@ -1165,7 +1165,7 @@ function renderTasks() {
                     "task-pin";
 
                 pin.textContent =
-                    '<i class="fi fi-br-thumbtack ui-icon" aria-hidden="true"></i>';
+                    "📌";
 
                 pin.title =
                     "Fontos feladat";
@@ -1209,8 +1209,8 @@ function renderTasks() {
 
             pinButton.textContent =
                 task.pinned
-                    ? '<i class="fi fi-br-thumbtack ui-icon" aria-hidden="true"></i>'
-                    : '<i class="fi fi-br-marker ui-icon" aria-hidden="true"></i>';
+                    ? "📌"
+                    : `<i class="fi fi-br-marker" aria-hidden="true"></i>`;
 
             pinButton.title =
                 task.pinned
@@ -1244,7 +1244,7 @@ function renderTasks() {
                 "button";
 
             editButton.textContent =
-                '<i class="fi fi-br-pencil ui-icon" aria-hidden="true"></i>';
+                "✏️";
 
             editButton.title =
                 "Feladat szerkesztése";
@@ -1276,7 +1276,7 @@ function renderTasks() {
                 "button";
 
             deleteButton.textContent =
-                '<i class="fi fi-br-trash ui-icon" aria-hidden="true"></i>';
+                "🗑️";
 
             deleteButton.title =
                 "Feladat törlése";
@@ -1891,7 +1891,7 @@ function editTask(id) {
 
 
     saveTaskButton.textContent =
-        '<i class="fi fi-br-disk ui-icon" aria-hidden="true"></i> Módosítás mentése';
+        "💾 Módosítás mentése";
 
 
     if (
@@ -2234,7 +2234,7 @@ if (
             ) {
 
                 toggleTaskFilters.textContent =
-                    '<i class="fi fi-br-search ui-icon" aria-hidden="true"></i> Keresés és szűrés';
+                    "🔎 Keresés és szűrés";
 
             }
 

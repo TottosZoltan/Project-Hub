@@ -1,11 +1,11 @@
 // =========================================================
-// PROJECT HUB 1.4.2 — APP FRISSÍTÉS / VERZIÓ
+// PROJECT HUB 1.5.0 — APP FRISSÍTÉS / VERZIÓ
 // =========================================================
 
 (function () {
     "use strict";
 
-    const APP_VERSION = "1.4.2";
+    const APP_VERSION = "1.5.0";
     const PULL_THRESHOLD = 72;
     const EDGE_SWIPE_THRESHOLD = 55;
     const EDGE_ZONE = 28;
@@ -33,13 +33,13 @@
     function mountVersionFooter() {
         const existing = document.querySelector(".app-version-footer");
         if (existing) {
-            existing.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span><a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>`;
+            existing.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span><a class="uicons-credit" href="https://www.flaticon.com/uicons" target="_blank" rel="noopener">Uicons by Flaticon</a>`;
             return;
         }
 
         const footer = document.createElement("footer");
         footer.className = "app-version-footer";
-        footer.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span><a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>`;
+        footer.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span><a class="uicons-credit" href="https://www.flaticon.com/uicons" target="_blank" rel="noopener">Uicons by Flaticon</a>`;
         document.body.appendChild(footer);
     }
 
@@ -69,7 +69,7 @@
             indicator.classList.remove("visible", "ready", "refreshing");
             indicator.style.transform = "translateX(-50%) translateY(-100%)";
             indicator.style.top = "0";
-            icon.textContent = "↓";
+            icon.innerHTML = '<i class="fi fi-br-arrow-down" aria-hidden="true"></i>';
             text.textContent = "Húzd le a frissítéshez";
             pullDistance = 0;
             pulling = false;
@@ -83,11 +83,11 @@
 
             if (distance >= PULL_THRESHOLD) {
                 indicator.classList.add("ready");
-                icon.textContent = "↑";
+                icon.innerHTML = '<i class="fi fi-br-arrow-up" aria-hidden="true"></i>';
                 text.textContent = "Engedd el a frissítéshez";
             } else {
                 indicator.classList.remove("ready");
-                icon.textContent = "↓";
+                icon.innerHTML = '<i class="fi fi-br-arrow-down" aria-hidden="true"></i>';
                 text.textContent = "Húzd le a frissítéshez";
             }
         }
@@ -135,7 +135,7 @@
                 indicator.classList.remove("ready");
                 indicator.style.transform = "translateX(-50%) translateY(0)";
                 indicator.style.top = "0";
-                icon.textContent = "↻";
+                icon.innerHTML = '<i class="fi fi-br-rotate-right" aria-hidden="true"></i>';
                 text.textContent = "Frissítés...";
                 window.setTimeout(function () { window.location.reload(); }, 250);
             } else {
