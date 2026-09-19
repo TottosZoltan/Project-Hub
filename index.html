@@ -323,68 +323,53 @@
              ÁTTEKINTÉS
         ========================================== -->
 
-        <section class="overview">
+        <section class="overview" aria-labelledby="overviewTitle">
 
-            <div class="section-header">
-
-                <h2>
-                    📊 Áttekintés
-                </h2>
-
-                <span>
-                    Ma
-                </span>
-
+            <div class="overview-top">
+                <div>
+                    <p class="overview-kicker">MAI ÁTTEKINTÉS</p>
+                    <h2 id="overviewTitle">A te Project Hubod</h2>
+                    <p id="overviewDate">Összesített adatok betöltése…</p>
+                </div>
+                <span class="overview-live"><i></i> Élő adatok</span>
             </div>
 
+            <div class="overview-stats">
+                <a class="overview-stat overview-stat-task" href="pages/tasks/tasks.html">
+                    <span class="overview-stat-icon">✓</span>
+                    <span class="overview-stat-copy"><small>Aktív feladatok</small><strong id="activeTaskCount">—</strong></span>
+                    <span class="overview-stat-arrow">→</span>
+                </a>
+                <a class="overview-stat overview-stat-note" href="pages/notes/notes.html">
+                    <span class="overview-stat-icon">✎</span>
+                    <span class="overview-stat-copy"><small>Jegyzetek</small><strong id="noteCount">—</strong></span>
+                    <span class="overview-stat-arrow">→</span>
+                </a>
+                <a class="overview-stat overview-stat-game" href="pages/games/games.html">
+                    <span class="overview-stat-icon">🎮</span>
+                    <span class="overview-stat-copy"><small>Játékok</small><strong id="gameCount">—</strong></span>
+                    <span class="overview-stat-arrow">→</span>
+                </a>
+                <a class="overview-stat overview-stat-place" href="pages/places/places.html">
+                    <span class="overview-stat-icon">⌖</span>
+                    <span class="overview-stat-copy"><small>Helyek</small><strong id="placeCount">—</strong></span>
+                    <span class="overview-stat-arrow">→</span>
+                </a>
+            </div>
 
-            <div class="stats">
-
-
-                <!-- FELADATOK -->
-
-                <div class="stat">
-
-                    <strong id="taskCount">
-                        0
-                    </strong>
-
-                    <span>
-                        Feladat
-                    </span>
-
+            <div class="overview-bottom">
+                <div class="overview-progress-card">
+                    <div class="overview-progress-head">
+                        <div><span>Feladatok haladása</span><strong id="taskProgressLabel">—</strong></div>
+                        <span id="taskProgressPercent">—</span>
+                    </div>
+                    <div class="overview-progress-track"><span id="taskProgressBar"></span></div>
+                    <p id="taskProgressText">A feladatok állapota itt jelenik meg.</p>
                 </div>
-
-
-                <!-- JEGYZETEK -->
-
-                <div class="stat">
-
-                    <strong id="noteCount">
-                        0
-                    </strong>
-
-                    <span>
-                        Jegyzet
-                    </span>
-
-                </div>
-
-
-                <!-- JÁTÉKOK -->
-
-                <div class="stat">
-
-                    <strong id="gameCount">
-                        0
-                    </strong>
-
-                    <span>
-                        Játék
-                    </span>
-
-                </div>
-
+                <a class="overview-cta" href="pages/tasks/tasks.html">
+                    <span>Feladatok megnyitása</span>
+                    <strong>→</strong>
+                </a>
             </div>
 
         </section>

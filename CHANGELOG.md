@@ -1,3 +1,13 @@
+# Project Hub — Changelog
+
+## 1.5.0 — 2026-09-19
+- 🏠 A főmenü Áttekintés része teljesen új dashboard megjelenést kapott.
+- 📊 Élő feladat-, jegyzet-, játék- és helyszámok jelennek meg.
+- ✅ A feladatok készültségi aránya vizuális haladási sávval látható.
+- 📱 Az Áttekintés mobilon és asztali nézetben is reszponzív.
+- 🔗 A statisztikai kártyák közvetlenül a kapcsolódó modulokra vezetnek.
+- 🔢 Az alkalmazás verziója 1.5.0.0-ra frissítve.
+
 # Changelog
 
 ## 1.4.2 — 2026-09-19

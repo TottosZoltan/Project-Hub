@@ -460,6 +460,82 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================================
+    // FŐMENÜ ÁTTEKINTÉS — 1.5
+    // =========================================
+
+    async function loadOverview() {
+
+        const activeTaskCount = document.getElementById("activeTaskCount");
+        const noteCount = document.getElementById("noteCount");
+        const gameCount = document.getElementById("gameCount");
+        const placeCount = document.getElementById("placeCount");
+        const progressLabel = document.getElementById("taskProgressLabel");
+        const progressPercent = document.getElementById("taskProgressPercent");
+        const progressBar = document.getElementById("taskProgressBar");
+        const progressText = document.getElementById("taskProgressText");
+        const overviewDate = document.getElementById("overviewDate");
+
+        if (!activeTaskCount) return;
+
+        const token = getAuthToken();
+        const headers = {
+            "Authorization": "Bearer " + token
+        };
+
+        const getJson = async (url) => {
+            try {
+                const response = await fetch(BACKEND_URL + url, {
+                    method: "GET",
+                    headers,
+                    credentials: "include"
+                });
+                if (!response.ok) return null;
+                return await response.json();
+            } catch (error) {
+                console.warn("Áttekintés adatbetöltési hiba:", url, error);
+                return null;
+            }
+        };
+
+        const [tasks, notes, customGames, places] = await Promise.all([
+            getJson("/api/tasks"),
+            getJson("/api/notes"),
+            getJson("/api/library/games"),
+            getJson("/api/places")
+        ]);
+
+        const taskRows = Array.isArray(tasks?.tasks) ? tasks.tasks : [];
+        const noteRows = Array.isArray(notes?.notes) ? notes.notes : [];
+        const gameRows = Array.isArray(customGames?.games) ? customGames.games : [];
+        const placeRows = Array.isArray(places?.places) ? places.places : [];
+
+        const completed = taskRows.filter(task => task.completed === true).length;
+        const active = Math.max(0, taskRows.length - completed);
+        const percentage = taskRows.length ? Math.round((completed / taskRows.length) * 100) : 0;
+
+        activeTaskCount.textContent = active;
+        noteCount.textContent = noteRows.length;
+        gameCount.textContent = gameRows.length;
+        placeCount.textContent = placeRows.length;
+        progressLabel.textContent = taskRows.length ? `${completed} / ${taskRows.length} kész` : "Nincs még feladat";
+        progressPercent.textContent = `${percentage}%`;
+        progressBar.style.width = `${percentage}%`;
+        progressText.textContent = taskRows.length
+            ? `${active} aktív feladat maradt, ${completed} már elkészült.`
+            : "Adj hozzá egy feladatot, és itt követheted majd a haladását.";
+
+        if (overviewDate) {
+            const now = new Date();
+            overviewDate.textContent = new Intl.DateTimeFormat("hu-HU", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }).format(now);
+        }
+    }
+
+    // =========================================
     // BEJELENTKEZÉS ELLENŐRZÉSE
     // =========================================
 
@@ -568,6 +644,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 unlockApp();
 
+                loadOverview();
 
                 return;
 
