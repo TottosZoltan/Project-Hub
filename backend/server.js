@@ -12,6 +12,7 @@ const systemRoutes = require("./routes/system");
 const notesRoutes = require("./routes/notes");
 const tasksRoutes = require("./routes/tasks");
 const steamRoutes = require("./routes/steam");
+const libraryRoutes = require("./routes/library");
 
 const app = express();
 
@@ -74,6 +75,7 @@ app.use(authRoutes);
 app.use(notesRoutes);
 app.use(tasksRoutes);
 app.use(steamRoutes);
+app.use(libraryRoutes);
 
 // ======================================================
 // GLOBAL ERROR HANDLER

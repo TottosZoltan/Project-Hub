@@ -1,36 +1,34 @@
-# Changelog
+# Project Hub – CHANGELOG
 
-Minden fontosabb Project Hub-változás ebben a fájlban kerül dokumentálásra.
+## 1.4.0 — 2026-09-19
 
-## [1.3.0] — 2026-09-19
+### 🎮 Játékok 2.0
+- Az egyéni játékok mostantól szerveroldalon is menthetők.
+- Egyéni játék szerkesztése és törlése.
+- Kedvenc játék jelölés.
+- Játékállapotok: Játszani szeretném / Játszom / Végigjátszva.
+- A korábbi helyi egyéni játékadatok első szinkronizáláskor megpróbálnak felkerülni a felhőbe.
+- Offline fallback továbbra is működik a helyi könyvtárral.
 
-### Added
-- 🎮 Steam-integráció a Profil oldalon.
-- 🎮 Steam játéklista és játékadatok.
-- 🏆 Steam achievement megjelenítés.
-- 📚 külön Egyéni játék könyvtár saját játékokhoz.
-- 👤 megújult Profil / Steam kapcsolat felület.
-- 📱 mobil-first reszponzív UI-frissítés.
-- 👆 mobilos gesztusok tesztverziója.
-- ⬇️ pull-to-refresh támogatás.
-- 📲 PWA manifest és service worker alapú alkalmazásélmény.
-- 🖥️ fejlesztői diagnosztikai Console.
-- 🔢 egységes Project Hub v1.3 verziójelölés.
+### 📍 Helyek 2.0
+- Teljes helykezelő modul.
+- Hely létrehozása, szerkesztése, törlése.
+- Kedvencek.
+- Kategóriák és szűrés.
+- Keresés név, cím és megjegyzés alapján.
+- Szerveroldali mentés PostgreSQL-ben.
+- Offline helyi fallback.
+- Mobilbarát modal és kártyás megjelenítés.
 
-### Fixed
-- Steam kapcsolási hibák és visszatérési állapotok kezelése.
-- Steam már másik fiókhoz kapcsolt állapot visszajelzése.
-- Games oldali szöveg- és kártya-túlcsordulások.
-- Mobilos belső oldalak illeszkedése.
-- Verziószám megjelenítésének inkonzisztenciái.
-- PWA cache verziófrissítés.
+### ☁️ Cloud / backend
+- Új `custom_games` adatbázistábla.
+- Új `places` adatbázistábla.
+- Új API végpontok saját játékokhoz és helyekhez.
+- Felhasználónként elkülönített adatok.
+- Tulajdonosi ellenőrzés minden módosító API műveletnél.
 
-### Changed
-- Egységesebb belső oldal- és kártyadizájn.
-- A Steam összekapcsolás helye kizárólag a Profil oldal.
-- A Games oldalon külön választható a Steam és az Egyéni könyvtár.
-- Frissítési visszajelzések és mobilos állapotjelzések javítása.
-
-## [1.2.5]
-
-- Előkészítő kiadások a Games, Steam, profil és mobil/PWA fejlesztésekhez.
+### 📱 PWA / stabilitás
+- Verziószám egységesítve `1.4.0`.
+- Service worker cache frissítve `v7`-re.
+- Mobilos megjelenítés és szövegtúlcsordulás további javítása.
+- A fejlesztői console és az app-frissítés rendszer is 1.4-es verziót jelez.

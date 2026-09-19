@@ -1,5 +1,5 @@
 /* =========================================================
-   PROJECT HUB 1.3 — SHARED DESIGN SYSTEM
+   PROJECT HUB 1.4 — SHARED DESIGN SYSTEM
    Mobile-first / responsive / touch friendly
 ========================================================= */
 
@@ -442,7 +442,7 @@ main {
     }
 }
 
-/* 1.3.2 — mobile text containment / no overflow */
+/* 1.4.0 — mobile text containment / no overflow */
 .profile-card,
 .steam-link-message,
 .steam-not-connected,
@@ -491,7 +491,7 @@ main {
     }
 }
 
-/* 1.3.2 — games text containment */
+/* 1.4.0 — games text containment */
 .games-topbar-inner,
 .games-hero-copy,
 .steam-account-main,

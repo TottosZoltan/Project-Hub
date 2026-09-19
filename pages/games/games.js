@@ -34,6 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const customGameImage = document.getElementById("customGameImage");
     const customGameMinutes = document.getElementById("customGameMinutes");
     const CUSTOM_LIBRARY_KEY = "projectHubCustomGames";
+    const CUSTOM_API = BACKEND_URL + "/api/library/games";
+    const customGameStatus = document.getElementById("customGameStatus");
+    const customGameFavorite = document.getElementById("customGameFavorite");
+    let editingCustomId = null;
 
     const modal = document.getElementById("gameDetailsModal");
     const modalOverlay = document.querySelector(".game-details-overlay");
@@ -58,8 +62,37 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function saveCustomGames(list) {
-        localStorage.setItem(CUSTOM_LIBRARY_KEY, JSON.stringify(list));
+    function saveCustomGames(list) { localStorage.setItem(CUSTOM_LIBRARY_KEY, JSON.stringify(list)); }
+
+    async function syncCustomGames() {
+        try {
+            const response = await fetch(CUSTOM_API, { headers: headers(), credentials: "include" });
+            if (response.status === 401) return showAuthError();
+            if (!response.ok) throw new Error("sync_failed");
+            const result = await response.json();
+            if (result.success && Array.isArray(result.games)) {
+                const localList = customGames();
+                if (!result.games.length && localList.length) {
+                    const uploaded=[];
+                    for (const item of localList) { const saved=await saveCustomGameCloud(item, null); if(saved) uploaded.push(saved); }
+                    if(uploaded.length){ saveCustomGames(uploaded); return uploaded; }
+                }
+                saveCustomGames(result.games); return result.games;
+            }
+        } catch (error) { console.warn("Saját játékok cloud sync sikertelen:", error); }
+        return customGames();
+    }
+
+    async function saveCustomGameCloud(game, existingId) {
+        try {
+            const response = await fetch(existingId ? CUSTOM_API + "/" + encodeURIComponent(existingId) : CUSTOM_API, {
+                method: existingId ? "PATCH" : "POST", headers: headers(), credentials: "include", body: JSON.stringify(game)
+            });
+            if (response.status === 401) return showAuthError();
+            if (!response.ok) throw new Error("save_failed");
+            const result = await response.json();
+            return result.game || null;
+        } catch (error) { console.warn("Saját játék mentése cloudba sikertelen:", error); return null; }
     }
 
     function setLibrary(library) {
@@ -78,8 +111,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (custom) renderCustomGames();
     }
 
-    function openCustomGameModal() {
+    function openCustomGameModal(game = null) {
+        editingCustomId = game?.id ?? null;
         customGameForm.reset();
+        document.getElementById("customGameTitle").textContent = game ? "Játék szerkesztése" : "Játék hozzáadása";
+        customGameName.value = game?.name || ""; customGameImage.value = game?.image || ""; customGameMinutes.value = game?.minutes || 0; customGameStatus.value = game?.status || "backlog"; customGameFavorite.checked = !!game?.favorite;
         customGameModal.hidden = false;
         document.body.classList.add("modal-open");
         setTimeout(() => customGameName.focus(), 30);
@@ -93,36 +129,17 @@ document.addEventListener("DOMContentLoaded", function () {
     function renderCustomGames() {
         const games = customGames();
         libraryMeta.textContent = games.length + (games.length === 1 ? " saját játék" : " saját játék");
-        if (!games.length) {
-            customGamesList.innerHTML = `<div class="games-state empty-state"><span class="state-icon">+</span><strong>Még nincs saját játékod.</strong><p>Adj hozzá egy játékot, és külön könyvtárban fog megjelenni.</p></div>`;
-            return;
-        }
-        customGamesList.innerHTML = "";
-        const fragment = document.createDocumentFragment();
-        games.forEach(game => {
-            const card = document.createElement("article");
-            card.className = "game-card custom-game-card";
-            const image = game.image || "";
-            const minutes = Number(game.minutes) || 0;
-            card.innerHTML = `
-                <div class="game-card-media">
-                    ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">` : `<div class="game-card-placeholder">${escapeHtml(game.name.slice(0,1).toUpperCase())}</div>`}
-                    <div class="game-card-gradient"></div>
-                    <button class="game-hide-button custom-delete-button" type="button" aria-label="${escapeHtml(game.name)} törlése" title="Játék törlése">×</button>
-                </div>
-                <div class="game-card-body">
-                    <h3>${escapeHtml(game.name)}</h3>
-                    <div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>Saját játék</span></div>
-                </div>`;
-            card.querySelector(".custom-delete-button").addEventListener("click", event => {
-                event.stopPropagation();
-                if (!confirm(`„${game.name}” törlése a saját könyvtárból?`)) return;
-                saveCustomGames(customGames().filter(item => item.id !== game.id));
-                renderCustomGames();
-            });
+        if (!games.length) { customGamesList.innerHTML = `<div class="games-state empty-state"><span class="state-icon">+</span><strong>Még nincs saját játékod.</strong><p>Adj hozzá egy játékot, és külön könyvtárban fog megjelenni.</p></div>`; return; }
+        customGamesList.innerHTML = ""; const fragment = document.createDocumentFragment();
+        const labels={backlog:"Játszani szeretném",playing:"Játszom",completed:"Végigjátszva"};
+        games.forEach(game=>{
+            const card=document.createElement("article"); card.className="game-card custom-game-card";
+            const image=game.image||"", minutes=Number(game.minutes)||0;
+            card.innerHTML=`<div class="game-card-media">${image?`<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">`:`<div class="game-card-placeholder">${escapeHtml(String(game.name||"?").slice(0,1).toUpperCase())}</div>`}<div class="game-card-gradient"></div><div class="custom-game-tools"><button class="custom-edit" type="button" title="Szerkesztés">✎</button><button class="custom-delete-button" type="button" title="Törlés">×</button></div></div><div class="game-card-body"><h3>${escapeHtml(game.name)}</h3><div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>${game.favorite?'⭐ ':''}Saját játék</span></div><div class="custom-status">${escapeHtml(labels[game.status]||"Játszani szeretném")}</div></div>`;
+            card.querySelector('.custom-edit').onclick=e=>{e.stopPropagation();openCustomGameModal(game)};
+            card.querySelector('.custom-delete-button').onclick=async e=>{e.stopPropagation();if(!confirm(`„${game.name}” törlése a saját könyvtárból?`))return;saveCustomGames(customGames().filter(x=>String(x.id)!==String(game.id)));renderCustomGames();try{await fetch(CUSTOM_API+"/"+encodeURIComponent(game.id),{method:"DELETE",headers:headers(),credentials:"include"})}catch{}};
             fragment.appendChild(card);
-        });
-        customGamesList.appendChild(fragment);
+        }); customGamesList.appendChild(fragment);
     }
 
     function token() {
@@ -324,26 +341,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="game-card-meta"><span>⏱</span><strong>${escapeHtml(formatPlaytime(getMinutes(game)))}</strong></div>
                 </div>`;
 
-            card.addEventListener("click", event => {
-                if (event.target.closest("button")) return;
-                openDetails(game);
-            });
+            card.addEventListener("click", () => openDetails(game));
             card.addEventListener("keydown", event => {
                 if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
                     openDetails(game);
                 }
             });
-            const cardImage = card.querySelector(".game-card-media img");
-            if (cardImage) {
-                cardImage.addEventListener("error", () => {
-                    cardImage.remove();
-                    const placeholder = document.createElement("div");
-                    placeholder.className = "game-card-placeholder";
-                    placeholder.textContent = "🎮";
-                    card.querySelector(".game-card-media").prepend(placeholder);
-                }, { once: true });
-            }
             card.querySelector(".game-hide-button").addEventListener("click", event => {
                 event.stopPropagation();
                 if (!confirm(`„${game.name}” elrejtése?`)) return;
@@ -363,9 +367,6 @@ document.addEventListener("DOMContentLoaded", function () {
         detailsAchievementCount.textContent = "Betöltés...";
         achievementsList.innerHTML = `<div class="games-state loading-state">🏆 Achievementek betöltése...</div>`;
         if (image) {
-            detailsImage.onerror = () => {
-                detailsImage.style.display = "none";
-            };
             detailsImage.src = image;
             detailsImage.alt = game.name;
             detailsImage.style.display = "block";
@@ -377,7 +378,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.add("modal-open");
 
         try {
-            const response = await fetch(BACKEND_URL + "/api/steam/game/" + encodeURIComponent(game.appid), {
+            const response = await fetch(BACKEND_URL + "/api/steam/games/" + encodeURIComponent(game.appid), {
                 method: "GET",
                 headers: headers(),
                 credentials: "include"
@@ -430,20 +431,15 @@ document.addEventListener("DOMContentLoaded", function () {
     closeCustomGameButton.addEventListener("click", closeCustomGameModal);
     cancelCustomGameButton.addEventListener("click", closeCustomGameModal);
     customGameOverlay.addEventListener("click", closeCustomGameModal);
-    customGameForm.addEventListener("submit", event => {
-        event.preventDefault();
-        const name = customGameName.value.trim();
-        if (!name) return;
-        const games = customGames();
-        games.unshift({
-            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
-            name,
-            image: customGameImage.value.trim(),
-            minutes: Math.max(0, Number(customGameMinutes.value) || 0)
-        });
-        saveCustomGames(games);
-        closeCustomGameModal();
-        setLibrary("custom");
+    customGameForm.addEventListener("submit", async event => {
+        event.preventDefault(); const name=customGameName.value.trim(); if(!name)return;
+        const payload={name,image:customGameImage.value.trim(),minutes:Math.max(0,Number(customGameMinutes.value)||0),status:customGameStatus.value,favorite:customGameFavorite.checked};
+        const games=customGames();
+        if(editingCustomId){ const item=games.find(x=>String(x.id)===String(editingCustomId)); if(item)Object.assign(item,payload); saveCustomGames(games); }
+        else { const localItem={id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),...payload}; games.unshift(localItem); saveCustomGames(games); }
+        const saved=await saveCustomGameCloud(payload, editingCustomId && !String(editingCustomId).startsWith("local-") ? editingCustomId : null);
+        if(saved){ const current=customGames(); if(editingCustomId){const i=current.findIndex(x=>String(x.id)===String(editingCustomId));if(i>=0)current[i]=saved;}else{current[0]=saved;} saveCustomGames(current); }
+        editingCustomId=null; closeCustomGameModal(); setLibrary("custom");
     });
 
     let touchStartX = 0;
@@ -482,6 +478,8 @@ document.addEventListener("DOMContentLoaded", function () {
     setLibrary("steam");
 
     (async function init() {
+        await syncCustomGames();
+        renderCustomGames();
         const connected = await loadSteamAccount();
         if (connected) await loadGames();
     })();

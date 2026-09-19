@@ -402,6 +402,43 @@ await pool.query(`
     `);
 
 
+    // ==================================================
+    // CUSTOM GAMES
+    // ==================================================
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS custom_games (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            name VARCHAR(120) NOT NULL,
+            image TEXT DEFAULT '',
+            minutes INTEGER NOT NULL DEFAULT 0,
+            status VARCHAR(30) NOT NULL DEFAULT 'backlog',
+            favorite BOOLEAN NOT NULL DEFAULT FALSE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    `);
+    await pool.query(`CREATE INDEX IF NOT EXISTS custom_games_user_id_idx ON custom_games(user_id);`);
+
+    // ==================================================
+    // PLACES
+    // ==================================================
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS places (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            name VARCHAR(160) NOT NULL,
+            category VARCHAR(80) NOT NULL DEFAULT 'Egyéb',
+            address TEXT DEFAULT '',
+            notes TEXT DEFAULT '',
+            favorite BOOLEAN NOT NULL DEFAULT FALSE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    `);
+    await pool.query(`CREATE INDEX IF NOT EXISTS places_user_id_idx ON places(user_id);`);
+
+
     console.log(
         "Adatbázis inicializálása kész."
     );
@@ -411,6 +448,7 @@ await pool.query(`
 // ======================================================
 // TASKS DATABASE INITIALIZATION
 // ======================================================
+
 
 async function initializeTasksDatabase() {
 

@@ -1,5 +1,5 @@
 /* =========================================================
-   PROJECT HUB 1.3 — GAMES
+   PROJECT HUB 1.4 — GAMES
 ========================================================= */
 
 .games-page { max-width: 1080px; }
@@ -99,7 +99,7 @@
 }
 
 /* =========================================================
-   PROJECT HUB 1.3 — GAMES / LIBRARY UI
+   PROJECT HUB 1.4 — GAMES / LIBRARY UI
 ========================================================= */
 .games-topbar {
     position: sticky;
@@ -196,3 +196,5 @@
     .games-list { grid-template-columns: 1fr; gap: 10px; }
     .game-card-media { aspect-ratio: 460 / 215; }
 }
+
+.custom-game-check{display:flex!important;align-items:center;gap:8px}.custom-game-check input{width:auto}.custom-game-card{position:relative}.custom-game-tools{display:flex;gap:4px;position:absolute;right:8px;top:8px}.custom-game-tools button{border:0;border-radius:9px;background:rgba(0,0,0,.58);color:#fff;padding:6px 8px}.custom-status{font-size:10px;color:var(--muted);margin-top:5px}
