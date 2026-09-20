@@ -1136,10 +1136,10 @@ function renderNotes() {
                 "note-category";
 
 
-            category.textContent =
+            category.innerHTML =
                 `${getCategoryIcon(
                     note.category
-                )} ${note.category}`;
+                )} ${escapeHtml(note.category)}`;
 
 
             // =================================
