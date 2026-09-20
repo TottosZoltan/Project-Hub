@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const CUSTOM_LIBRARY_KEY = "projectHubCustomGames";
     const CUSTOM_API = BACKEND_URL + "/api/library/games";
     const customGameStatus = document.getElementById("customGameStatus");
+    const customGameSubmit = customGameForm?.querySelector('button[type="submit"]');
     const customGameFavorite = document.getElementById("customGameFavorite");
     let editingCustomId = null;
 
@@ -117,7 +118,12 @@ document.addEventListener("DOMContentLoaded", function () {
         editingCustomId = game?.id ?? null;
         customGameForm.reset();
         document.getElementById("customGameTitle").textContent = game ? "Játék szerkesztése" : "Játék hozzáadása";
-        customGameName.value = game?.name || ""; customGameImage.value = game?.image || ""; customGameMinutes.value = game?.minutes || 0; customGameStatus.value = game?.status || "backlog"; customGameFavorite.checked = !!game?.favorite;
+        customGameName.value = game?.name || "";
+        customGameImage.value = game?.image || "";
+        customGameMinutes.value = game?.minutes || 0;
+        if (customGameStatus) customGameStatus.value = game?.status || "backlog";
+        if (customGameFavorite) customGameFavorite.checked = !!game?.favorite;
+        if (customGameSubmit) customGameSubmit.textContent = game ? "Mentés" : "Hozzáadás";
         customGameModal.hidden = false;
         document.body.classList.add("modal-open");
         setTimeout(() => customGameName.focus(), 30);
@@ -131,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function renderCustomGames() {
         const games = customGames();
         libraryMeta.textContent = games.length + (games.length === 1 ? " egyéb játék" : " egyéb játék");
-        if (!games.length) { customGamesList.innerHTML = `<div class="games-state empty-state"><span class="state-icon">+</span><strong>Még nincs egyéb játékod.</strong><p>Adj hozzá egy játékot, és az „Egyéb játékaid” között fog megjelenni.</p></div>`; return; }
+        if (!games.length) { customGamesList.innerHTML = `<div class="games-state empty-state"><span class="state-icon"><i class="fi fi-br-gamepad" aria-hidden="true"></i></span><strong>Még nincs egyéb játékod.</strong><p>Adj hozzá egy játékot, és az „Egyéb játékaid” között fog megjelenni.</p></div>`; return; }
         customGamesList.innerHTML = ""; const fragment = document.createDocumentFragment();
         const labels={backlog:"Játszani szeretném",playing:"Játszom",completed:"Végigjátszva"};
         games.forEach(game=>{
@@ -252,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!result.success || !result.connected || !result.account) {
                 steamAccountStatus.textContent = "Nincs Steam-fiók összekötve. A kapcsolatot a Profil → Steam résznél tudod beállítani.";
-                steamAccountAvatar.textContent = "🔗";
+                steamAccountAvatar.innerHTML = '<i class="fi fi-br-link" aria-hidden="true"></i>';
                 gamesControls.style.display = "none";
                 setState("empty", "Nincs Steam-fiók összekötve", "A Steam összekapcsolását kizárólag a Profil oldalon tudod elindítani.");
                 return false;
@@ -265,7 +271,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (avatar) {
                 steamAccountAvatar.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Steam profilkép">`;
             } else {
-                steamAccountAvatar.textContent = `<i class="fi fi-br-gamepad" aria-hidden="true"></i>`;
+                steamAccountAvatar.innerHTML = '<i class="fi fi-br-gamepad" aria-hidden="true"></i>';
             }
             return true;
         } catch (error) {
@@ -335,12 +341,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="game-card-media">
                     ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">` : `<div class="game-card-placeholder"><i class="fi fi-br-gamepad" aria-hidden="true"></i></div>`}
                     <div class="game-card-gradient"></div>
-                    <button class="game-hide-button" type="button" aria-label="${escapeHtml(game.name)} elrejtése" title="Játék elrejtése">•••</button>
+                    <button class="game-hide-button" type="button" aria-label="${escapeHtml(game.name)} elrejtése" title="Játék elrejtése"><i class="fi fi-br-eye-crossed" aria-hidden="true"></i></button>
                     ${recent ? `<span class="recent-badge">${escapeHtml(formatPlaytime(recent))} az elmúlt 2 hétben</span>` : ""}
                 </div>
                 <div class="game-card-body">
                     <h3>${escapeHtml(game.name)}</h3>
-                    <div class="game-card-meta"><span>⏱</span><strong>${escapeHtml(formatPlaytime(getMinutes(game)))}</strong></div>
+                    <div class="game-card-meta"><span><i class="fi fi-br-clock" aria-hidden="true"></i></span><strong>${escapeHtml(formatPlaytime(getMinutes(game)))}</strong></div>
                 </div>`;
 
             card.addEventListener("click", () => openDetails(game));
@@ -364,7 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
     async function openDetails(game) {
         const image = gameImage(game);
         detailsTitle.textContent = game.name;
-        detailsPlaytime.textContent = "⏱ " + formatPlaytime(getMinutes(game));
+        detailsPlaytime.innerHTML = '<i class="fi fi-br-clock" aria-hidden="true"></i> ' + escapeHtml(formatPlaytime(getMinutes(game)));
         detailsHours.textContent = formatHours(getMinutes(game));
         detailsAchievementCount.textContent = "Betöltés...";
         achievementsList.innerHTML = `<div class="games-state loading-state"><i class="fi fi-br-trophy" aria-hidden="true"></i> Achievementek betöltése...</div>`;
@@ -410,7 +416,8 @@ document.addEventListener("DOMContentLoaded", function () {
             ["Megjelenés", store.releaseDate || "Nem elérhető"],
             ["Műfaj", Array.isArray(store.genres) ? store.genres.join(", ") : "Nem elérhető"],
             ["Játékidő", formatPlaytime(game.playtimeForever || 0)],
-            ["Utolsó 2 hét", formatPlaytime(game.playtime2Weeks || 0)]
+            ["Utolsó 2 hét", formatPlaytime(game.playtime2Weeks || 0)],
+            ["Achievementek", store.achievementCount != null ? String(store.achievementCount) : "Nem elérhető"]
         ];
         detailsInfoList.innerHTML = rows.map(([label, value]) => `<div class="game-info-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
         if (store.storeUrl) {
@@ -462,13 +469,13 @@ document.addEventListener("DOMContentLoaded", function () {
     customGameOverlay.addEventListener("click", closeCustomGameModal);
     customGameForm.addEventListener("submit", async event => {
         event.preventDefault(); const name=customGameName.value.trim(); if(!name)return;
-        const payload={name,image:customGameImage.value.trim(),minutes:Math.max(0,Number(customGameMinutes.value)||0),status:customGameStatus.value,favorite:customGameFavorite.checked};
+        const payload={name,image:customGameImage.value.trim(),minutes:Math.max(0,Number(customGameMinutes.value)||0),status:customGameStatus?.value || "backlog",favorite:!!customGameFavorite?.checked};
         const games=customGames();
         if(editingCustomId){ const item=games.find(x=>String(x.id)===String(editingCustomId)); if(item)Object.assign(item,payload); saveCustomGames(games); }
         else { const localItem={id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),...payload}; games.unshift(localItem); saveCustomGames(games); }
         const saved=await saveCustomGameCloud(payload, editingCustomId && !String(editingCustomId).startsWith("local-") ? editingCustomId : null);
         if(saved){ const current=customGames(); if(editingCustomId){const i=current.findIndex(x=>String(x.id)===String(editingCustomId));if(i>=0)current[i]=saved;}else{current[0]=saved;} saveCustomGames(current); }
-        editingCustomId=null; closeCustomGameModal(); setLibrary("custom");
+        editingCustomId=null; closeCustomGameModal(); renderCustomGames(); setLibrary("custom");
     });
 
     let touchStartX = 0;
