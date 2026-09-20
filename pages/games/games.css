@@ -352,3 +352,52 @@ body.modal-open { overflow:hidden; }
 @media (max-width:370px) {
   .games-list { grid-template-columns:1fr; }
 }
+
+/* =========================================================
+   PROJECT HUB — MOBILE GAME CARD FIX
+   - mobile: exactly one game per row
+   - game artwork: standard 16:9
+   - details view: 16:9 cover instead of square
+========================================================= */
+.game-card-media,
+.steam-game-image-wrapper {
+    aspect-ratio: 16 / 9;
+}
+
+.game-card-media img,
+.steam-game-image {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.game-details-cover img {
+    width: min(100%, 360px);
+    max-width: 360px;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    object-fit: cover;
+}
+
+@media (max-width: 560px) {
+    .games-list {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+
+    .game-card-media,
+    .steam-game-image-wrapper {
+        aspect-ratio: 16 / 9;
+    }
+
+    .game-details-cover img {
+        width: 100%;
+        max-width: 100%;
+        aspect-ratio: 16 / 9;
+    }
+}
+
+@media (max-width: 370px) {
+    .games-list {
+        grid-template-columns: 1fr !important;
+    }
+}
