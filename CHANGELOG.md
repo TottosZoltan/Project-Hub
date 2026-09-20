@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.2 — 2026-09-20
+
+- Stabilizálva az egyéb játékok szerkesztése és mentés utáni frissítése.
+- A játéklista maradék emoji műveleti és játékidő ikonokat Flaticon UIcons ikonok váltják.
+- A Steam achievement ikonok átadása javítva.
+- PWA cache és fejlesztői console verzió frissítve 1.5.2-re.
+
+
 ## 1.5.1 — 2026-09-20
 
 - Javítva az „Egyéb játékaid” hozzáadás/szerkesztés űrlap hiányzó állapot- és kedvenc mezője.
