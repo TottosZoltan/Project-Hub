@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const customGameImage = document.getElementById("customGameImage");
     const customGameMinutes = document.getElementById("customGameMinutes");
     const CUSTOM_LIBRARY_KEY = "projectHubCustomGames";
-    const LOCAL_CUSTOM_PREFIX = "local-";
     const CUSTOM_API = BACKEND_URL + "/api/library/games";
     const customGameStatus = document.getElementById("customGameStatus");
     const customGameFavorite = document.getElementById("customGameFavorite");
@@ -65,9 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function isCloudGameId(id) { return /^\d+$/.test(String(id || "")); }
-    function isLocalGameId(id) { return !isCloudGameId(id); }
-
     function saveCustomGames(list) { localStorage.setItem(CUSTOM_LIBRARY_KEY, JSON.stringify(list)); }
 
     async function syncCustomGames() {
@@ -78,15 +74,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const result = await response.json();
             if (result.success && Array.isArray(result.games)) {
                 const localList = customGames();
-                const unsynced = localList.filter(item => isLocalGameId(item.id));
-                const uploaded = [];
-                for (const item of unsynced) {
-                    const saved = await saveCustomGameCloud(item, null);
-                    if (saved) uploaded.push(saved);
+                if (!result.games.length && localList.length) {
+                    const uploaded=[];
+                    for (const item of localList) { const saved=await saveCustomGameCloud(item, null); if(saved) uploaded.push(saved); }
+                    if(uploaded.length){ saveCustomGames(uploaded); return uploaded; }
                 }
-                const merged = [...result.games, ...uploaded];
-                saveCustomGames(merged);
-                return merged;
+                saveCustomGames(result.games); return result.games;
             }
         } catch (error) { console.warn("Saját játékok cloud sync sikertelen:", error); }
         return customGames();
@@ -146,19 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const image=game.image||"", minutes=Number(game.minutes)||0;
             card.innerHTML=`<div class="game-card-media">${image?`<img src="${escapeHtml(image)}" alt="${escapeHtml(game.name)}" loading="lazy">`:`<div class="game-card-placeholder">${escapeHtml(String(game.name||"?").slice(0,1).toUpperCase())}</div>`}<div class="game-card-gradient"></div><div class="custom-game-tools"><button class="custom-edit" type="button" title="Szerkesztés"><i class="fi fi-br-pencil" aria-hidden="true"></i></button><button class="custom-delete-button" type="button" title="Törlés"><i class="fi fi-br-cross" aria-hidden="true"></i></button></div></div><div class="game-card-body"><h3>${escapeHtml(game.name)}</h3><div class="game-card-meta"><strong>${escapeHtml(formatPlaytime(minutes))}</strong><span>${game.favorite?'<i class="fi fi-br-star" aria-hidden="true"></i> ':''}Egyéb játék</span></div><div class="custom-status">${escapeHtml(labels[game.status]||"Játszani szeretném")}</div></div>`;
             card.querySelector('.custom-edit').onclick=e=>{e.stopPropagation();openCustomGameModal(game)};
-            card.querySelector('.custom-delete-button').onclick=async e=>{
-                e.stopPropagation();
-                if(!confirm(`„${game.name}” törlése az egyéb játékaid közül?`)) return;
-                const id=String(game.id);
-                saveCustomGames(customGames().filter(x=>String(x.id)!==id));
-                renderCustomGames();
-                if(isCloudGameId(id)){
-                    try{
-                        const response=await fetch(CUSTOM_API+"/"+encodeURIComponent(id),{method:"DELETE",headers:headers(),credentials:"include"});
-                        if(response.status===401) showAuthError();
-                    }catch(error){ console.warn("Saját játék törlése cloudból sikertelen:",error); }
-                }
-            };
+            card.querySelector('.custom-delete-button').onclick=async e=>{e.stopPropagation();if(!confirm(`„${game.name}” törlése az egyéb játékaid közül?`))return;saveCustomGames(customGames().filter(x=>String(x.id)!==String(game.id)));renderCustomGames();try{await fetch(CUSTOM_API+"/"+encodeURIComponent(game.id),{method:"DELETE",headers:headers(),credentials:"include"})}catch{}};
             fragment.appendChild(card);
         }); customGamesList.appendChild(fragment);
     }
@@ -182,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function showAuthError() {
         localStorage.removeItem("projectHubAuthToken");
-        sessionStorage.setItem("projectHubAuthMessage", "A munkameneted lejárt. Kérlek jelentkezz be újra.");
+        sessionStorage.setItem("projectHubAuthMessage", '<i class="fi fi-br-lock" aria-hidden="true"></i> A munkameneted lejárt. Kérlek jelentkezz be újra.');
         window.location.href = "../auth/login.html";
     }
 
@@ -244,8 +225,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function setState(type, title, message) {
-        const icon = type === "error" ? "fi-br-circle-exclamation" : type === "empty" ? "fi-br-gamepad" : "fi-br-spinner";
-        gamesList.innerHTML = `<div class="games-state ${type}-state"><span class="state-icon"><i class="fi ${icon}" aria-hidden="true"></i></span><strong>${escapeHtml(title)}</strong>${message ? `<p>${escapeHtml(message)}</p>` : ""}</div>`;
+        const icon = type === "error" ? '<i class="fi fi-br-triangle-warning" aria-hidden="true"></i>' : type === "empty" ? '<i class="fi fi-br-gamepad" aria-hidden="true"></i>' : '<i class="fi fi-br-spinner" aria-hidden="true"></i>';
+        gamesList.innerHTML = `<div class="games-state ${type}-state"><span class="state-icon">${icon}</span><strong>${escapeHtml(title)}</strong>${message ? `<p>${escapeHtml(message)}</p>` : ""}</div>`;
     }
 
     function normalizeGame(game) {
@@ -271,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!result.success || !result.connected || !result.account) {
                 steamAccountStatus.textContent = "Nincs Steam-fiók összekötve. A kapcsolatot a Profil → Steam résznél tudod beállítani.";
-                steamAccountAvatar.innerHTML = `<i class="fi fi-br-link" aria-hidden="true"></i>`;
+                steamAccountAvatar.textContent = "🔗";
                 gamesControls.style.display = "none";
                 setState("empty", "Nincs Steam-fiók összekötve", "A Steam összekapcsolását kizárólag a Profil oldalon tudod elindítani.");
                 return false;
@@ -284,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (avatar) {
                 steamAccountAvatar.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Steam profilkép">`;
             } else {
-                steamAccountAvatar.innerHTML = `<i class="fi fi-br-gamepad" aria-hidden="true"></i>`;
+                steamAccountAvatar.textContent = "🎮";
             }
             return true;
         } catch (error) {
@@ -383,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function () {
     async function openDetails(game) {
         const image = gameImage(game);
         detailsTitle.textContent = game.name;
-        detailsPlaytime.textContent = "⏱ " + formatPlaytime(getMinutes(game));
+        detailsPlaytime.innerHTML = '<i class="fi fi-br-clock" aria-hidden="true"></i> ' + escapeHtml(formatPlaytime(getMinutes(game)));
         detailsHours.textContent = formatHours(getMinutes(game));
         detailsAchievementCount.textContent = "Betöltés...";
         achievementsList.innerHTML = `<div class="games-state loading-state"><i class="fi fi-br-trophy" aria-hidden="true"></i> Achievementek betöltése...</div>`;
@@ -484,15 +465,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const payload={name,image:customGameImage.value.trim(),minutes:Math.max(0,Number(customGameMinutes.value)||0),status:customGameStatus.value,favorite:customGameFavorite.checked};
         const games=customGames();
         if(editingCustomId){ const item=games.find(x=>String(x.id)===String(editingCustomId)); if(item)Object.assign(item,payload); saveCustomGames(games); }
-        else { const localItem={id:LOCAL_CUSTOM_PREFIX+Date.now().toString(36)+Math.random().toString(36).slice(2,8),...payload}; games.unshift(localItem); saveCustomGames(games); editingCustomId=localItem.id; }
-        const isLocalEdit = editingCustomId && isLocalGameId(editingCustomId);
-        const saved = isLocalEdit ? await saveCustomGameCloud(payload, null) : await saveCustomGameCloud(payload, editingCustomId);
-        if(saved){
-            const current=customGames();
-            const index=current.findIndex(x=>String(x.id)===String(editingCustomId));
-            if(index>=0) current[index]=saved; else current.unshift(saved);
-            saveCustomGames(current);
-        }
+        else { const localItem={id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),...payload}; games.unshift(localItem); saveCustomGames(games); }
+        const saved=await saveCustomGameCloud(payload, editingCustomId && !String(editingCustomId).startsWith("local-") ? editingCustomId : null);
+        if(saved){ const current=customGames(); if(editingCustomId){const i=current.findIndex(x=>String(x.id)===String(editingCustomId));if(i>=0)current[i]=saved;}else{current[0]=saved;} saveCustomGames(current); }
         editingCustomId=null; closeCustomGameModal(); setLibrary("custom");
     });
 

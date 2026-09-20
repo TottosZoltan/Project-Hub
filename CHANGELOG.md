@@ -1,12 +1,11 @@
 # Changelog
 
-## 1.5.1
-- Egyéb játékok hozzáadás/szerkesztés/törlés stabilizálva helyi és felhős mentéssel.
-- Javítva a lokális egyéb játékok szerkesztése, amikor a felhős mentés átmenetileg nem elérhető.
-- Az Áttekintés élőben mutatja a feladatok, jegyzetek, játékok és helyek számát, valamint a feladatok készültségi százalékát.
-- Az Áttekintés statisztikái 30 másodpercenként automatikusan frissülnek.
-- Emoji-alapú UI ikonok eltávolítva a főbb nézetekből, egységes Flaticon Uicons használattal.
-- PWA cache verzió frissítve, hogy az új JS/CSS biztosan betöltődjön.
+## 1.5.1 — 2026-09-20
+
+- Javítva az „Egyéb játékaid” hozzáadás/szerkesztés űrlap hiányzó állapot- és kedvenc mezője.
+- Stabilabb mobilos játéklista és szűrőelrendezés.
+- Az állapot- és részletező nézetekben az emoji ikonokat Flaticon UIcons ikonok váltják.
+- Javítva a játék részletező fejlécének idő kijelzése.
 
 
 ## 1.5.0 — 2026-09-19

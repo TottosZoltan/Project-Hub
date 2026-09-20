@@ -317,3 +317,38 @@ body.modal-open { overflow:hidden; }
   .achievement-row img,.achievement-placeholder { width:38px; height:38px; }
   .achievement-status { grid-column:2; }
 }
+
+
+/* 1.5.1 — játékok felület stabilizálása */
+.custom-game-check { display:flex!important; align-items:center; gap:9px; min-height:44px; padding:10px 12px; border:1px solid var(--border-strong); border-radius:12px; background:rgba(255,255,255,.025); color:var(--muted-strong)!important; font-size:11px!important; }
+.custom-game-check input { width:17px!important; min-height:17px!important; margin:0; accent-color:var(--accent); }
+.custom-game-form select { appearance:none; -webkit-appearance:none; }
+.custom-game-form label { min-width:0; }
+.custom-game-form input, .custom-game-form select { box-sizing:border-box; }
+.state-icon .fi { font-size:22px; }
+.games-state.loading-state .state-icon .fi-br-spinner { animation: gamesSpinner .9s linear infinite; }
+@keyframes gamesSpinner { to { transform:rotate(360deg); } }
+.game-card-meta .fi { font-size:10px; }
+.game-details-subtitle .fi { margin-right:3px; }
+@media (max-width:560px) {
+  .games-hero { margin-bottom:12px; }
+  .library-tabs { gap:3px; }
+  .library-tab { font-size:11px; padding-inline:5px; }
+  .library-tab-hint { display:none; }
+  .library-header { gap:8px; }
+  .library-header h2 { font-size:16px; }
+  .library-header-actions { flex-shrink:0; }
+  .library-add { min-height:38px; }
+  .games-controls { margin-bottom:12px; }
+  .games-list { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .game-card { border-radius:14px; }
+  .game-card-body { padding:10px; }
+  .game-card-body h3 { font-size:11px; line-height:1.3; white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .game-card-meta { font-size:9px; }
+  .custom-status { font-size:9px; }
+  .custom-game-tools { top:6px; right:6px; }
+  .custom-game-tools button { width:30px; height:30px; padding:0; display:grid; place-items:center; }
+}
+@media (max-width:370px) {
+  .games-list { grid-template-columns:1fr; }
+}
