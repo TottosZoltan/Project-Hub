@@ -221,15 +221,41 @@ document.addEventListener("DOMContentLoaded", function () {
         return (value / 60).toFixed(1) + " óra";
     }
 
-    function gameImage(game) {
-        if (game.header_image) return game.header_image;
-        if (game.images && game.images.header) return game.images.header;
-        if (game.img_logo_url) return "https://cdn.cloudflare.steamstatic.com/steam/apps/" + game.appid + "/" + game.img_logo_url;
-        if (game.img_icon_url) return "https://media.steampowered.com/steamcommunity/public/images/apps/" + game.appid + "/" + game.img_icon_url + ".jpg";
-        if (game.appid) return "https://cdn.cloudflare.steamstatic.com/steam/apps/" + game.appid + "/header.jpg";
-        return "";
+    function gameImageCandidates(game) {
+        const id = game && game.appid ? String(game.appid) : "";
+        const candidates = [];
+        if (game && game.header_image) candidates.push(game.header_image);
+        if (game && game.images && game.images.header) candidates.push(game.images.header);
+        if (id && game && game.img_logo_url) candidates.push("https://cdn.cloudflare.steamstatic.com/steam/apps/" + id + "/" + game.img_logo_url);
+        if (id && game && game.img_icon_url) candidates.push("https://media.steampowered.com/steamcommunity/public/images/apps/" + id + "/" + game.img_icon_url + ".jpg");
+        if (id) {
+            candidates.push("https://cdn.cloudflare.steamstatic.com/steam/apps/" + id + "/header.jpg");
+            candidates.push("https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/" + id + "/header.jpg");
+        }
+        return [...new Set(candidates.filter(Boolean))];
     }
 
+    function gameImage(game) {
+        return gameImageCandidates(game)[0] || "";
+    }
+
+    function bindSteamImageFallback(img, game) {
+        if (!img) return;
+        const candidates = gameImageCandidates(game);
+        let index = Math.max(0, candidates.indexOf(img.currentSrc || img.src));
+        img.addEventListener("error", function handleImageError() {
+            index += 1;
+            if (index < candidates.length) {
+                img.src = candidates[index];
+                return;
+            }
+            img.removeEventListener("error", handleImageError);
+            const placeholder = document.createElement("div");
+            placeholder.className = "game-card-placeholder";
+            placeholder.innerHTML = '<i class="fi fi-br-gamepad" aria-hidden="true"></i>';
+            if (img.parentElement) img.replaceWith(placeholder);
+        });
+    }
     function setState(type, title, message) {
         const icon = type === "error" ? "!" : type === "empty" ? `<i class="fi fi-br-gamepad" aria-hidden="true"></i>` : "◌";
         gamesList.innerHTML = `<div class="games-state ${type}-state"><span class="state-icon">${icon}</span><strong>${escapeHtml(title)}</strong>${message ? `<p>${escapeHtml(message)}</p>` : ""}</div>`;
@@ -356,6 +382,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     openDetails(game);
                 }
             });
+            bindSteamImageFallback(card.querySelector(".game-card-media img"), game);
             card.querySelector(".game-hide-button").addEventListener("click", event => {
                 event.stopPropagation();
                 if (!confirm(`„${game.name}” elrejtése?`)) return;
@@ -380,6 +407,7 @@ document.addEventListener("DOMContentLoaded", function () {
             detailsImage.src = image;
             detailsImage.alt = game.name;
             detailsImage.style.display = "block";
+            bindSteamImageFallback(detailsImage, game);
         } else {
             detailsImage.removeAttribute("src");
             detailsImage.style.display = "none";
