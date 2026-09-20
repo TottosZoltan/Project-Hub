@@ -1,7 +1,7 @@
 @import url("https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css");
 
 /* =========================================================
-   PROJECT HUB 1.4 — SHARED DESIGN SYSTEM
+   PROJECT HUB 1.5.1 — SHARED DESIGN SYSTEM
    Mobile-first / responsive / touch friendly
 ========================================================= */
 
@@ -282,7 +282,7 @@ main {
 
 .stats {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
 }
 
@@ -295,7 +295,14 @@ main {
 }
 
 .stat strong { display: block; margin-bottom: 3px; font-size: 22px; letter-spacing: -.03em; }
-.stat span { color: var(--muted); font-size: 10px; }
+.stat span { color: var(--muted); font-size: 10px; display:flex; align-items:center; justify-content:center; gap:5px; }
+.stat span .fi { font-size: 11px; }
+.overview-progress { margin-top: 12px; padding: 12px 13px; border: 1px solid rgba(255,255,255,.05); border-radius: 14px; background: rgba(7,10,16,.42); }
+.overview-progress-head { display:flex; align-items:center; justify-content:space-between; gap:12px; color:var(--muted); font-size:10px; }
+.overview-progress-head span { display:flex; align-items:center; gap:6px; }
+.overview-progress-head strong { color:var(--text); font-size:12px; }
+.overview-progress-track { height:7px; margin-top:9px; overflow:hidden; border-radius:999px; background:rgba(255,255,255,.07); }
+.overview-progress-track span { display:block; width:0; height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--accent),#a58cff); transition:width .35s ease; }
 
 /* ========================= SIDE MENU ========================= */
 .side-menu {
@@ -410,6 +417,7 @@ main {
 }
 
 @media (max-width: 520px) {
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     main { padding-top: 24px; }
     .welcome, .page-intro { padding-bottom: 22px; }
     .app-card { min-height: 108px; padding: 14px; }
@@ -561,7 +569,7 @@ main {
 }
 
 /* =========================================
-   1.5.0.0 — FLATICON UICONS / BOLD ROUNDED
+   1.5.1 — FLATICON UICONS / BOLD ROUNDED
 ========================================= */
 .fi {
     display: inline-flex;
@@ -590,98 +598,3 @@ main {
 .overview .section-header h2 { display: flex; align-items: center; gap: 8px; }
 .overview .section-header h2 .fi { font-size: 18px; line-height: 1; }
 .overview .section-header > span { white-space: nowrap; }
-
-/* =========================================
-   1.5.0.0 — ÁTTEKINTÉS / DASHBOARD
-========================================= */
-.overview-header { align-items: flex-end; }
-.overview-header .eyebrow { margin: 0 0 4px; }
-.overview-header h2 { margin: 0; }
-.overview-status { white-space: nowrap; }
-
-.overview-progress-card {
-    margin-bottom: 10px;
-    padding: 15px;
-    border: 1px solid rgba(255,255,255,.06);
-    border-radius: 16px;
-    background: rgba(7,10,16,.52);
-}
-
-.overview-progress-copy {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    margin-bottom: 10px;
-}
-
-.overview-progress-copy > div { display: grid; gap: 3px; }
-.overview-kicker { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .12em; }
-.overview-progress-copy strong { font-size: 21px; letter-spacing: -.03em; }
-.overview-progress-copy p { margin: 0; color: var(--muted); font-size: 11px; text-align: right; }
-
-.overview-progress-track {
-    height: 7px;
-    overflow: hidden;
-    border-radius: 999px;
-    background: rgba(255,255,255,.07);
-}
-
-.overview-progress-track span {
-    display: block;
-    width: 0;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, #7485ff, #9ba7ff);
-    transition: width .35s ease;
-}
-
-.overview-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-.overview-stat-card {
-    position: relative;
-    min-width: 0;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 10px;
-    padding: 12px;
-    color: inherit;
-    text-decoration: none;
-    text-align: left;
-    transition: transform .16s ease, border-color .16s ease, background .16s ease;
-}
-
-.overview-stat-card:hover { transform: translateY(-2px); border-color: var(--border-strong); background: rgba(255,255,255,.045); }
-.overview-stat-card:active { transform: scale(.985); }
-.overview-stat-card:focus-visible { outline: 2px solid rgba(124,140,255,.8); outline-offset: 2px; }
-
-.stat-icon {
-    width: 38px;
-    height: 38px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    background: var(--accent-soft);
-    color: #dfe3ff;
-    font-size: 16px;
-}
-
-.stat-copy { min-width: 0; }
-.stat-copy strong { margin: 0 0 2px; font-size: 19px; }
-.stat-copy > span { display: block; overflow: hidden; color: var(--muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
-.stat-arrow { color: #727d91; font-size: 12px; }
-
-@media (max-width: 760px) {
-    .overview-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-@media (max-width: 480px) {
-    .overview { padding: 14px; }
-    .overview-header { align-items: flex-start; }
-    .overview-progress-copy { align-items: flex-start; flex-direction: column; }
-    .overview-progress-copy p { text-align: left; }
-    .overview-stat-card { padding: 11px; }
-    .stat-icon { width: 34px; height: 34px; }
-}

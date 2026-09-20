@@ -166,7 +166,7 @@
         <section class="welcome">
 
             <p class="small-title">
-                ÜDV ÚJRA 👋
+                ÜDV ÚJRA
             </p>
 
             <h2>
@@ -323,67 +323,32 @@
              ÁTTEKINTÉS
         ========================================== -->
 
-        <section class="overview" aria-labelledby="overviewTitle">
+        <section class="overview">
 
-            <div class="section-header overview-header">
-                <div>
-                    <p class="eyebrow">PROJECT HUB</p>
-                    <h2 id="overviewTitle">
-                        <i class="fi fi-br-chart-simple" aria-hidden="true"></i> Áttekintés
-                    </h2>
-                </div>
-                <span id="overviewStatsStatus" class="overview-status">Betöltés...</span>
+            <div class="section-header">
+
+                <h2>
+                    <i class="fi fi-br-chart-simple" aria-hidden="true"></i> Áttekintés
+                </h2>
+
+                <span id="overviewStatsStatus">Betöltés...</span>
+
             </div>
 
-            <div class="overview-progress-card">
-                <div class="overview-progress-copy">
-                    <div>
-                        <span class="overview-kicker">FELADATOK HALADÁSA</span>
-                        <strong id="overviewProgressPercent">0%</strong>
-                    </div>
-                    <p id="overviewProgressText">A feladatok készültsége betöltés alatt…</p>
-                </div>
-                <div class="overview-progress-track" role="progressbar" aria-label="Feladatok készültsége" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                    <span id="overviewProgressBar"></span>
-                </div>
+
+            <div class="stats">
+                <div class="stat"><strong id="taskCount">—</strong><span><i class="fi fi-br-list-check" aria-hidden="true"></i> Feladat</span></div>
+                <div class="stat"><strong id="noteCount">—</strong><span><i class="fi fi-br-note-sticky" aria-hidden="true"></i> Jegyzet</span></div>
+                <div class="stat"><strong id="gameCount">—</strong><span><i class="fi fi-br-gamepad" aria-hidden="true"></i> Játék</span></div>
+                <div class="stat"><strong id="placeCount">—</strong><span><i class="fi fi-br-marker" aria-hidden="true"></i> Hely</span></div>
             </div>
 
-            <div class="stats overview-stats">
-                <a class="stat overview-stat-card" href="pages/tasks/tasks.html" aria-label="Feladatok megnyitása">
-                    <span class="stat-icon"><i class="fi fi-br-check-circle" aria-hidden="true"></i></span>
-                    <span class="stat-copy">
-                        <strong id="taskCount">—</strong>
-                        <span>Aktív feladat</span>
-                    </span>
-                    <i class="fi fi-br-arrow-up-right stat-arrow" aria-hidden="true"></i>
-                </a>
-
-                <a class="stat overview-stat-card" href="pages/notes/notes.html" aria-label="Jegyzetek megnyitása">
-                    <span class="stat-icon"><i class="fi fi-br-note" aria-hidden="true"></i></span>
-                    <span class="stat-copy">
-                        <strong id="noteCount">—</strong>
-                        <span>Jegyzet</span>
-                    </span>
-                    <i class="fi fi-br-arrow-up-right stat-arrow" aria-hidden="true"></i>
-                </a>
-
-                <a class="stat overview-stat-card" href="pages/games/games.html" aria-label="Játékok megnyitása">
-                    <span class="stat-icon"><i class="fi fi-br-gamepad" aria-hidden="true"></i></span>
-                    <span class="stat-copy">
-                        <strong id="gameCount">—</strong>
-                        <span>Játék</span>
-                    </span>
-                    <i class="fi fi-br-arrow-up-right stat-arrow" aria-hidden="true"></i>
-                </a>
-
-                <a class="stat overview-stat-card" href="pages/places/places.html" aria-label="Helyek megnyitása">
-                    <span class="stat-icon"><i class="fi fi-br-marker" aria-hidden="true"></i></span>
-                    <span class="stat-copy">
-                        <strong id="placeCount">—</strong>
-                        <span>Hely</span>
-                    </span>
-                    <i class="fi fi-br-arrow-up-right stat-arrow" aria-hidden="true"></i>
-                </a>
+            <div class="overview-progress" aria-label="Feladatok készültsége">
+                <div class="overview-progress-head">
+                    <span><i class="fi fi-br-chart-simple" aria-hidden="true"></i> Feladatok készültsége</span>
+                    <strong id="taskProgress">0%</strong>
+                </div>
+                <div class="overview-progress-track"><span id="taskProgressBar"></span></div>
             </div>
 
         </section>

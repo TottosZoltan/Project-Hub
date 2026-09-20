@@ -1,11 +1,10 @@
-/* Project Hub 1.5.0.0 — Áttekintés élő statisztikák */
+/* Project Hub 1.5.1 — élő áttekintés statisztikák */
 (function () {
     "use strict";
 
     const BACKEND_URL = "https://project-hub-backend-1.onrender.com";
     const TOKEN_KEY = "projectHubAuthToken";
     const REFRESH_MS = 30000;
-    let refreshTimer = null;
 
     function authHeaders() {
         const token = localStorage.getItem(TOKEN_KEY);
@@ -22,33 +21,21 @@
         return response.json();
     }
 
-    function setCount(id, value) {
+    function setText(id, value) {
         const el = document.getElementById(id);
-        if (el) el.textContent = String(Number.isFinite(value) ? value : 0);
+        if (el) el.textContent = String(value);
     }
 
-    function updateProgress(total, completed) {
-        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-        const percentEl = document.getElementById("overviewProgressPercent");
-        const textEl = document.getElementById("overviewProgressText");
-        const barEl = document.getElementById("overviewProgressBar");
-        const track = barEl ? barEl.parentElement : null;
-
-        if (percentEl) percentEl.textContent = percent + "%";
-        if (textEl) textEl.textContent = total > 0
-            ? `${completed} / ${total} feladat kész`
-            : "Még nincs feladat a készültség méréséhez.";
-        if (barEl) barEl.style.width = percent + "%";
-        if (track) track.setAttribute("aria-valuenow", String(percent));
+    function setProgress(percent) {
+        const value = Math.max(0, Math.min(100, Math.round(percent)));
+        setText("taskProgress", value + "%");
+        const bar = document.getElementById("taskProgressBar");
+        if (bar) bar.style.width = value + "%";
     }
 
     async function loadOverviewStats() {
         const status = document.getElementById("overviewStatsStatus");
-        const token = localStorage.getItem(TOKEN_KEY);
-        if (!token) {
-            if (status) status.textContent = "Bejelentkezés szükséges";
-            return;
-        }
+        if (!localStorage.getItem(TOKEN_KEY)) return;
 
         try {
             const results = await Promise.allSettled([
@@ -59,48 +46,32 @@
                 getJson("/api/places")
             ]);
 
-            const data = results.map((result) => result.status === "fulfilled" ? result.value : null);
-            const tasks = Array.isArray(data[0]?.tasks) ? data[0].tasks : [];
-            const notes = Array.isArray(data[1]?.notes) ? data[1].notes : [];
-            const steamGames = Array.isArray(data[2]?.games) ? data[2].games : [];
-            const customGames = Array.isArray(data[3]?.games) ? data[3].games : [];
-            const places = Array.isArray(data[4]?.places) ? data[4].places : [];
+            const tasks = results[0].status === "fulfilled" && Array.isArray(results[0].value.tasks) ? results[0].value.tasks : [];
+            const notes = results[1].status === "fulfilled" && Array.isArray(results[1].value.notes) ? results[1].value.notes : [];
+            const steamGames = results[2].status === "fulfilled" && Array.isArray(results[2].value.games) ? results[2].value.games : [];
+            const customGames = results[3].status === "fulfilled" && Array.isArray(results[3].value.games) ? results[3].value.games : [];
+            const places = results[4].status === "fulfilled" && Array.isArray(results[4].value.places) ? results[4].value.places : [];
 
-            const completedTasks = tasks.filter((task) => task && task.completed === true).length;
-            const activeTasks = Math.max(tasks.length - completedTasks, 0);
+            const completed = tasks.filter(task => task.completed === true || task.completed === 1 || task.completed === "true").length;
+            const progress = tasks.length ? (completed / tasks.length) * 100 : 0;
 
-            setCount("taskCount", activeTasks);
-            setCount("noteCount", notes.length);
-            setCount("gameCount", steamGames.length + customGames.length);
-            setCount("placeCount", places.length);
-            updateProgress(tasks.length, completedTasks);
-
-            const failed = results.filter((result) => result.status === "rejected").length;
-            if (status) status.textContent = failed ? "Részben frissítve" : "Élő adatok · frissítve";
+            setText("taskCount", tasks.length);
+            setText("noteCount", notes.length);
+            setText("gameCount", steamGames.length + customGames.length);
+            setText("placeCount", places.length);
+            setProgress(progress);
+            if (status) status.textContent = "Élő adatok · frissítve";
         } catch (error) {
             console.warn("Project Hub overview stats:", error);
-            if (status) status.textContent = "Nem sikerült frissíteni";
+            if (status) status.textContent = "Részleges adatok";
         }
     }
 
-    function scheduleRefresh() {
-        if (refreshTimer) clearInterval(refreshTimer);
-        refreshTimer = setInterval(() => {
-            if (!document.hidden) loadOverviewStats();
-        }, REFRESH_MS);
-    }
-
-    function init() {
+    function start() {
         loadOverviewStats();
-        scheduleRefresh();
-        document.addEventListener("visibilitychange", () => {
-            if (!document.hidden) loadOverviewStats();
-        });
+        window.setInterval(loadOverviewStats, REFRESH_MS);
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", init, { once: true });
-    } else {
-        init();
-    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
+    else start();
 })();
