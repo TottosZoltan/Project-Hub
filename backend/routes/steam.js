@@ -1349,6 +1349,14 @@ router.get(
                                     achievement.description ||
                                     "",
 
+                                icon:
+                                    achievement.icon ||
+                                    "",
+
+                                icongray:
+                                    achievement.icongray ||
+                                    "",
+
                                 achieved:
                                     achievement.achieved === 1,
 
