@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const customGameStatus = document.getElementById("customGameStatus");
     const customGameSubmit = customGameForm?.querySelector('button[type="submit"]');
     const customGameFavorite = document.getElementById("customGameFavorite");
+    const customGameSubmit = customGameForm ? customGameForm.querySelector('button[type="submit"]') : null;
     let editingCustomId = null;
 
     const modal = document.getElementById("gameDetailsModal");
