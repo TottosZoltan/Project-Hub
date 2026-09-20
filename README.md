@@ -1,4 +1,4 @@
-# Project Hub 1.5
+# Project Hub 1.5.2
 
 A Project Hub egy személyes, mobil-first dashboard jegyzetekkel, feladatokkal, játékokkal, Steam-integrációval, saját játékkönyvtárral és helykezeléssel.
 
@@ -12,7 +12,7 @@ A Project Hub egy személyes, mobil-first dashboard jegyzetekkel, feladatokkal, 
 - ⭐ Kedvenc helyek
 - ☁️ PostgreSQL alapú felhasználói adatszinkronizáció a saját játékokhoz és helyekhez
 - 📱 Mobilbarát modalok és gesztusbarát kezelőfelület
-- 🔄 PWA frissítési rendszer 1.5.1
+- 🔄 PWA frissítési rendszer 1.5.2
 
 ## Fő modulok
 
@@ -45,4 +45,4 @@ A backend Node.js + Express + PostgreSQL alapú. A felhasználói adatok token a
 
 ## Verzió
 
-**Project Hub 1.5.1**
+**Project Hub 1.5.2**
