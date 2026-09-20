@@ -922,8 +922,8 @@ function renderNotes() {
                     "pin-indicator";
 
 
-                pinIcon.textContent =
-                    "📌";
+                pinIcon.innerHTML =
+                    '<i class="fi fi-br-marker" aria-hidden="true"></i>';
 
 
                 pinIcon.title =
@@ -988,10 +988,8 @@ function renderNotes() {
                 "button";
 
 
-            pinButton.textContent =
-                note.pinned
-                    ? "📌"
-                    : `<i class="fi fi-br-marker" aria-hidden="true"></i>`;
+            pinButton.innerHTML =
+                '<i class="fi fi-br-marker" aria-hidden="true"></i>';
 
 
             pinButton.title =
@@ -1028,8 +1026,8 @@ function renderNotes() {
                 "edit-note";
 
 
-            editButton.textContent =
-                "✏️";
+            editButton.innerHTML =
+                '<i class="fi fi-br-pencil" aria-hidden="true"></i>';
 
 
             editButton.type =
