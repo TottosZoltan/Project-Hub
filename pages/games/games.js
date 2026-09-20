@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const CUSTOM_LIBRARY_KEY = "projectHubCustomGames";
     const CUSTOM_API = BACKEND_URL + "/api/library/games";
     const customGameStatus = document.getElementById("customGameStatus");
-    const customGameSubmit = customGameForm?.querySelector('button[type="submit"]');
     const customGameFavorite = document.getElementById("customGameFavorite");
     const customGameSubmit = customGameForm ? customGameForm.querySelector('button[type="submit"]') : null;
     let editingCustomId = null;
