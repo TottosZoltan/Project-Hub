@@ -1333,8 +1333,8 @@ function renderTasks() {
             priority.className =
                 `task-priority priority-${task.priority}`;
 
-            priority.textContent =
-                `${getPriorityIcon(task.priority)} ${getPriorityName(task.priority)}`;
+            priority.innerHTML =
+                `${getPriorityIcon(task.priority)} ${escapeHtml(getPriorityName(task.priority))}`;
 
 
             const category =
@@ -1345,8 +1345,8 @@ function renderTasks() {
             category.className =
                 "task-category";
 
-            category.textContent =
-                `${getCategoryIcon(task.category)} ${task.category}`;
+            category.innerHTML =
+                `${getCategoryIcon(task.category)} ${escapeHtml(task.category)}`;
 
 
             taskMeta.appendChild(
