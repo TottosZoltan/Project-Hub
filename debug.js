@@ -1,12 +1,12 @@
 // =========================================
 // PROJECT HUB — FEJLESZTŐI CONSOLE
-// Verzió: 1.5.1
+// Verzió: 1.5.2
 // =========================================
 
 (function () {
     "use strict";
 
-    const VERSION = "1.5.1";
+    const VERSION = "1.5.2";
     const STARTED_AT = performance.now();
     const original = {
         log: console.log.bind(console),
