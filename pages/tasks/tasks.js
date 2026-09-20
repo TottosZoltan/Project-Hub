@@ -1164,8 +1164,8 @@ function renderTasks() {
                 pin.className =
                     "task-pin";
 
-                pin.textContent =
-                    "📌";
+                pin.innerHTML =
+                    '<i class="fi fi-br-marker" aria-hidden="true"></i>';
 
                 pin.title =
                     "Fontos feladat";
@@ -1207,10 +1207,8 @@ function renderTasks() {
             pinButton.type =
                 "button";
 
-            pinButton.textContent =
-                task.pinned
-                    ? "📌"
-                    : `<i class="fi fi-br-marker" aria-hidden="true"></i>`;
+            pinButton.innerHTML =
+                '<i class="fi fi-br-marker" aria-hidden="true"></i>';
 
             pinButton.title =
                 task.pinned
@@ -1243,8 +1241,8 @@ function renderTasks() {
             editButton.type =
                 "button";
 
-            editButton.textContent =
-                "✏️";
+            editButton.innerHTML =
+                '<i class="fi fi-br-pencil" aria-hidden="true"></i>';
 
             editButton.title =
                 "Feladat szerkesztése";
