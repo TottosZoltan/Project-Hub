@@ -1,3 +1,18 @@
+## 1.6.3 — 2026-09-21
+
+### 🎮 SteamGridDB automatikus kép-fallback
+- Ha egy Steam játék egyik normál Steam artwork URL-je sem töltődik be, a frontend csak ekkor indít SteamGridDB fallback lekérést.
+- A backend a Steam AppID alapján a hivatalos SteamGridDB v2 API-t használja, és 460×215 / 920×430 vízszintes artworköt kér.
+- A fallback csak hitelesített felhasználónál és a saját Steam könyvtárában lévő AppID-ra fut le.
+- A frontend AppID-nként cache-eli a fallback lekérést, így a kártya és a részletes nézet nem indítja el újra ugyanazt a kérést.
+- A SteamGridDB API-kulcs a backend STEAMGRIDDB_API_KEY környezeti változója; kulcs nélkül a normál Steam képek továbbra is működnek.
+
+### 📱 Letisztult Project Hub PWA ikon
+- A korábbi színes neon ikon helyett egységes, sötét háttérre épülő, minimalista hub-jel került a PWA/iPhone ikonokba.
+- Frissítve a 180×180, 192×192 és 512×512 PNG ikon.
+- A favicon is ugyanazt a letisztult vizuális irányt követi.
+- Service worker cache frissítve v16-ra, hogy az új ikon és frontend kód biztosan újratöltődjön.
+
 ## 1.6.2 — 2026-09-21
 
 ### 📱 iPhone ikon – végleges Project Hub logó
