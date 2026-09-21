@@ -1,4 +1,4 @@
-const CACHE_NAME = "project-hub-v12";
+const CACHE_NAME = "project-hub-v13";
 
 const APP_SHELL = [
     "./",
@@ -30,6 +30,7 @@ const APP_SHELL = [
     "./pages/places/places.css",
     "./pages/places/places.js",
     "./manifest.webmanifest",
+    "./assets/apple-touch-icon.png",
     "./icons/icon-192.png",
     "./icons/icon-512.png"
 ];
