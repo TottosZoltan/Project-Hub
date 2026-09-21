@@ -1,4 +1,4 @@
-# Project Hub 1.5.2
+# Project Hub 1.6.3
 
 A Project Hub egy személyes, mobil-first dashboard jegyzetekkel, feladatokkal, játékokkal, Steam-integrációval, saját játékkönyvtárral és helykezeléssel.
 
@@ -25,12 +25,17 @@ A Project Hub egy személyes, mobil-first dashboard jegyzetekkel, feladatokkal, 
 - 📍 Helyek
 - 👤 Profil
 - 🔗 Steam kapcsolat
+- 🖼️ SteamGridDB artwork fallback
 - 📱 PWA / iPhone
 - 🖥️ Fejlesztői console
 
 ## Backend
 
 A backend Node.js + Express + PostgreSQL alapú. A felhasználói adatok token alapú hitelesítéssel vannak leválasztva.
+
+### SteamGridDB artwork fallback
+
+A hiányzó Steam artwork automatikusan a SteamGridDB v2 API-ból tölthető be, kizárólag akkor, ha a normál Steam képek nem érhetők el. Ehhez a backend környezetében be kell állítani a `STEAMGRIDDB_API_KEY` változót. A kulcsot nem szabad a frontend kódjába vagy a repository-ba commitolni.
 
 ### Új 1.4 API-k
 
@@ -45,4 +50,4 @@ A backend Node.js + Express + PostgreSQL alapú. A felhasználói adatok token a
 
 ## Verzió
 
-**Project Hub 1.5.2**
+**Project Hub 1.6.3**
