@@ -1,3 +1,11 @@
+## 1.6.2 — 2026-09-21
+
+### 📱 iPhone ikon – végleges Project Hub logó
+- Az iPhone főképernyős ikon most a kifejezetten a Project Hub neon logóból készített 180×180 PNG-t használja.
+- A korábban használt 192×192 ikon első verziója kikerült az iPhone elsődleges ikonútvonalából.
+- A manifest és az apple-touch-icon ugyanazt a végleges Project Hub logóképet használja.
+- Service worker cache frissítve v15-re.
+
 ## 1.6.1 — 2026-09-21
 
 ### 📱 iPhone / PWA ikon javítás
