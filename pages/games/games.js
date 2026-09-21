@@ -224,6 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function gameImageCandidates(game) {
         const id = game && game.appid ? String(game.appid) : "";
         const candidates = [];
+        if (game && game.images && game.images.grid) candidates.push(game.images.grid);
         if (game && game.header_image) candidates.push(game.header_image);
         if (game && game.images && game.images.header) candidates.push(game.images.header);
         if (id && game && game.img_logo_url) candidates.push("https://cdn.cloudflare.steamstatic.com/steam/apps/" + id + "/" + game.img_logo_url);
@@ -243,12 +244,36 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!img) return;
         const candidates = gameImageCandidates(game);
         let index = Math.max(0, candidates.indexOf(img.currentSrc || img.src));
-        img.addEventListener("error", function handleImageError() {
+        let gridLookupStarted = false;
+
+        img.addEventListener("error", async function handleImageError() {
             index += 1;
             if (index < candidates.length) {
                 img.src = candidates[index];
                 return;
             }
+
+            if (!gridLookupStarted && game && game.appid) {
+                gridLookupStarted = true;
+                try {
+                    const response = await fetch(BACKEND_URL + "/api/steam/grid-image/" + encodeURIComponent(game.appid), {
+                        method: "GET",
+                        headers: headers(),
+                        credentials: "include",
+                        cache: "no-store"
+                    });
+                    const result = await response.json().catch(() => null);
+                    if (response.ok && result && result.success && result.image) {
+                        game.images = game.images || {};
+                        game.images.grid = result.image;
+                        img.src = result.image;
+                        return;
+                    }
+                } catch (error) {
+                    console.warn("SteamGridDB frontend fallback failed:", error);
+                }
+            }
+
             img.removeEventListener("error", handleImageError);
             const placeholder = document.createElement("div");
             placeholder.className = "game-card-placeholder";
