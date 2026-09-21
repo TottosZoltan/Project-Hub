@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let allGames = [];
     let currentSort = "playtime";
     let activeLibrary = "steam";
+    const steamGridLookupCache = new Map();
 
     function customGames() {
         try {
@@ -240,45 +241,87 @@ document.addEventListener("DOMContentLoaded", function () {
         return gameImageCandidates(game)[0] || "";
     }
 
+    function getSteamGridImage(game) {
+        const appId = game && game.appid ? String(game.appid) : "";
+        if (!appId) return Promise.resolve(null);
+
+        if (steamGridLookupCache.has(appId)) {
+            return steamGridLookupCache.get(appId);
+        }
+
+        const lookup = fetch(
+            BACKEND_URL + "/api/steam/grid-image/" + encodeURIComponent(appId),
+            {
+                method: "GET",
+                headers: headers(),
+                credentials: "include",
+                cache: "no-store"
+            }
+        )
+            .then(async response => {
+                const result = await response.json().catch(() => null);
+
+                if (
+                    response.ok &&
+                    result &&
+                    result.success &&
+                    result.image
+                ) {
+                    return result.image;
+                }
+
+                return null;
+            })
+            .catch(error => {
+                console.warn(
+                    "SteamGridDB frontend fallback failed:",
+                    error
+                );
+                return null;
+            });
+
+        steamGridLookupCache.set(appId, lookup);
+        return lookup;
+    }
+
     function bindSteamImageFallback(img, game) {
         if (!img) return;
+
         const candidates = gameImageCandidates(game);
-        let index = Math.max(0, candidates.indexOf(img.currentSrc || img.src));
-        let gridLookupStarted = false;
+        let index = Math.max(
+            0,
+            candidates.indexOf(img.currentSrc || img.src)
+        );
 
         img.addEventListener("error", async function handleImageError() {
             index += 1;
+
             if (index < candidates.length) {
                 img.src = candidates[index];
                 return;
             }
 
-            if (!gridLookupStarted && game && game.appid) {
-                gridLookupStarted = true;
-                try {
-                    const response = await fetch(BACKEND_URL + "/api/steam/grid-image/" + encodeURIComponent(game.appid), {
-                        method: "GET",
-                        headers: headers(),
-                        credentials: "include",
-                        cache: "no-store"
-                    });
-                    const result = await response.json().catch(() => null);
-                    if (response.ok && result && result.success && result.image) {
-                        game.images = game.images || {};
-                        game.images.grid = result.image;
-                        img.src = result.image;
-                        return;
-                    }
-                } catch (error) {
-                    console.warn("SteamGridDB frontend fallback failed:", error);
+            if (game && game.appid) {
+                const gridImage = await getSteamGridImage(game);
+
+                if (gridImage) {
+                    game.images = game.images || {};
+                    game.images.grid = gridImage;
+                    img.src = gridImage;
+                    return;
                 }
             }
 
             img.removeEventListener("error", handleImageError);
+
             const placeholder = document.createElement("div");
             placeholder.className = "game-card-placeholder";
-            placeholder.innerHTML = '<i class="fi fi-br-gamepad" aria-hidden="true"></i>';
-            if (img.parentElement) img.replaceWith(placeholder);
+            placeholder.innerHTML =
+                '<i class="fi fi-br-gamepad" aria-hidden="true"></i>';
+
+            if (img.parentElement) {
+                img.replaceWith(placeholder);
+            }
         });
     }
     function setState(type, title, message) {
