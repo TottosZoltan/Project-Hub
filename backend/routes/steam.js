@@ -1113,37 +1113,80 @@ router.get(
     async function (req, res) {
         try {
             const user = await getAuthenticatedSteamUser(req);
+
             if (!user) {
-                return res.status(401).json({ success: false, message: "Érvényes bejelentkezés szükséges." });
+                return res.status(401).json({
+                    success: false,
+                    message: "Érvényes bejelentkezés szükséges."
+                });
             }
 
             const appId = Number(req.params.appid);
+
             if (!Number.isInteger(appId) || appId <= 0) {
-                return res.status(400).json({ success: false, message: "Érvénytelen Steam AppID." });
+                return res.status(400).json({
+                    success: false,
+                    message: "Érvénytelen Steam AppID."
+                });
             }
 
             const account = await getSteamAccountForUser(user.id);
+
             if (!account) {
-                return res.status(400).json({ success: false, connected: false, message: "Nincs Steam-fiók összekötve." });
+                return res.status(400).json({
+                    success: false,
+                    connected: false,
+                    message: "Nincs Steam-fiók összekötve."
+                });
             }
 
-            // Verify ownership before exposing a lookup for an AppID.
+            if (!STEAMGRIDDB_API_KEY) {
+                return res.status(503).json({
+                    success: false,
+                    image: null,
+                    source: null,
+                    message: "A STEAMGRIDDB_API_KEY nincs beállítva."
+                });
+            }
+
+            // A lookup csak a saját Steam könyvtárban lévő AppID-kre engedélyezett.
             const ownedGamesData = await steamApiGet(
                 "IPlayerService",
                 "GetOwnedGames",
                 "v0001",
-                { steamid: account.steam_id, include_appinfo: 1, include_played_free_games: 1 }
+                {
+                    steamid: account.steam_id,
+                    include_appinfo: 1,
+                    include_played_free_games: 1
+                }
             );
-            const game = (ownedGamesData?.response?.games || []).find(item => Number(item.appid) === appId);
-            if (!game) {
-                return res.status(404).json({ success: false, message: "A játék nem található a Steam könyvtáradban." });
+
+            const ownedGame = (
+                ownedGamesData?.response?.games || []
+            ).find(item => Number(item.appid) === appId);
+
+            if (!ownedGame) {
+                return res.status(404).json({
+                    success: false,
+                    message: "A játék nem található a Steam könyvtáradban."
+                });
             }
 
-            const image = await getSteamGridImage(appId, game.name || "");
-            return res.json({ success: true, image: image || null, source: image ? "steamgriddb" : null });
+            const image = await getSteamGridImage(appId);
+
+            return res.json({
+                success: true,
+                image: image || null,
+                source: image ? "steamgriddb" : null
+            });
         } catch (error) {
             console.error("STEAMGRIDDB IMAGE HIBA:", error);
-            return res.status(500).json({ success: false, image: null, message: "Nem sikerült SteamGridDB képet lekérni." });
+
+            return res.status(502).json({
+                success: false,
+                image: null,
+                message: "Nem sikerült SteamGridDB képet lekérni."
+            });
         }
     }
 );
