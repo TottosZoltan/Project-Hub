@@ -1,3 +1,12 @@
+## 1.6.1 — 2026-09-21
+
+### 📱 iPhone / PWA ikon javítás
+- Az iPhone főképernyős ikon most közvetlenül a meglévő Project Hub 192×192 PNG ikonból töltődik.
+- Az előző assets/apple-touch-icon.png hivatkozás kikerült az elsődleges PWA ikonútvonalból, mert iOS-en továbbra is alapértelmezett „P” ikon jelent meg.
+- Az index.html most explicit apple-touch-icon, favicon, manifest és theme-color meta beállítást tartalmaz.
+- A PWA manifest visszakapta a 192×192 és 512×512 ikonokat maskable támogatással.
+- Service worker cache verzió frissítve v14-re, hogy a régi ikon cache-e ne maradjon aktív.
+
 # Changelog
 
 ## 1.5.2 — 2026-09-20
