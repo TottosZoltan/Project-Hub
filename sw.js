@@ -30,7 +30,6 @@ const APP_SHELL = [
     "./pages/places/places.css",
     "./pages/places/places.js",
     "./manifest.webmanifest",
-    "./assets/apple-touch-icon.png",
     "./icons/icon-192.png",
     "./icons/icon-512.png"
 ];
