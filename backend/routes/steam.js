@@ -8,7 +8,8 @@ const {
     hashSteamLinkState,
     getSteamPlayerSummary,
     steamApiGet,
-    getSteamImageUrls
+    getSteamImageUrls,
+    getSteamGridImage
 } = require("../services/steam");
 const router = require("express").Router();
 
@@ -986,13 +987,19 @@ router.get(
 
 
             const formattedGames =
-                games.map(
-                    function (game) {
+                await Promise.all(
+                    games.map(
+                        async function (game) {
 
-                        const images =
-                            getSteamImageUrls(
-                                game.appid
-                            );
+                            const images =
+                                getSteamImageUrls(
+                                    game.appid
+                                );
+
+                            // A SteamGridDB képet csak a frontend fallback
+                            // endpointja használja, ezért a normál lista
+                            // betöltése nem lassul minden játéknál.
+                            images.grid = null;
 
 
                         return {
@@ -1045,7 +1052,8 @@ router.get(
 
                         };
 
-                    }
+                        }
+                    )
                 );
 
 
@@ -1089,6 +1097,54 @@ router.get(
 
         }
 
+    }
+);
+
+
+// ======================================================
+// STEAMGRIDDB IMAGE FALLBACK
+// ======================================================
+// Only called by the frontend after the normal Steam artwork
+// candidates have failed. This keeps the normal library fast.
+// ======================================================
+
+router.get(
+    "/api/steam/grid-image/:appid",
+    async function (req, res) {
+        try {
+            const user = await getAuthenticatedSteamUser(req);
+            if (!user) {
+                return res.status(401).json({ success: false, message: "Érvényes bejelentkezés szükséges." });
+            }
+
+            const appId = Number(req.params.appid);
+            if (!Number.isInteger(appId) || appId <= 0) {
+                return res.status(400).json({ success: false, message: "Érvénytelen Steam AppID." });
+            }
+
+            const account = await getSteamAccountForUser(user.id);
+            if (!account) {
+                return res.status(400).json({ success: false, connected: false, message: "Nincs Steam-fiók összekötve." });
+            }
+
+            // Verify ownership before exposing a lookup for an AppID.
+            const ownedGamesData = await steamApiGet(
+                "IPlayerService",
+                "GetOwnedGames",
+                "v0001",
+                { steamid: account.steam_id, include_appinfo: 1, include_played_free_games: 1 }
+            );
+            const game = (ownedGamesData?.response?.games || []).find(item => Number(item.appid) === appId);
+            if (!game) {
+                return res.status(404).json({ success: false, message: "A játék nem található a Steam könyvtáradban." });
+            }
+
+            const image = await getSteamGridImage(appId, game.name || "");
+            return res.json({ success: true, image: image || null, source: image ? "steamgriddb" : null });
+        } catch (error) {
+            console.error("STEAMGRIDDB IMAGE HIBA:", error);
+            return res.status(500).json({ success: false, image: null, message: "Nem sikerült SteamGridDB képet lekérni." });
+        }
     }
 );
 
@@ -1245,6 +1301,10 @@ router.get(
                 getSteamImageUrls(
                     appId
                 );
+
+            // A részletes nézet is megkapja az SGDB fallbacket, de csak
+            // akkor kérdezzük le, ha a normál Steam kép később hibásnak bizonyul.
+            images.grid = null;
 
 
             // --------------------------------------------------
