@@ -244,84 +244,85 @@ const steamGridImageCache = new Map();
 function withTimeout(promise, ms) {
     return Promise.race([
         promise,
-        new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("timeout")), ms)
+        )
     ]);
 }
 
-function extractGridUrl(payload) {
-    const values = Array.isArray(payload)
-        ? payload
-        : Array.isArray(payload?.data)
-            ? payload.data
-            : Array.isArray(payload?.grids)
-                ? payload.grids
-                : [];
-    const preferred = values.find(item =>
-        item && typeof item.url === "string" &&
-        (!item.dimensions || item.dimensions === "460x215" || item.dimensions === "920x430")
-    );
-    return preferred?.url || values.find(item => typeof item?.url === "string")?.url || null;
-}
-
 /**
- * Looks up a 16:9 SteamGridDB artwork only after normal Steam artwork fails.
- * v2 is preferred when STEAMGRIDDB_API_KEY is configured; the deprecated
- * public v1 endpoint is retained as a compatibility fallback.
+ * SteamGridDB artwork fallback.
+ *
+ * This is intentionally lazy: the frontend calls this endpoint only after
+ * every normal Steam artwork candidate has failed. SteamGridDB v2 requires
+ * an API key and is queried directly by Steam AppID, so no title matching
+ * or scraping is necessary.
+ *
+ * The requested dimensions are SteamGridDB's horizontal artwork formats
+ * (460x215 / 920x430). The frontend keeps the image inside its existing
+ * 16:9 media frame so the card/detail layout remains consistent.
  */
-async function getSteamGridImage(appId, gameName = "") {
+async function getSteamGridImage(appId) {
     const id = String(appId || "");
     if (!id) return null;
-    if (steamGridImageCache.has(id)) return await steamGridImageCache.get(id);
+
+    if (!STEAMGRIDDB_API_KEY) {
+        return null;
+    }
+
+    if (steamGridImageCache.has(id)) {
+        return await steamGridImageCache.get(id);
+    }
 
     const request = (async () => {
         try {
-            if (STEAMGRIDDB_API_KEY) {
-                const response = await withTimeout(
-                    fetch(
-                        "https://www.steamgriddb.com/api/v2/grids/steam/" +
-                        encodeURIComponent(id) +
-                        "?dimensions=460x215,920x430",
-                        {
-                            headers: {
-                                Authorization: "Bearer " + STEAMGRIDDB_API_KEY,
-                                Accept: "application/json"
-                            }
-                        }
-                    ),
-                    5000
+            const url =
+                "https://www.steamgriddb.com/api/v2/grids/steam/" +
+                encodeURIComponent(id) +
+                "?dimensions=460x215,920x430&types=static";
+
+            const response = await withTimeout(
+                fetch(url, {
+                    headers: {
+                        Authorization: "Bearer " + STEAMGRIDDB_API_KEY,
+                        Accept: "application/json"
+                    }
+                }),
+                6000
+            );
+
+            if (!response.ok) {
+                console.warn(
+                    "SteamGridDB HTTP hiba:",
+                    response.status
                 );
-                if (response.ok) {
-                    const url = extractGridUrl(await response.json());
-                    if (url) return url;
-                }
+                return null;
             }
 
-            if (gameName) {
-                const response = await withTimeout(
-                    fetch(
-                        "https://www.steamgriddb.com/api/grids?" +
-                        new URLSearchParams({
-                            game: gameName,
-                            fields: "grid_url,grid_url_thumbnail,style",
-                            orderby: "score",
-                            orderdirection: "desc"
-                        }).toString(),
-                        { headers: { Accept: "application/json" } }
-                    ),
-                    5000
-                );
-                if (response.ok) {
-                    const payload = await response.json();
-                    const legacy = Array.isArray(payload) ? payload : payload?.grids || payload?.data || [];
-                    return legacy.find(item => typeof item?.grid_url === "string")?.grid_url ||
-                        legacy.find(item => typeof item?.grid_url_thumbnail === "string")?.grid_url_thumbnail ||
-                        null;
-                }
-            }
+            const payload = await response.json();
+            const values = Array.isArray(payload?.data)
+                ? payload.data
+                : Array.isArray(payload)
+                    ? payload
+                    : [];
+
+            // Prefer the widest horizontal artwork, then fall back to the
+            // first valid URL returned by the API.
+            const preferred =
+                values.find(item => item?.dimensions === "920x430") ||
+                values.find(item => item?.dimensions === "460x215") ||
+                values.find(item => typeof item?.url === "string");
+
+            return typeof preferred?.url === "string"
+                ? preferred.url
+                : null;
         } catch (error) {
-            console.warn("SteamGridDB artwork lookup failed:", error.message);
+            console.warn(
+                "SteamGridDB artwork lookup failed:",
+                error.message
+            );
+            return null;
         }
-        return null;
     })();
 
     steamGridImageCache.set(id, request);
