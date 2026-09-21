@@ -12,10 +12,16 @@ const BACKEND_URL =
 const STEAM_API_KEY =
     process.env.STEAM_API_KEY;
 
+// Optional SteamGridDB API key. The artwork fallback also has a
+// legacy public-endpoint compatibility path when this is not set.
+const STEAMGRIDDB_API_KEY =
+    process.env.STEAMGRIDDB_API_KEY;
+
 module.exports = {
     PORT,
     FRONTEND_URL,
     PROJECT_HUB_URL,
     BACKEND_URL,
-    STEAM_API_KEY
+    STEAM_API_KEY,
+    STEAMGRIDDB_API_KEY
 };
