@@ -600,8 +600,3 @@ main {
 .overview .section-header > span { white-space: nowrap; }
 
 
-/* Project Hub brand logo */
-.brand-mark, .brand-title { margin: 0; line-height: 0; }
-.brand-mark img { width: 148px; height: 74px; object-fit: contain; object-position: center; }
-.brand-title img { width: 180px; height: 92px; object-fit: contain; object-position: center; }
-@media (max-width: 600px) { .brand-title img { width: 145px; height: 76px; } .brand-mark img { width: 125px; height: 64px; } }
