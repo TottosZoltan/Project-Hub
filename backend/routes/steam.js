@@ -1,6 +1,6 @@
 const express = require("express");
 const { pool } = require("../database");
-const { FRONTEND_URL, PROJECT_HUB_URL, BACKEND_URL, STEAM_API_KEY } = require("../config");
+const { FRONTEND_URL, PROJECT_HUB_URL, BACKEND_URL, STEAM_API_KEY, STEAMGRIDDB_API_KEY } = require("../config");
 const { getAuthenticatedSteamUser } = require("../middleware/auth");
 const {
     getSteamAccountForUser,
