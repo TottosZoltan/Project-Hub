@@ -240,6 +240,26 @@ function getCategoryIcon(category) {
 
 
 // =========================================
+// BIZTONSÁGOS SZÖVEG ESCAPE
+// =========================================
+// A renderTasks() meta mezői innerHTML-t használnak az ikonok miatt.
+// A feladatból érkező szövegeket ezért mindig escape-eljük,
+// mielőtt HTML-be illesztjük őket.
+// =========================================
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+// =========================================
 // FELADAT NORMALIZÁLÁS
 // =========================================
 
