@@ -9,19 +9,16 @@
   "orientation": "portrait-primary",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
-  "categories": ["productivity", "games"],
+  "categories": [
+    "productivity",
+    "games"
+  ],
   "icons": [
     {
-      "src": "./icons/icon-192.png",
-      "sizes": "192x192",
+      "src": "./assets/apple-touch-icon.png",
+      "sizes": "180x180",
       "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
