@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const { pool } = require("../database");
-const { STEAM_API_KEY } = require("../config");
+const { STEAM_API_KEY, STEAMGRIDDB_API_KEY } = require("../config");
 
 // STEAM ACCOUNT
 // ======================================================
@@ -236,6 +236,100 @@ function getSteamImageUrls(appId) {
 
 
 // ======================================================
+// STEAMGRIDDB KÉP FALLBACK
+// ======================================================
+
+const steamGridImageCache = new Map();
+
+function withTimeout(promise, ms) {
+    return Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))
+    ]);
+}
+
+function extractGridUrl(payload) {
+    const values = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.data)
+            ? payload.data
+            : Array.isArray(payload?.grids)
+                ? payload.grids
+                : [];
+    const preferred = values.find(item =>
+        item && typeof item.url === "string" &&
+        (!item.dimensions || item.dimensions === "460x215" || item.dimensions === "920x430")
+    );
+    return preferred?.url || values.find(item => typeof item?.url === "string")?.url || null;
+}
+
+/**
+ * Looks up a 16:9 SteamGridDB artwork only after normal Steam artwork fails.
+ * v2 is preferred when STEAMGRIDDB_API_KEY is configured; the deprecated
+ * public v1 endpoint is retained as a compatibility fallback.
+ */
+async function getSteamGridImage(appId, gameName = "") {
+    const id = String(appId || "");
+    if (!id) return null;
+    if (steamGridImageCache.has(id)) return await steamGridImageCache.get(id);
+
+    const request = (async () => {
+        try {
+            if (STEAMGRIDDB_API_KEY) {
+                const response = await withTimeout(
+                    fetch(
+                        "https://www.steamgriddb.com/api/v2/grids/steam/" +
+                        encodeURIComponent(id) +
+                        "?dimensions=460x215,920x430",
+                        {
+                            headers: {
+                                Authorization: "Bearer " + STEAMGRIDDB_API_KEY,
+                                Accept: "application/json"
+                            }
+                        }
+                    ),
+                    5000
+                );
+                if (response.ok) {
+                    const url = extractGridUrl(await response.json());
+                    if (url) return url;
+                }
+            }
+
+            if (gameName) {
+                const response = await withTimeout(
+                    fetch(
+                        "https://www.steamgriddb.com/api/grids?" +
+                        new URLSearchParams({
+                            game: gameName,
+                            fields: "grid_url,grid_url_thumbnail,style",
+                            orderby: "score",
+                            orderdirection: "desc"
+                        }).toString(),
+                        { headers: { Accept: "application/json" } }
+                    ),
+                    5000
+                );
+                if (response.ok) {
+                    const payload = await response.json();
+                    const legacy = Array.isArray(payload) ? payload : payload?.grids || payload?.data || [];
+                    return legacy.find(item => typeof item?.grid_url === "string")?.grid_url ||
+                        legacy.find(item => typeof item?.grid_url_thumbnail === "string")?.grid_url_thumbnail ||
+                        null;
+                }
+            }
+        } catch (error) {
+            console.warn("SteamGridDB artwork lookup failed:", error.message);
+        }
+        return null;
+    })();
+
+    steamGridImageCache.set(id, request);
+    return await request;
+}
+
+
+// ======================================================
 // OWNER TAG
 // ======================================================
 
@@ -259,5 +353,6 @@ module.exports = {
     hashSteamLinkState,
     getSteamPlayerSummary,
     steamApiGet,
-    getSteamImageUrls
+    getSteamImageUrls,
+    getSteamGridImage
 };
