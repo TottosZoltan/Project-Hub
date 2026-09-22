@@ -1,11 +1,12 @@
 ## 1.6.4 — 2026-09-22
 
-### ⚡ Hibajavítás és gyorsítás
-- Javítva a Játékok oldal JavaScript szintaktikai hibája, amely megakadályozhatta az oldal betöltését.
-- A Steam könyvtár lekérése most legfeljebb 20 másodpercig vár, utána egyértelmű hibaüzenetet ad.
-- A játékoldal indulásakor a független háttérlekérések párhuzamosan indulnak.
-- A Steam játéklista 60 másodperces rövid szerveroldali cache-t kapott, így az ismételt betöltések gyorsabbak.
-- A verziószám minden felületen 1.6.4-ra frissítve.
+### ⚡ Steam játéklista hibajavítás és gyorsítás
+- Javítva a Steam játéklista végpont hibája: a cache-kulcs hiányzott, ezért a sikeres Steam-lekérés után a szerver hibával térhetett vissza.
+- A Steam API-lekérések most 15 másodperces szerveroldali időkorlátot kapnak.
+- A Játékok oldalon a Steam-kapcsolat ellenőrzése 10 másodperc után megszakad, ha a backend nem válaszol.
+- A játéklista továbbra is 60 másodperces szerveroldali cache-t használ; a kézi frissítés megkerüli a cache-t.
+- A normál játéklista betöltése nem vár SteamGridDB-lekérésekre.
+
 
 ## 1.6.2 — 2026-09-22
 
