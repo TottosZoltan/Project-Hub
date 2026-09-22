@@ -230,9 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
         } finally {
             if (customGameImageSearch) customGameImageSearch.disabled = false;
         }
-    } finally {
-            if (customGameImageSearch) customGameImageSearch.disabled = false;
-        }
     }
 
     function renderCustomGames() {
