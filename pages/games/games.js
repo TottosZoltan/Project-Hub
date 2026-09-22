@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeCustomGameButton = document.getElementById("closeCustomGameButton");
     const cancelCustomGameButton = document.getElementById("cancelCustomGameButton");
     const customGameName = document.getElementById("customGameName");
+    const customGameSearchName = document.getElementById("customGameSearchName");
     const customGameImage = document.getElementById("customGameImage");
     const customGameMinutes = document.getElementById("customGameMinutes");
     const CUSTOM_LIBRARY_KEY = "projectHubCustomGames";
@@ -124,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
         customGameForm.reset();
         document.getElementById("customGameTitle").textContent = game ? "Játék szerkesztése" : "Játék hozzáadása";
         customGameName.value = game?.name || "";
+        customGameSearchName.value = game?.searchName || game?.name || "";
         customGameImage.value = game?.image || "";
         showCustomImagePreview(game?.image || "");
         setCustomImageStatus(game?.image ? "Mentett kép betöltve." : "A név elhagyásakor automatikusan megpróbáljuk megtalálni a képet.");
@@ -162,9 +164,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function findCustomGameImage() {
-        const name = customGameName?.value.trim();
-        if (!name) {
-            setCustomImageStatus("Előbb írd be a játék nevét.", "error");
+        const displayName = customGameName?.value.trim();
+        const name = customGameSearchName?.value.trim() || displayName;
+        if (!displayName) {
+            setCustomImageStatus("Előbb írd be a megjelenített játéknevet.", "error");
             customGameName?.focus();
             return null;
         }
@@ -651,8 +654,8 @@ document.addEventListener("DOMContentLoaded", function () {
     customGameOverlay.addEventListener("click", closeCustomGameModal);
 
     customGameImageSearch?.addEventListener("click", findCustomGameImage);
-    customGameName?.addEventListener("blur", () => {
-        if (customGameName.value.trim() && !customGameImage.value.trim()) {
+    customGameSearchName?.addEventListener("blur", () => {
+        if ((customGameSearchName.value.trim() || customGameName.value.trim()) && !customGameImage.value.trim()) {
             findCustomGameImage();
         }
     });
@@ -663,7 +666,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     customGameForm.addEventListener("submit", async event => {
         event.preventDefault(); const name=customGameName.value.trim(); if(!name)return;
-        const payload={name,image:customGameImage.value.trim(),minutes:Math.max(0,Number(customGameMinutes.value)||0),status:customGameStatus?.value || "backlog",favorite:!!customGameFavorite?.checked};
+        const payload={name,image:customGameImage.value.trim(),searchName:(customGameSearchName?.value.trim() || name),minutes:Math.max(0,Number(customGameMinutes.value)||0),status:customGameStatus?.value || "backlog",favorite:!!customGameFavorite?.checked};
         const games=customGames();
         if(editingCustomId){ const item=games.find(x=>String(x.id)===String(editingCustomId)); if(item)Object.assign(item,payload); saveCustomGames(games); }
         else { const localItem={id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),...payload}; games.unshift(localItem); saveCustomGames(games); }
