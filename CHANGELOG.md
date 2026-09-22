@@ -1,11 +1,11 @@
-## 1.6.3 — 2026-09-22
+## 1.6.4 — 2026-09-22
 
 ### ⚡ Hibajavítás és gyorsítás
 - Javítva a Játékok oldal JavaScript szintaktikai hibája, amely megakadályozhatta az oldal betöltését.
 - A Steam könyvtár lekérése most legfeljebb 20 másodpercig vár, utána egyértelmű hibaüzenetet ad.
 - A játékoldal indulásakor a független háttérlekérések párhuzamosan indulnak.
 - A Steam játéklista 60 másodperces rövid szerveroldali cache-t kapott, így az ismételt betöltések gyorsabbak.
-- A verziószám minden felületen 1.6.3-ra frissítve.
+- A verziószám minden felületen 1.6.4-ra frissítve.
 
 ## 1.6.2 — 2026-09-22
 
@@ -45,7 +45,7 @@
 - A feladat-emlékeztetők külön kapcsolhatóak.
 - Service worker push-kezelés előkészítve a háttérben érkező telefonos értesítésekhez.
 
-## 1.6.3 — 2026-09-21
+## 1.6.4 — 2026-09-21
 
 ### 🎮 SteamGridDB automatikus kép-fallback
 - Ha egy Steam játék egyik normál Steam artwork URL-je sem töltődik be, a frontend csak ekkor indít SteamGridDB fallback lekérést.
