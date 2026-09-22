@@ -322,15 +322,28 @@ async function getSteamGridImage(appId, gameName = "") {
 
         function firstHorizontalImage(payload) {
             const values = Array.isArray(payload?.data) ? payload.data : [];
-            const horizontal = values.filter(item =>
-                item &&
-                typeof item.url === "string" &&
-                ["920x430", "460x215"].includes(String(item.dimensions || ""))
-            );
+            const horizontal = values.filter(item => {
+                if (!item || typeof item.url !== "string") return false;
+                const dimensions = String(item.dimensions || "").replace(/\\s/g, "");
+                const width = Number(item.width);
+                const height = Number(item.height);
+                return (
+                    dimensions === "920x430" ||
+                    dimensions === "460x215" ||
+                    (width === 920 && height === 430) ||
+                    (width === 460 && height === 215)
+                );
+            });
 
             const preferred =
-                horizontal.find(item => String(item.dimensions) === "920x430") ||
-                horizontal.find(item => String(item.dimensions) === "460x215") ||
+                horizontal.find(item =>
+                    String(item.dimensions || "").replace(/\\s/g, "") === "920x430" ||
+                    (Number(item.width) === 920 && Number(item.height) === 430)
+                ) ||
+                horizontal.find(item =>
+                    String(item.dimensions || "").replace(/\\s/g, "") === "460x215" ||
+                    (Number(item.width) === 460 && Number(item.height) === 215)
+                ) ||
                 values.find(item => typeof item?.url === "string");
 
             return typeof preferred?.url === "string" ? preferred.url : null;
