@@ -1130,16 +1130,6 @@ router.get(
                 });
             }
 
-            const account = await getSteamAccountForUser(user.id);
-
-            if (!account) {
-                return res.status(400).json({
-                    success: false,
-                    connected: false,
-                    message: "Nincs Steam-fiók összekötve."
-                });
-            }
-
             if (!STEAMGRIDDB_API_KEY) {
                 return res.status(503).json({
                     success: false,
