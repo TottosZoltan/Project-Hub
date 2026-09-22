@@ -14,7 +14,7 @@ const tasksRoutes = require("./routes/tasks");
 const steamRoutes = require("./routes/steam");
 const libraryRoutes = require("./routes/library");
 const notificationsRoutes = require("./routes/notifications");
-const { processTaskReminders } = require("./services/push");
+const { processTaskReminders, processScheduledPushTests } = require("./services/push");
 
 const app = express();
 
@@ -109,6 +109,11 @@ async function startServer() {
             console.error("TASK REMINDER WORKER HIBA:", error);
         });
     }, 30000);
+    setInterval(function () {
+        processScheduledPushTests().catch(function (error) {
+            console.error("DELAYED PUSH TEST WORKER HIBA:", error);
+        });
+    }, 5000);
     try {
         await initializeDatabase();
         await initializeTasksDatabase();
