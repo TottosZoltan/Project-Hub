@@ -29,6 +29,12 @@ const taskPriority =
 const taskCategory =
     document.getElementById("taskCategory");
 
+const taskDueDate =
+    document.getElementById("taskDueDate");
+
+const taskReminder =
+    document.getElementById("taskReminder");
+
 const saveTaskButton =
     document.getElementById("saveTask");
 
@@ -295,7 +301,17 @@ function normalizeTask(task) {
         date:
             task.date ||
             task.created_at ||
-            ""
+            "",
+
+        dueDate:
+            task.dueDate ||
+            task.due_date ||
+            "",
+
+        reminderMinutes:
+            task.reminderMinutes ??
+            task.reminder_minutes ??
+            "none"
 
     };
 
@@ -452,7 +468,9 @@ async function createTask(
     title,
     description,
     priority,
-    category
+    category,
+    dueDate,
+    reminderMinutes
 ) {
 
     const response =
@@ -482,7 +500,15 @@ async function createTask(
                             priority,
 
                         category:
-                            category
+                            category,
+
+                        dueDate:
+                            dueDate || null,
+
+                        reminderMinutes:
+                            reminderMinutes === "none"
+                                ? null
+                                : Number(reminderMinutes)
 
                     })
 
@@ -990,6 +1016,45 @@ function updateStats() {
 
 
 // =========================================
+// HATÁRIDŐ / EMLÉKEZTETŐ SEGÉDEK
+// =========================================
+
+function toDateTimeLocalValue(value) {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value).slice(0, 16);
+    const offset = date.getTimezoneOffset();
+    const local = new Date(date.getTime() - offset * 60000);
+    return local.toISOString().slice(0, 16);
+}
+
+function formatDueDate(value) {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+    return date.toLocaleString("hu-HU", { dateStyle: "medium", timeStyle: "short" });
+}
+
+function scheduleTaskReminder(task) {
+    if (!window.ProjectHubNotifications || !task.dueDate || task.completed) return;
+    const settings = window.ProjectHubNotifications.getSettings();
+    if (!settings.enabled || !settings.taskReminders || task.reminderMinutes == null || task.reminderMinutes === "none") return;
+    const due = new Date(task.dueDate).getTime();
+    const reminder = due - Number(task.reminderMinutes) * 60000;
+    const delay = reminder - Date.now();
+    if (delay <= 0 || delay > 2147483647) return;
+    const key = "projectHubReminder:" + task.id + ":" + due + ":" + task.reminderMinutes;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+    setTimeout(function () {
+        window.ProjectHubNotifications.notify(
+            "Project Hub — emlékeztető",
+            { body: task.title + "\nHatáridő: " + formatDueDate(task.dueDate), tag: "task-" + task.id }
+        );
+    }, delay);
+}
+
+// =========================================
 // FELADATOK MEGJELENÍTÉSE
 // =========================================
 
@@ -1435,6 +1500,17 @@ function renderTasks() {
                 date
             );
 
+            if (task.dueDate) {
+                const due = document.createElement("small");
+                due.className = "task-due-date";
+                due.innerHTML = '<i class="fi fi-br-calendar-clock" aria-hidden="true"></i> Határidő: ' + escapeHtml(formatDueDate(task.dueDate));
+                if (!task.completed && new Date(task.dueDate).getTime() < Date.now()) {
+                    due.classList.add("overdue");
+                }
+                taskCard.appendChild(due);
+                scheduleTaskReminder(task);
+            }
+
 
             taskCard.addEventListener(
                 "click",
@@ -1482,6 +1558,18 @@ if (
             const category =
                 taskCategory.value;
 
+            const dueDate =
+                taskDueDate?.value || "";
+
+            const reminderMinutes =
+                taskReminder?.value || "none";
+
+            if (reminderMinutes !== "none" && !dueDate) {
+                alert("Figyelmeztetéshez előbb adj meg határidőt.");
+                taskDueDate?.focus();
+                return;
+            }
+
 
             if (
                 title === ""
@@ -1527,7 +1615,15 @@ if (
                                     priority,
 
                                 category:
-                                    category
+                                    category,
+
+                                dueDate:
+                                    dueDate || null,
+
+                                reminderMinutes:
+                                    reminderMinutes === "none"
+                                        ? null
+                                        : Number(reminderMinutes)
 
                             }
                         );
@@ -1579,7 +1675,9 @@ if (
                             title,
                             description,
                             priority,
-                            category
+                            category,
+                            dueDate,
+                            reminderMinutes
                         );
 
 
@@ -1611,6 +1709,9 @@ if (
 
                 taskCategory.value =
                     "Egyéb";
+
+                if (taskDueDate) taskDueDate.value = "";
+                if (taskReminder) taskReminder.value = "30";
 
 
                 // =================================
@@ -1902,6 +2003,14 @@ function editTask(id) {
 
     taskCategory.value =
         task.category;
+
+    if (taskDueDate) {
+        taskDueDate.value = task.dueDate ? toDateTimeLocalValue(task.dueDate) : "";
+    }
+
+    if (taskReminder) {
+        taskReminder.value = task.reminderMinutes == null ? "none" : String(task.reminderMinutes);
+    }
 
 
     editingTaskId =
