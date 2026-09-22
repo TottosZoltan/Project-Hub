@@ -192,8 +192,18 @@ async function steamApiGet(
         query.toString();
 
 
-    const response =
-        await fetch(url);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
+    let response;
+
+    try {
+        response = await fetch(url, {
+            signal: controller.signal
+        });
+    } finally {
+        clearTimeout(timeout);
+    }
 
 
     if (!response.ok) {
