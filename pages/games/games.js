@@ -441,11 +441,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function loadSteamAccount() {
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 10000);
         try {
             const response = await fetch(BACKEND_URL + "/api/steam/account", {
                 method: "GET",
                 headers: headers(),
-                credentials: "include"
+                credentials: "include",
+                signal: controller.signal,
+                cache: "no-store"
             });
             if (response.status === 401) return showAuthError();
             const result = await response.json();
@@ -471,9 +475,14 @@ document.addEventListener("DOMContentLoaded", function () {
             return true;
         } catch (error) {
             console.error("Steam account error:", error);
+            const message = error?.name === "AbortError"
+                ? "A Steam-kapcsolat ellenőrzése túl sokáig tartott."
+                : "Próbáld újratölteni az oldalt.";
             steamAccountStatus.textContent = "A Steam-kapcsolat ellenőrzése sikertelen.";
-            setState("error", "Nem sikerült ellenőrizni a Steam-kapcsolatot", "Próbáld újratölteni az oldalt.");
+            setState("error", "Nem sikerült ellenőrizni a Steam-kapcsolatot", message);
             return false;
+        } finally {
+            window.clearTimeout(timeout);
         }
     }
 
