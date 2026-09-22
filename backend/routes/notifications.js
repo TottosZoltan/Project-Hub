@@ -97,4 +97,17 @@ router.post("/api/notifications/test-push-delayed", async function (req, res) {
     }
 });
 
+
+router.get("/api/notifications/generate-vapid", function (req, res) {
+    try {
+        const webpush = require("web-push");
+        const keys = webpush.generateVAPIDKeys();
+        return res.type("html").send(
+            "<!doctype html><html lang='hu'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Project Hub – VAPID kulcsok</title><style>body{margin:0;padding:24px;background:#080b12;color:#fff;font-family:Arial,sans-serif}.card{max-width:760px;margin:30px auto;background:#111622;border:1px solid #293248;border-radius:18px;padding:22px}label{display:block;margin:16px 0 7px;font-weight:700;font-size:13px}textarea{width:100%;box-sizing:border-box;background:#080b12;color:#fff;border:1px solid #35415a;border-radius:10px;padding:12px;font:12px monospace;min-height:90px}p{color:#aeb6c8;line-height:1.5}.ok{color:#79e2a0;font-weight:700}</style></head><body><div class='card'><h1>🔐 VAPID kulcsok elkészültek</h1><p class='ok'>✓ A kulcspár elkészült.</p><label>VAPID_PUBLIC_KEY</label><textarea readonly>" + keys.publicKey + "</textarea><label>VAPID_PRIVATE_KEY</label><textarea readonly>" + keys.privateKey + "</textarea><label>VAPID_SUBJECT</label><textarea readonly>mailto:admin@example.com</textarea><p>Render → Environment Variables alatt add meg ezt a három értéket. A private key-t kezeld titkos adatként.</p></div></body></html>"
+        );
+    } catch (error) {
+        console.error("VAPID GENERÁLÁSI HIBA:", error);
+        return res.status(500).json({ success: false, message: "A VAPID kulcsok generálása sikertelen." });
+    }
+});
 module.exports = router;
