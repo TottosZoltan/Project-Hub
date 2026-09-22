@@ -1362,6 +1362,75 @@
 
 
         // =========================================
+        // ÉRTESÍTÉSEK
+        // =========================================
+
+        function updateNotificationSettingsUI() {
+            const status = document.getElementById("notificationPermissionStatus");
+            const help = document.getElementById("notificationPermissionHelp");
+            const enable = document.getElementById("enableNotificationsButton");
+            const toggle = document.getElementById("taskNotificationsToggle");
+            const settings = window.ProjectHubNotifications?.getSettings?.() || {};
+
+            if (toggle) toggle.checked = settings.taskReminders !== false;
+
+            if (!("Notification" in window)) {
+                status.textContent = "Az eszköz nem támogatja az értesítéseket.";
+                help.textContent = "Próbáld meg a Project Hubot támogatott mobil böngészőből/PWA-ként használni.";
+                if (enable) enable.disabled = true;
+                return;
+            }
+
+            const permission = Notification.permission;
+            if (permission === "granted" && settings.enabled) {
+                status.textContent = "✓ Értesítések engedélyezve";
+                help.textContent = "A Project Hub kérhet és megjeleníthet feladat-emlékeztetőket.";
+                enable.textContent = "Értesítések kikapcsolása";
+            } else if (permission === "denied") {
+                status.textContent = "Értesítések letiltva";
+                help.textContent = "A telefon böngészőjének beállításaiban kell újra engedélyezned őket.";
+                enable.textContent = "Böngészőbeállítások megnyitása";
+            } else {
+                status.textContent = "Értesítések nincsenek engedélyezve";
+                help.textContent = "Engedélyezd őket, hogy a feladat-emlékeztetők megjelenhessenek.";
+                enable.textContent = "Értesítések engedélyezése";
+            }
+        }
+
+        document.getElementById("enableNotificationsButton")?.addEventListener("click", async function () {
+            const settings = window.ProjectHubNotifications;
+            if (!settings || !("Notification" in window)) return;
+
+            if (Notification.permission === "granted") {
+                settings.saveSettings({ enabled: !settings.getSettings().enabled });
+                updateNotificationSettingsUI();
+                return;
+            }
+
+            if (Notification.permission === "denied") {
+                alert("Az értesítések le vannak tiltva a böngészőben. Nyisd meg a webhely értesítési beállításait, és engedélyezd a Project Hubot.");
+                return;
+            }
+
+            try {
+                await settings.requestPermission();
+                settings.saveSettings({ taskReminders: true });
+                updateNotificationSettingsUI();
+                settings.notify("Project Hub", { body: "Az értesítések sikeresen engedélyezve vannak." });
+            } catch (error) {
+                alert(error.message || "Az értesítéseket nem sikerült engedélyezni.");
+                updateNotificationSettingsUI();
+            }
+        });
+
+        document.getElementById("taskNotificationsToggle")?.addEventListener("change", function () {
+            window.ProjectHubNotifications?.saveSettings({ taskReminders: this.checked });
+            updateNotificationSettingsUI();
+        });
+
+        updateNotificationSettingsUI();
+
+        // =========================================
         // LOGOUT
         // =========================================
 
