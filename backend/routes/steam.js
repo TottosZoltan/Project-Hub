@@ -963,6 +963,14 @@ router.get(
             }
 
 
+            const cacheKey = getSteamGamesCacheKey(user.id);
+            const forceRefresh = String(req.query.refresh || "") === "1";
+            const cached = steamGamesCache.get(cacheKey);
+
+            if (!forceRefresh && cached && cached.expiresAt > Date.now()) {
+                return res.json(cached.payload);
+            }
+
             const data =
                 await steamApiGet(
                     "IPlayerService",
