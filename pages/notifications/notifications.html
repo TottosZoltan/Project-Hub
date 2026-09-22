@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Értesítések - Project Hub</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../pages.css">
+    <link rel="stylesheet" href="notifications.css">
+    <style>
+        body { visibility: hidden; }
+        body.authenticated { visibility: visible; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../../index.html" class="back-button" aria-label="Vissza a főoldalra">
+            <span class="back-arrow"></span>
+        </a>
+        <div>
+            <h1>ÉRTESÍTÉSEK</h1>
+            <p>Project Hub</p>
+        </div>
+        <a href="../profile/profile.html" class="page-profile-link">Profil</a>
+    </header>
+
+    <main class="page-content notifications-page">
+        <section class="page-intro">
+            <p class="small-title">PROJECT HUB</p>
+            <h2><i class="fi fi-br-bell" aria-hidden="true"></i> Inbox</h2>
+            <p>Itt jelennek meg a feladataidhoz és az alkalmazáshoz tartozó fontos értesítések.</p>
+        </section>
+
+        <section class="notifications-toolbar">
+            <div>
+                <strong id="notificationCount">0 értesítés</strong>
+                <span id="notificationUnread">0 olvasatlan</span>
+            </div>
+            <div class="notifications-actions">
+                <button type="button" id="markAllRead" class="notification-action">✓ Mind olvasott</button>
+                <button type="button" id="clearNotifications" class="notification-action danger">Törlés</button>
+            </div>
+        </section>
+
+        <section id="notificationsList" class="notifications-list"></section>
+
+        <section id="notificationsEmpty" class="empty-state notifications-empty">
+            <div class="notification-empty-icon"><i class="fi fi-br-bell" aria-hidden="true"></i></div>
+            <h3>Nincs új értesítés</h3>
+            <p>Ha egy beállított feladat-emlékeztető elérkezik, itt is meg fog jelenni.</p>
+        </section>
+    </main>
+
+    <script src="../../notifications.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const token = localStorage.getItem("projectHubAuthToken");
+            if (!token) {
+                window.location.href = "../auth/login.html";
+                return;
+            }
+
+            try {
+                const response = await fetch("https://project-hub-backend-1.onrender.com/api/auth/me", {
+                    headers: { "Authorization": "Bearer " + token },
+                    credentials: "include"
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success || !result.user) {
+                    localStorage.removeItem("projectHubAuthToken");
+                    window.location.href = "../auth/login.html";
+                    return;
+                }
+                document.body.classList.add("authenticated");
+            } catch (error) {
+                console.error("Értesítések auth hiba:", error);
+                window.location.href = "../auth/login.html";
+            }
+        });
+    </script>
+    <script src="notifications.js"></script>
+</body>
+</html>
