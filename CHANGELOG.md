@@ -1,3 +1,12 @@
+## 1.7.1 — 2026-09-22
+
+### Értesítési Inbox
+- Új **Értesítések** oldal az alkalmazáson belül.
+- A feladat-emlékeztetők most az Inboxba is bekerülnek.
+- Olvasatlan értesítések száma megjelenik a főmenüben és a főoldali kártyán.
+- Értesítések olvasottként jelölhetők, illetve az összes értesítés törölhető.
+- A Service Worker cache frissítve az új oldalhoz.
+
 ## 1.7.0 — 2026-09-22
 
 ### ⏰ Feladatok: határidő és emlékeztető
