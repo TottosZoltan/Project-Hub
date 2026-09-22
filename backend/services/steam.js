@@ -496,5 +496,6 @@ module.exports = {
     getSteamPlayerSummary,
     steamApiGet,
     getSteamImageUrls,
-    getSteamGridImage
+    getSteamGridImage,
+    getSteamGridImages
 };
