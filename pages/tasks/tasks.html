@@ -230,6 +230,31 @@
             </div>
 
 
+            <!-- HATÁRIDŐ + EMLÉKEZTETŐ -->
+
+            <div class="task-editor-options task-datetime-options">
+
+                <div class="task-option task-option-wide">
+                    <label for="taskDueDate">Határidő</label>
+                    <input id="taskDueDate" type="datetime-local">
+                    <small>Ha nincs megadva, a feladatnak nincs határideje.</small>
+                </div>
+
+                <div class="task-option task-option-wide">
+                    <label for="taskReminder">Figyelmeztetés</label>
+                    <select id="taskReminder">
+                        <option value="none">Nincs figyelmeztetés</option>
+                        <option value="5">5 perccel előtte</option>
+                        <option value="15">15 perccel előtte</option>
+                        <option value="30" selected>30 perccel előtte</option>
+                        <option value="60">1 órával előtte</option>
+                        <option value="1440">1 nappal előtte</option>
+                    </select>
+                    <small>A telefonos értesítéshez az Értesítések engedélyezése szükséges.</small>
+                </div>
+
+            </div>
+
             <!-- MENTÉS -->
 
             <button
