@@ -143,6 +143,18 @@
         }
     }
 
+    async function scheduleDelayedPushTest() {
+        const token = getAuthToken();
+        if (!token) throw new Error("Bejelentkezés szükséges.");
+        const response = await fetch("https://project-hub-backend-1.onrender.com/api/notifications/test-push-delayed", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + token }
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || "A késleltetett teszt sikertelen.");
+        return result;
+    }
+
     async function sendServerPushTest() {
         const token = getAuthToken();
         if (!token) throw new Error("Bejelentkezés szükséges.");
@@ -248,6 +260,7 @@
         ensurePushSubscription,
         disablePushSubscription,
         sendServerPushTest,
+        scheduleDelayedPushTest,
         getInbox,
         addInboxNotification,
         markInboxRead,
