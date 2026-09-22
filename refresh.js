@@ -5,7 +5,7 @@
 (function () {
     "use strict";
 
-    const APP_VERSION = "1.6.3";
+    const APP_VERSION = "1.6.4";
     const PULL_THRESHOLD = 72;
     const EDGE_SWIPE_THRESHOLD = 55;
     const EDGE_ZONE = 28;
