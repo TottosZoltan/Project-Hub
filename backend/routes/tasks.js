@@ -524,6 +524,18 @@ router.put(
                     ? req.body.pinned === true
                     : existingTask.pinned;
 
+            const reminderMinutes =
+                req.body.reminder_minutes !== undefined
+                    ? (req.body.reminder_minutes === null || req.body.reminder_minutes === "" ? null : Number(req.body.reminder_minutes))
+                    : (req.body.reminderMinutes !== undefined ? (req.body.reminderMinutes === null || req.body.reminderMinutes === "" ? null : Number(req.body.reminderMinutes)) : existingTask.reminder_minutes);
+
+            if (reminderMinutes !== null && (!Number.isInteger(reminderMinutes) || reminderMinutes < 0 || reminderMinutes > 10080)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Érvénytelen emlékeztető idő."
+                });
+            }
+
 
             let dueDate =
                 existingTask.due_date;
