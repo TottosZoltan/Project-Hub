@@ -1101,6 +1101,73 @@ router.get(
 );
 
 
+
+// ======================================================
+// STEAMGRIDDB IMAGE SEARCH BY GAME NAME
+// ======================================================
+// Used by the custom-game image picker. The exact text entered
+// into the dedicated search-name field is sent to SteamGridDB.
+// ======================================================
+
+router.get(
+    "/api/steam/grid-search",
+    async function (req, res) {
+        try {
+            const user = await getAuthenticatedSteamUser(req);
+
+            if (!user) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Érvényes bejelentkezés szükséges."
+                });
+            }
+
+            const name = String(req.query.name || "").trim();
+
+            if (!name) {
+                return res.status(400).json({
+                    success: false,
+                    image: null,
+                    source: null,
+                    message: "A képkeresési név nem lehet üres."
+                });
+            }
+
+            if (!STEAMGRIDDB_API_KEY) {
+                return res.status(503).json({
+                    success: false,
+                    image: null,
+                    source: null,
+                    message: "A STEAMGRIDDB_API_KEY nincs beállítva."
+                });
+            }
+
+            // Itt közvetlenül a megadott keresési nevet küldjük az
+            // SGDB keresőnek. Nem Steam Store keresést használunk.
+            const image = await getSteamGridImage("", name);
+
+            return res.json({
+                success: Boolean(image),
+                image: image || null,
+                source: image ? "steamgriddb" : null,
+                query: name,
+                message: image
+                    ? "SteamGridDB kép megtalálva."
+                    : "A SteamGridDB nem talált használható képet ehhez a kereséshez."
+            });
+        } catch (error) {
+            console.error("STEAMGRIDDB NAME SEARCH HIBA:", error);
+
+            return res.status(502).json({
+                success: false,
+                image: null,
+                source: null,
+                message: "Nem sikerült SteamGridDB képet keresni."
+            });
+        }
+    }
+);
+
 // ======================================================
 // STEAMGRIDDB IMAGE FALLBACK
 // ======================================================
