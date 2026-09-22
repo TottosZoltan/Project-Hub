@@ -62,12 +62,13 @@ document.getElementById("generate").addEventListener("click", async () => {
       ["sign", "verify"]
     );
     const jwk = await crypto.subtle.exportKey("jwk", keyPair.privateKey);
-    if (!jwk.x || !jwk.y || !jwk.d) {
-      throw new Error("A böngésző nem tudta exportálni a kulcsot.");
+    const rawPublicKey = new Uint8Array(
+      await crypto.subtle.exportKey("raw", keyPair.publicKey)
+    );
+    if (rawPublicKey.length !== 65 || !jwk.d) {
+      throw new Error("Érvénytelen P-256 kulcspár.");
     }
-    const x = fromBase64Url(jwk.x);
-    const y = fromBase64Url(jwk.y);
-    const publicKey = toBase64Url(new Uint8Array([4, ...x, ...y]));
+    const publicKey = toBase64Url(rawPublicKey);
     document.getElementById("publicKey").value = publicKey;
     document.getElementById("privateKey").value = jwk.d;
     document.getElementById("result").hidden = false;
