@@ -35,33 +35,49 @@ button:disabled{opacity:.6}
 </div>
 </div>
 <script>
-const fromBase64Url = value => {\n  const base64=value.replace(/-/g,"+").replace(/_/g,"/");\n  const padded=base64+"=".repeat((4-base64.length%4)%4);\n  const binary=atob(padded);\n  return Uint8Array.from(binary,c=>c.charCodeAt(0));\n};\nconst toBase64Url = bytes => {
-  let binary="";
-  const chunk=0x8000;
-  for(let i=0;i<bytes.length;i+=chunk) binary += String.fromCharCode(...bytes.subarray(i,i+chunk));
-  return btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+const fromBase64Url = (value) => {
+  const base64 = value.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = base64 + "=".repeat((4 - base64.length % 4) % 4);
+  const binary = atob(padded);
+  return Uint8Array.from(binary, c => c.charCodeAt(0));
 };
-document.getElementById("generate").addEventListener("click",async()=>{
-  const button=document.getElementById("generate");
-  button.disabled=true; button.textContent="Generálás…";
-  try{
-    const keyPair=await crypto.subtle.generateKey(
-      {name:"ECDSA",namedCurve:"P-256"},true,["sign","verify"]
+const toBase64Url = (bytes) => {
+  let binary = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  }
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+};
+document.getElementById("generate").addEventListener("click", async () => {
+  const button = document.getElementById("generate");
+  button.disabled = true;
+  button.textContent = "Generálás…";
+  try {
+    if (!window.crypto || !window.crypto.subtle) {
+      throw new Error("A böngésző nem támogatja a biztonságos kulcsgenerálást.");
+    }
+    const keyPair = await crypto.subtle.generateKey(
+      { name: "ECDSA", namedCurve: "P-256" },
+      true,
+      ["sign", "verify"]
     );
-    const jwk=await crypto.subtle.exportKey("jwk",keyPair.privateKey);
-    if(!jwk.x||!jwk.y||!jwk.d) throw new Error("A böngésző nem tudta exportálni a kulcsot.");
-    const x=Uint8Array.from(atob(jwk.x.replace(/-/g,"+").replace(/_/g,"/")+"==".slice((jwk.x.length+3)%4)),c=>c.charCodeAt(0));
-    const y=Uint8Array.from(atob(jwk.y.replace(/-/g,"+").replace(/_/g,"/")+"==".slice((jwk.y.length+3)%4)),c=>c.charCodeAt(0));
-    const d=jwk.d.replace(/-/g,"+").replace(/_/g,"/");
-    const publicKey=toBase64Url(new Uint8Array([4,...x,...y]));
-    document.getElementById("publicKey").value=publicKey;
-    document.getElementById("privateKey").value=jwk.d;
-    document.getElementById("result").hidden=false;
-    button.textContent="Új kulcspár generálása";
-  }catch(error){
-    alert("A generálás nem sikerült: "+error.message);
-    button.textContent="VAPID kulcsok generálása";
-  }finally{button.disabled=false}
+    const jwk = await crypto.subtle.exportKey("jwk", keyPair.privateKey);
+    if (!jwk.x || !jwk.y || !jwk.d) {
+      throw new Error("A böngésző nem tudta exportálni a kulcsot.");
+    }
+    const x = fromBase64Url(jwk.x);
+    const y = fromBase64Url(jwk.y);
+    const publicKey = toBase64Url(new Uint8Array([4, ...x, ...y]));
+    document.getElementById("publicKey").value = publicKey;
+    document.getElementById("privateKey").value = jwk.d;
+    document.getElementById("result").hidden = false;
+    button.textContent = "Új kulcspár generálása";
+  } catch (error) {
+    alert("A generálás nem sikerült: " + (error.message || error));
+    button.textContent = "VAPID kulcsok generálása";
+  } finally {
+    button.disabled = false;
+  }
 });
 </script>
 </body>
