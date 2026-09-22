@@ -165,3 +165,14 @@
         border-radius: 11px;
     }
 }
+
+
+.notification-action.test {
+    border-color: rgba(124,140,255,.45);
+    background: rgba(124,140,255,.12);
+    color: var(--text);
+}
+.notification-action:disabled {
+    opacity: .55;
+    cursor: wait;
+}
