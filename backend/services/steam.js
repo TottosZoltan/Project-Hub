@@ -425,11 +425,33 @@ async function getSteamGridImages(appId, gameName = "", limit = 3) {
 
     function horizontalImages(payload) {
         const values = Array.isArray(payload?.data) ? payload.data : [];
-        const horizontal = values.filter(item =>
-            item && typeof item.url === "string" &&
-            ["920x430", "460x215"].includes(String(item.dimensions || ""))
-        );
-        return horizontal.map(item => item.url).filter(Boolean).slice(0, max);
+        const horizontal = values.filter(item => {
+            if (!item || typeof item.url !== "string") return false;
+
+            // SGDB responses have used both a dimensions string and
+            // width/height fields. Support both so a response-format
+            // change cannot silently break image selection.
+            const dimensions = String(item.dimensions || "").replace(/\\s/g, "");
+            const width = Number(item.width);
+            const height = Number(item.height);
+
+            return (
+                dimensions === "920x430" ||
+                dimensions === "460x215" ||
+                (width === 920 && height === 430) ||
+                (width === 460 && height === 215)
+            );
+        });
+
+        // Keep the preferred large artwork first, but never fail just
+        // because SGDB returned metadata without the dimensions fields.
+        const fallback = values
+            .filter(item => item && typeof item.url === "string")
+            .map(item => item.url)
+            .filter(Boolean);
+
+        const preferred = horizontal.map(item => item.url).filter(Boolean);
+        return [...new Set([...preferred, ...fallback])].slice(0, max);
     }
 
     try {
