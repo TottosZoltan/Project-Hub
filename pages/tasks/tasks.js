@@ -59,6 +59,9 @@ const taskStatusFilter =
 const taskCategoryFilter =
     document.getElementById("taskCategoryFilter");
 
+const taskScheduleFilter =
+    document.getElementById("taskScheduleFilter");
+
 const taskSort =
     document.getElementById("taskSort");
 
@@ -505,7 +508,15 @@ async function createTask(
                         dueDate:
                             dueDate || null,
 
+                        due_date:
+                            dueDate || null,
+
                         reminderMinutes:
+                            reminderMinutes === "none"
+                                ? null
+                                : Number(reminderMinutes),
+
+                        reminder_minutes:
                             reminderMinutes === "none"
                                 ? null
                                 : Number(reminderMinutes)
@@ -713,6 +724,9 @@ function getFilteredTasks() {
     const selectedCategory =
         taskCategoryFilter.value;
 
+    const selectedSchedule =
+        taskScheduleFilter?.value || "all";
+
 
     let filteredTasks =
         tasks.filter(
@@ -767,6 +781,20 @@ function getFilteredTasks() {
 
                 }
 
+                const hasSchedule = !!task.dueDate;
+
+                if (selectedSchedule === "scheduled" && !hasSchedule) {
+                    return false;
+                }
+
+                if (selectedSchedule === "unscheduled" && hasSchedule) {
+                    return false;
+                }
+
+                if (selectedSchedule === "overdue" &&
+                    (!hasSchedule || task.completed || new Date(task.dueDate).getTime() >= Date.now())) {
+                    return false;
+                }
 
                 return true;
 
