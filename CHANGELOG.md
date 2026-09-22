@@ -1,3 +1,17 @@
+## 1.7.0 — 2026-09-22
+
+### ⏰ Feladatok: határidő és emlékeztető
+- A feladatokhoz határidő és előzetes emlékeztető adható.
+- A szerkesztőben 5 perc, 15 perc, 30 perc, 1 óra és 1 napos figyelmeztetés választható.
+- A lejárt határidők külön vizuális jelzést kapnak.
+- A frontend elküldi a dueDate és reminderMinutes mezőket a Tasks API-nak.
+
+### 🔔 Értesítések
+- Új értesítési beállítások kerültek a Profil oldalra.
+- A felhasználó külön engedélyezheti és kikapcsolhatja a Project Hub értesítéseit.
+- A feladat-emlékeztetők külön kapcsolhatóak.
+- Service worker push-kezelés előkészítve a háttérben érkező telefonos értesítésekhez.
+
 ## 1.6.3 — 2026-09-21
 
 ### 🎮 SteamGridDB automatikus kép-fallback
