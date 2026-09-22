@@ -1091,21 +1091,38 @@ function formatDueDate(value) {
 
 function scheduleTaskReminder(task) {
     if (!window.ProjectHubNotifications || !task.dueDate || task.completed) return;
+
     const settings = window.ProjectHubNotifications.getSettings();
     if (!settings.enabled || !settings.taskReminders || task.reminderMinutes == null || task.reminderMinutes === "none") return;
+
     const due = new Date(task.dueDate).getTime();
     const reminder = due - Number(task.reminderMinutes) * 60000;
-    const delay = reminder - Date.now();
-    if (delay <= 0 || delay > 2147483647) return;
     const key = "projectHubReminder:" + task.id + ":" + due + ":" + task.reminderMinutes;
+
+    if (!Number.isFinite(due) || !Number.isFinite(reminder) || reminder <= Date.now()) return;
     if (sessionStorage.getItem(key)) return;
-    sessionStorage.setItem(key, "1");
-    setTimeout(function () {
-        window.ProjectHubNotifications.notify(
-            "Project Hub — emlékeztető",
-            { body: task.title + "\nHatáridő: " + formatDueDate(task.dueDate), tag: "task-" + task.id }
-        );
-    }, delay);
+
+    function arm() {
+        const remaining = reminder - Date.now();
+
+        if (remaining <= 0) {
+            window.ProjectHubNotifications.notify(
+                "Project Hub — emlékeztető",
+                {
+                    body: task.title + "\nHatáridő: " + formatDueDate(task.dueDate),
+                    tag: "task-" + task.id,
+                    requireInteraction: true
+                }
+            ).then(function (shown) {
+                if (shown) sessionStorage.setItem(key, "1");
+            });
+            return;
+        }
+
+        setTimeout(arm, Math.min(remaining, 2147483647));
+    }
+
+    arm();
 }
 
 // =========================================
@@ -2257,6 +2274,26 @@ if (
 ) {
 
     taskCategoryFilter.addEventListener(
+        "change",
+        function () {
+
+            renderTasks();
+
+        }
+    );
+
+}
+
+
+// =========================================
+// ÜTEMEZÉS SZŰRÉS
+// =========================================
+
+if (
+    taskScheduleFilter
+) {
+
+    taskScheduleFilter.addEventListener(
         "change",
         function () {
 
