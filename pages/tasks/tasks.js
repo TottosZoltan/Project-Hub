@@ -2479,3 +2479,7 @@ function initializeTasksHamburgerCompatibility() {
 initializeTasksHamburgerCompatibility();
 
 loadTasks();
+
+window.addEventListener("focus", function () {
+    tasks.forEach(scheduleTaskReminder);
+});
