@@ -86,15 +86,20 @@ async function processScheduledPushTests() {
         ORDER BY test_scheduled_at ASC
         LIMIT 100
     `);
-    for (const item of result.rows) {
-        const pushResult = await sendPushToUser(item.user_id, {
+    // A teszt időpontja subscriptionönként van tárolva, de egy usernek csak
+    // egyszer küldünk push-t. A korábbi megoldás minden subscription sorhoz
+    // meghívta a sendPushToUser()-t, ami az összes eszközre újra elküldte,
+    // ezért ugyanaz az értesítés többször érkezhetett meg.
+    const userIds = [...new Set(result.rows.map((item) => item.user_id))];
+    for (const userId of userIds) {
+        const pushResult = await sendPushToUser(userId, {
             title: "Project Hub — teszt értesítés",
             body: "Ez az 1 perccel ezelőtt beállított teszt. Az app bezárva is működik. ✅",
             url: "/Project-Hub/pages/profile/profile.html",
             tag: "project-hub-delayed-test"
         });
         if (pushResult.sent > 0) {
-            await pool.query("UPDATE push_subscriptions SET test_scheduled_at = NULL WHERE id = $1", [item.id]);
+            await pool.query("UPDATE push_subscriptions SET test_scheduled_at = NULL WHERE user_id = $1 AND test_scheduled_at IS NOT NULL AND test_scheduled_at <= CURRENT_TIMESTAMP", [userId]);
         }
     }
 }
