@@ -324,7 +324,7 @@ async function getSteamGridImage(appId, gameName = "") {
             const values = Array.isArray(payload?.data) ? payload.data : [];
             const horizontal = values.filter(item => {
                 if (!item || typeof item.url !== "string") return false;
-                const dimensions = String(item.dimensions || "").replace(/\\s/g, "");
+                const dimensions = String(item.dimensions || "").replace(/\s/g, "");
                 const width = Number(item.width);
                 const height = Number(item.height);
                 return (
@@ -337,11 +337,11 @@ async function getSteamGridImage(appId, gameName = "") {
 
             const preferred =
                 horizontal.find(item =>
-                    String(item.dimensions || "").replace(/\\s/g, "") === "920x430" ||
+                    String(item.dimensions || "").replace(/\s/g, "") === "920x430" ||
                     (Number(item.width) === 920 && Number(item.height) === 430)
                 ) ||
                 horizontal.find(item =>
-                    String(item.dimensions || "").replace(/\\s/g, "") === "460x215" ||
+                    String(item.dimensions || "").replace(/\s/g, "") === "460x215" ||
                     (Number(item.width) === 460 && Number(item.height) === 215)
                 ) ||
                 values.find(item => typeof item?.url === "string");
@@ -444,7 +444,7 @@ async function getSteamGridImages(appId, gameName = "", limit = 3) {
             // SGDB responses have used both a dimensions string and
             // width/height fields. Support both so a response-format
             // change cannot silently break image selection.
-            const dimensions = String(item.dimensions || "").replace(/\\s/g, "");
+            const dimensions = String(item.dimensions || "").replace(/\s/g, "");
             const width = Number(item.width);
             const height = Number(item.height);
 
