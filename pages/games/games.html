@@ -31,7 +31,6 @@
                 <h2>A játékaid, egy helyen.</h2>
                 <p>Játékidő, könyvtár és achievementek egy gyors, mobilbarát nézetben.</p>
             </div>
-            
         </section>
 
         <section class="steam-account-card" aria-labelledby="steamAccountTitle">
@@ -100,12 +99,26 @@
         <div class="custom-game-overlay"></div>
         <div class="custom-game-content" role="dialog" aria-modal="true" aria-labelledby="customGameTitle">
             <button id="closeCustomGameButton" class="game-details-close" type="button" aria-label="Bezárás"><i class="fi fi-br-cross" aria-hidden="true"></i></button>
-            <p class="eyebrow">EGYÉNI KÖNYVTÁR</p>
+            <p class="eyebrow">EGYÉB JÁTÉK</p>
             <h2 id="customGameTitle">Játék hozzáadása</h2>
-            <p>Adj hozzá olyan játékot is, ami nincs a Steam könyvtáradban.</p>
+            <p>Írd be a játék nevét, és megpróbálunk automatikusan képet keresni hozzá. Ha inkább saját képet használnál, az URL-t továbbra is megadhatod.</p>
             <form id="customGameForm" class="custom-game-form">
                 <label>Játék neve<input id="customGameName" name="name" type="text" maxlength="80" required placeholder="Pl. Minecraft"></label>
-                <label>Kép URL-je <span>(opcionális)</span><input id="customGameImage" name="image" type="url" maxlength="500" placeholder="https://..."></label>
+
+                <div class="custom-image-search-box">
+                    <div class="custom-image-search-head">
+                        <label for="customGameImage">Játék képe <span>(automatikus vagy saját)</span></label>
+                        <button id="customGameImageSearch" type="button" class="custom-image-search-button"><i class="fi fi-br-search" aria-hidden="true"></i> Kép keresése</button>
+                    </div>
+                    <div class="custom-image-input-row">
+                        <input id="customGameImage" name="image" type="url" maxlength="500" placeholder="Automatikusan kereshető, vagy https://...">
+                    </div>
+                    <div id="customGameImageStatus" class="custom-image-status" aria-live="polite">A név elhagyásakor automatikusan megpróbáljuk megtalálni a Steam/SteamGridDB képet.</div>
+                    <div id="customGameImagePreview" class="custom-image-preview" hidden>
+                        <img id="customGameImagePreviewImg" src="" alt="Játék képének előnézete">
+                    </div>
+                </div>
+
                 <label>Játékidő percben <span>(opcionális)</span><input id="customGameMinutes" name="minutes" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></label>
                 <label>Állapot<select id="customGameStatus" name="status">
                     <option value="backlog">Játszani szeretném</option>
