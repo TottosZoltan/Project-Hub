@@ -1,3 +1,13 @@
+## 1.6.5 — 2026-09-22
+
+### 🔔 Háttérben is működő értesítések és mobil fejléc javítás
+- A Project Hub most Web Push alapú értesítési feliratkozást kezel, így a telefonos értesítés az app bezárása után is kézbesíthető.
+- A feladat-emlékeztetők szerveroldalon is tárolódnak, és a backend automatikusan ellenőrzi az esedékes emlékeztetőket.
+- A Profil → Értesítések részen a push kapcsolat engedélyezhető, tesztelhető és kikapcsolható.
+- Az elavult push subscriptionök automatikusan törlődnek.
+- A felső safe-area háttér egységesen sötét, így mobilon nem jelenik meg fehér csík a fejléc felett.
+
+
 ## 1.6.4 — 2026-09-22
 
 ### ⚡ Steam játéklista hibajavítás és gyorsítás
