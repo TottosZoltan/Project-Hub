@@ -145,8 +145,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function setCustomImageStatus(message, type = "") {
         if (!customGameImageStatus) return;
-        customGameImageStatus.textContent = message;
-        customGameImageStatus.className = "custom-image-status" + (type ? " " + type : "");
+        const icons = { idle: "○", searching: "⌛", success: "✓", error: "!" };
+        customGameImageStatus.className = "custom-image-status " + (type || "idle");
+        customGameImageStatus.innerHTML =
+            '<span class="custom-image-status-icon">' + (icons[type] || icons.idle) + '</span>' +
+            '<span>' + escapeHtml(message) + '</span>';
     }
 
     function showCustomImagePreview(url) {
@@ -173,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (customGameImageSearch) customGameImageSearch.disabled = true;
-        setCustomImageStatus("Játék keresése a Steam adatbázisában…");
+        setCustomImageStatus("Keresés folyamatban: „" + name + "” → Steam → SteamGridDB…", "searching");
 
         try {
             const searchUrl = "https://store.steampowered.com/api/storesearch/?term=" +
