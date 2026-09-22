@@ -228,7 +228,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const result = await response.json().catch(() => ({}));
 
-            if (!response.ok || !result.success || !result.image) {
+            const images = Array.isArray(result.images)
+                ? result.images.filter(Boolean).slice(0, 3)
+                : (result.image ? [result.image] : []);
+
+            if (!response.ok || !result.success || !images.length) {
                 setCustomImageStatus(
                     result.message || "A SteamGridDB nem talált képet ehhez a névhez.",
                     "error"
@@ -238,12 +242,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 return null;
             }
 
-            const image = result.image;
+            const image = images[0];
 
             customGameImage.value = image;
             showCustomImagePreview(image);
+            showCustomImageChoices(images, image);
             setCustomImageStatus(
-                "✓ Kép megtalálva a SteamGridDB-ben: „" + name + "”",
+                images.length > 1
+                    ? "✓ " + images.length + " kép megtalálva a SteamGridDB-ben – válassz közülük."
+                    : "✓ Kép megtalálva a SteamGridDB-ben: „" + name + "”",
                 "success"
             );
 
