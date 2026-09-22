@@ -262,73 +262,120 @@ function withTimeout(promise, ms) {
  * (460x215 / 920x430). The frontend keeps the image inside its existing
  * 16:9 media frame so the card/detail layout remains consistent.
  */
-async function getSteamGridImage(appId) {
-    const id = String(appId || "");
-    if (!id) return null;
+async function getSteamGridImage(appId, gameName = "") {
+    const id = String(appId || "").trim();
+    const name = String(gameName || "").trim();
 
-    if (!STEAMGRIDDB_API_KEY) {
-        return null;
-    }
+    if (!id && !name) return null;
 
-    if (steamGridImageCache.has(id)) {
-        return await steamGridImageCache.get(id);
+    const cacheKey = id ? "steam:" + id : "name:" + name.toLowerCase();
+    if (steamGridImageCache.has(cacheKey)) {
+        return await steamGridImageCache.get(cacheKey);
     }
 
     const request = (async () => {
-        try {
-            const url =
-                "https://www.steamgriddb.com/api/v2/grids/steam/" +
-                encodeURIComponent(id) +
-                "?dimensions=460x215,920x430&types=static";
+        if (!STEAMGRIDDB_API_KEY) {
+            console.warn("SteamGridDB: STEAMGRIDDB_API_KEY nincs beállítva.");
+            return null;
+        }
 
+        const headers = {
+            Authorization: "Bearer " + STEAMGRIDDB_API_KEY,
+            Accept: "application/json"
+        };
+
+        async function requestJson(url) {
             const response = await withTimeout(
-                fetch(url, {
-                    headers: {
-                        Authorization: "Bearer " + STEAMGRIDDB_API_KEY,
-                        Accept: "application/json"
-                    }
-                }),
-                6000
+                fetch(url, { headers }),
+                8000
             );
 
             if (!response.ok) {
-                console.warn(
-                    "SteamGridDB HTTP hiba:",
-                    response.status
-                );
+                console.warn("SteamGridDB HTTP hiba:", response.status, url);
                 return null;
             }
 
-            const payload = await response.json();
-            const values = Array.isArray(payload?.data)
-                ? payload.data
-                : Array.isArray(payload)
-                    ? payload
-                    : [];
+            const payload = await response.json().catch(() => null);
+            return payload && payload.success !== false ? payload : null;
+        }
 
-            // Prefer the widest horizontal artwork, then fall back to the
-            // first valid URL returned by the API.
+        function firstHorizontalImage(payload) {
+            const values = Array.isArray(payload?.data) ? payload.data : [];
+            const horizontal = values.filter(item =>
+                item &&
+                typeof item.url === "string" &&
+                ["920x430", "460x215"].includes(String(item.dimensions || ""))
+            );
+
             const preferred =
-                values.find(item => item?.dimensions === "920x430") ||
-                values.find(item => item?.dimensions === "460x215") ||
+                horizontal.find(item => String(item.dimensions) === "920x430") ||
+                horizontal.find(item => String(item.dimensions) === "460x215") ||
                 values.find(item => typeof item?.url === "string");
 
-            return typeof preferred?.url === "string"
-                ? preferred.url
-                : null;
+            return typeof preferred?.url === "string" ? preferred.url : null;
+        }
+
+        try {
+            // First try the Steam AppID directly. This is the most reliable
+            // mapping and avoids title ambiguity.
+            if (id) {
+                const directUrl =
+                    "https://www.steamgriddb.com/api/v2/grids/steam/" +
+                    encodeURIComponent(id) +
+                    "?dimensions=920x430,460x215&types=static";
+
+                const directPayload = await requestJson(directUrl);
+                const directImage = firstHorizontalImage(directPayload);
+                if (directImage) return directImage;
+            }
+
+            // Some Steam titles are not mapped correctly by SGDB's Steam-ID
+            // endpoint. Fall back to SGDB's title search, then query the
+            // matching SGDB game ID.
+            if (name) {
+                const searchUrl =
+                    "https://www.steamgriddb.com/api/v2/search/autocomplete/" +
+                    encodeURIComponent(name);
+
+                const searchPayload = await requestJson(searchUrl);
+                const matches = Array.isArray(searchPayload?.data)
+                    ? searchPayload.data
+                    : [];
+
+                const normalizedName = name.toLocaleLowerCase("hu-HU");
+                const match =
+                    matches.find(item =>
+                        String(item?.name || "").trim().toLocaleLowerCase("hu-HU") === normalizedName
+                    ) ||
+                    matches.find(item =>
+                        Array.isArray(item?.types) && item.types.includes("steam")
+                    ) ||
+                    matches[0];
+
+                if (match?.id) {
+                    const gameUrl =
+                        "https://www.steamgriddb.com/api/v2/grids/game/" +
+                        encodeURIComponent(match.id) +
+                        "?dimensions=920x430,460x215&types=static";
+
+                    const gamePayload = await requestJson(gameUrl);
+                    const gameImage = firstHorizontalImage(gamePayload);
+                    if (gameImage) return gameImage;
+                }
+            }
         } catch (error) {
             console.warn(
                 "SteamGridDB artwork lookup failed:",
                 error.message
             );
-            return null;
         }
+
+        return null;
     })();
 
-    steamGridImageCache.set(id, request);
+    steamGridImageCache.set(cacheKey, request);
     return await request;
 }
-
 
 // ======================================================
 // OWNER TAG
