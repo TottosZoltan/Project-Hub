@@ -31,6 +31,7 @@
 
 html {
     min-height: 100%;
+    background-color: var(--bg) !important;
     background: var(--bg);
     color-scheme: dark;
     scroll-behavior: smooth;
@@ -38,6 +39,7 @@ html {
 
 body {
     min-height: 100vh;
+    background-color: var(--bg) !important;
     overflow-x: hidden;
     background:
         radial-gradient(circle at 85% -10%, rgba(91, 105, 255, 0.14), transparent 34rem),
