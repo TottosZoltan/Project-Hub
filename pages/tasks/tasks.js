@@ -272,6 +272,32 @@ function escapeHtml(value) {
 // FELADAT NORMALIZÁLÁS
 // =========================================
 
+const TASK_SCHEDULE_STORAGE_KEY = "projectHubTaskSchedules:" + (getAuthToken() || "guest").slice(0, 24);
+
+function getLocalTaskSchedules() {
+    try { return JSON.parse(localStorage.getItem(TASK_SCHEDULE_STORAGE_KEY) || "{}"); }
+    catch (_) { return {}; }
+}
+
+function saveLocalTaskSchedule(taskId, dueDate, reminderMinutes) {
+    const schedules = getLocalTaskSchedules();
+    if (!dueDate) delete schedules[String(taskId)];
+    else schedules[String(taskId)] = {
+        dueDate: dueDate,
+        reminderMinutes: reminderMinutes === "none" ? null : Number(reminderMinutes)
+    };
+    localStorage.setItem(TASK_SCHEDULE_STORAGE_KEY, JSON.stringify(schedules));
+}
+
+function applyLocalTaskSchedule(task) {
+    const local = getLocalTaskSchedules()[String(task.id)];
+    if (!local) return task;
+    return Object.assign({}, task, {
+        dueDate: local.dueDate,
+        reminderMinutes: local.reminderMinutes
+    });
+}
+
 function normalizeTask(task) {
 
     return {
@@ -425,9 +451,9 @@ async function loadTasks() {
         ) {
 
             tasks =
-                result.tasks.map(
-                    normalizeTask
-                );
+                result.tasks.map(function (task) {
+                    return applyLocalTaskSchedule(normalizeTask(task));
+                });
 
         }
 
@@ -1651,7 +1677,15 @@ if (
                                 dueDate:
                                     dueDate || null,
 
+                                due_date:
+                                    dueDate || null,
+
                                 reminderMinutes:
+                                    reminderMinutes === "none"
+                                        ? null
+                                        : Number(reminderMinutes),
+
+                                reminder_minutes:
                                     reminderMinutes === "none"
                                         ? null
                                         : Number(reminderMinutes)
@@ -1659,6 +1693,8 @@ if (
                             }
                         );
 
+
+                    saveLocalTaskSchedule(editingTaskId, dueDate, reminderMinutes);
 
                     if (updatedTask) {
 
@@ -1714,10 +1750,10 @@ if (
 
                     if (newTask) {
 
+                        const normalizedNewTask = normalizeTask(newTask);
+                        saveLocalTaskSchedule(normalizedNewTask.id, dueDate, reminderMinutes);
                         tasks.unshift(
-                            normalizeTask(
-                                newTask
-                            )
+                            applyLocalTaskSchedule(normalizedNewTask)
                         );
 
                     }
