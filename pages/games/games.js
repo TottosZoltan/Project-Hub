@@ -168,61 +168,69 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function findCustomGameImage() {
         const displayName = customGameName?.value.trim();
-        const name = customGameSearchName?.value.trim() || displayName;
+        const name = customGameSearchName?.value.trim();
+
         if (!displayName) {
             setCustomImageStatus("Előbb írd be a megjelenített játéknevet.", "error");
             customGameName?.focus();
             return null;
         }
 
+        if (!name) {
+            setCustomImageStatus("Előbb írd be a képkeresési nevet.", "error");
+            customGameSearchName?.focus();
+            return null;
+        }
+
         if (customGameImageSearch) customGameImageSearch.disabled = true;
-        setCustomImageStatus("Keresés folyamatban: „" + name + "” → Steam → SteamGridDB…", "searching");
+        setCustomImageStatus("Keresés folyamatban a SteamGridDB-ben: „" + name + "”…", "searching");
 
         try {
-            const searchUrl = "https://store.steampowered.com/api/storesearch/?term=" +
-                encodeURIComponent(name) + "&cc=hu&l=hungarian";
-            const response = await fetch(searchUrl, { cache: "no-store" });
-            if (!response.ok) throw new Error("steam_search_failed");
+            const searchUrl =
+                BACKEND_URL +
+                "/api/steam/grid-search?name=" +
+                encodeURIComponent(name);
 
-            const result = await response.json();
-            const items = Array.isArray(result.items) ? result.items : [];
-            if (!items.length) {
-                setCustomImageStatus("Nem találtam pontos találatot. Megadhatsz saját kép URL-t.", "error");
+            const response = await fetch(searchUrl, {
+                method: "GET",
+                headers: headers(),
+                credentials: "include",
+                cache: "no-store"
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok || !result.success || !result.image) {
+                setCustomImageStatus(
+                    result.message || "A SteamGridDB nem talált képet ehhez a névhez.",
+                    "error"
+                );
+                showCustomImagePreview("");
                 return null;
             }
 
-            const match = items.find(item =>
-                String(item.name || "").trim().toLocaleLowerCase("hu-HU") === name.toLocaleLowerCase("hu-HU")
-            ) || items[0];
-
-            const appid = match.appid ? String(match.appid) : "";
-            let image = "";
-
-            if (appid) {
-                image = await getSteamGridImage({ appid }) || "";
-            }
-
-            if (!image) {
-                image = match.header || match.tiny_image || "";
-            }
-
-            if (!image) {
-                setCustomImageStatus("A játékot megtaláltam, de nem érkezett hozzá kép. Adj meg saját képet URL-lel.", "error");
-                return null;
-            }
+            const image = result.image;
 
             customGameImage.value = image;
             showCustomImagePreview(image);
             setCustomImageStatus(
-                "Kép megtalálva: " + (match.name || name) + (image.includes("steamgriddb") ? " · SteamGridDB" : " · Steam"),
+                "✓ Kép megtalálva a SteamGridDB-ben: „" + name + "”",
                 "success"
             );
+
             return image;
         } catch (error) {
-            console.warn("Automatikus egyéni játék képkeresés sikertelen:", error);
-            setCustomImageStatus("Az automatikus keresés most nem érhető el. Használhatsz saját kép URL-t.", "error");
+            console.warn("SteamGridDB képkeresés sikertelen:", error);
+            setCustomImageStatus(
+                "Nem sikerült elérni a SteamGridDB képkeresést. Ellenőrizd a szerver kapcsolatát és az API-kulcsot.",
+                "error"
+            );
+            showCustomImagePreview("");
             return null;
         } finally {
+            if (customGameImageSearch) customGameImageSearch.disabled = false;
+        }
+    } finally {
             if (customGameImageSearch) customGameImageSearch.disabled = false;
         }
     }
