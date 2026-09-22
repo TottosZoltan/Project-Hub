@@ -398,6 +398,79 @@ async function getSteamGridImage(appId, gameName = "") {
     return await request;
 }
 
+
+// ======================================================
+// STEAMGRIDDB — ELSŐ 3 KÉP (EGYÉB JÁTÉKOK)
+// ======================================================
+
+async function getSteamGridImages(appId, gameName = "", limit = 3) {
+    const id = String(appId || "").trim();
+    const name = String(gameName || "").trim();
+    const max = Math.max(1, Math.min(3, Number(limit) || 3));
+    if (!id && !name) return [];
+
+    if (!STEAMGRIDDB_API_KEY) return [];
+
+    const headers = {
+        Authorization: "Bearer " + STEAMGRIDDB_API_KEY,
+        Accept: "application/json"
+    };
+
+    async function requestJson(url) {
+        const response = await withTimeout(fetch(url, { headers }), 8000);
+        if (!response.ok) return null;
+        const payload = await response.json().catch(() => null);
+        return payload && payload.success !== false ? payload : null;
+    }
+
+    function horizontalImages(payload) {
+        const values = Array.isArray(payload?.data) ? payload.data : [];
+        const horizontal = values.filter(item =>
+            item && typeof item.url === "string" &&
+            ["920x430", "460x215"].includes(String(item.dimensions || ""))
+        );
+        return horizontal.map(item => item.url).filter(Boolean).slice(0, max);
+    }
+
+    try {
+        let urls = [];
+        if (id) {
+            const direct = await requestJson(
+                "https://www.steamgriddb.com/api/v2/grids/steam/" +
+                encodeURIComponent(id) +
+                "?dimensions=920x430,460x215&types=static"
+            );
+            urls = horizontalImages(direct);
+        }
+
+        if (urls.length < max && name) {
+            const search = await requestJson(
+                "https://www.steamgriddb.com/api/v2/search/autocomplete/" +
+                encodeURIComponent(name)
+            );
+            const matches = Array.isArray(search?.data) ? search.data : [];
+            const normalizedName = name.toLocaleLowerCase("hu-HU");
+            const match =
+                matches.find(item => String(item?.name || "").trim().toLocaleLowerCase("hu-HU") === normalizedName) ||
+                matches.find(item => Array.isArray(item?.types) && item.types.includes("steam")) ||
+                matches[0];
+
+            if (match?.id) {
+                const gamePayload = await requestJson(
+                    "https://www.steamgriddb.com/api/v2/grids/game/" +
+                    encodeURIComponent(match.id) +
+                    "?dimensions=920x430,460x215&types=static"
+                );
+                urls = [...new Set([...urls, ...horizontalImages(gamePayload)])].slice(0, max);
+            }
+        }
+        return urls;
+    } catch (error) {
+        console.warn("SteamGridDB több kép keresés sikertelen:", error.message);
+        return [];
+    }
+}
+
 // ======================================================
 // OWNER TAG
 // ======================================================
