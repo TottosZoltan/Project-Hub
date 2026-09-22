@@ -73,7 +73,7 @@
     async function registerServiceWorker() {
         if (!("serviceWorker" in navigator)) return null;
         try {
-            return await navigator.serviceWorker.register("./sw.js", { scope: "./" });
+            return await navigator.serviceWorker.register("/Project-Hub/sw.js", { scope: "/Project-Hub/" });
         } catch (error) {
             console.warn("Service worker regisztráció sikertelen:", error);
             return null;
