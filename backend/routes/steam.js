@@ -9,7 +9,8 @@ const {
     getSteamPlayerSummary,
     steamApiGet,
     getSteamImageUrls,
-    getSteamGridImage
+    getSteamGridImage,
+    getSteamGridImages
 } = require("../services/steam");
 const router = require("express").Router();
 
@@ -1155,15 +1156,19 @@ router.get(
 
             // Itt közvetlenül a megadott keresési nevet küldjük az
             // SGDB keresőnek. Nem Steam Store keresést használunk.
-            const image = await getSteamGridImage("", name);
+            const images = await getSteamGridImages("", name, 3);
+            const image = images[0] || null;
 
             return res.json({
                 success: Boolean(image),
-                image: image || null,
+                image: image,
+                images,
                 source: image ? "steamgriddb" : null,
                 query: name,
                 message: image
-                    ? "SteamGridDB kép megtalálva."
+                    ? images.length > 1
+                        ? "SteamGridDB képek megtalálva."
+                        : "SteamGridDB kép megtalálva."
                     : "A SteamGridDB nem talált használható képet ehhez a kereséshez."
             });
         } catch (error) {
