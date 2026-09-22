@@ -48,6 +48,8 @@ router.get(
                         priority,
                         category,
                         due_date,
+                        reminder_minutes,
+                        reminder_sent_at,
                         pinned,
                         created_at,
                         updated_at
@@ -189,6 +191,19 @@ router.post(
                 req.body.pinned === true;
 
 
+            const reminderMinutes =
+                req.body.reminder_minutes !== undefined
+                    ? (req.body.reminder_minutes === null || req.body.reminder_minutes === "" ? null : Number(req.body.reminder_minutes))
+                    : (req.body.reminderMinutes !== undefined ? (req.body.reminderMinutes === null || req.body.reminderMinutes === "" ? null : Number(req.body.reminderMinutes)) : null);
+
+            if (reminderMinutes !== null && (!Number.isInteger(reminderMinutes) || reminderMinutes < 0 || reminderMinutes > 10080)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Érvénytelen emlékeztető idő."
+                });
+            }
+
+
             let dueDate = null;
 
 
@@ -254,6 +269,7 @@ router.post(
                         priority,
                         category,
                         due_date,
+                        reminder_minutes,
                         pinned
                     )
 
@@ -266,7 +282,8 @@ router.post(
                         $6,
                         $7,
                         $8,
-                        $9
+                        $9,
+                        $10
                     )
 
                     RETURNING
@@ -279,6 +296,8 @@ router.post(
                         priority,
                         category,
                         due_date,
+                        reminder_minutes,
+                        reminder_sent_at,
                         pinned,
                         created_at,
                         updated_at
@@ -292,6 +311,7 @@ router.post(
                         priority || "normal",
                         category || "Egyéb",
                         dueDate,
+                        reminderMinutes,
                         pinned
                     ]
                 );
@@ -405,6 +425,8 @@ router.put(
                         priority,
                         category,
                         due_date,
+                        reminder_minutes,
+                        reminder_sent_at,
                         pinned,
                         created_at,
                         updated_at
@@ -579,7 +601,9 @@ router.put(
                         priority = $4,
                         category = $5,
                         due_date = $6,
-                        pinned = $7,
+                        reminder_minutes = $7,
+                        reminder_sent_at = NULL,
+                        pinned = $8,
                         updated_at =
                             CURRENT_TIMESTAMP
 
@@ -598,6 +622,8 @@ router.put(
                         priority,
                         category,
                         due_date,
+                        reminder_minutes,
+                        reminder_sent_at,
                         pinned,
                         created_at,
                         updated_at
@@ -609,6 +635,7 @@ router.put(
                         priority || "normal",
                         category || "Egyéb",
                         dueDate,
+                        reminderMinutes,
                         pinned,
                         taskId,
                         ownerUserId,
