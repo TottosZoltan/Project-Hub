@@ -1439,7 +1439,6 @@
             button.textContent = "⏳ Tesztelés...";
             try {
                 const result = await window.ProjectHubNotifications.sendTestNotification();
-                try { await window.ProjectHubNotifications.scheduleDelayedPushTest(); alert("Beállítva! 1 perc múlva érkezik a teszt értesítés. Most bezárhatod az appot."); } catch (error) { alert(error.message || "Nem sikerült beállítani a tesztet."); }
                 try { await window.ProjectHubNotifications.sendServerPushTest(); } catch (_) {}
                 alert(result.browser
                     ? "✓ Teszt sikeres: az Inboxba és a böngészős értesítések közé is bekerült."
@@ -1449,6 +1448,22 @@
             } finally {
                 button.disabled = false;
                 button.textContent = "🔔 Teszt értesítés";
+            }
+        });
+
+        document.getElementById("profileDelayedTestNotificationButton")?.addEventListener("click", async function () {
+            const button = this;
+            button.disabled = true;
+            button.textContent = "⏳ Beállítás...";
+            try {
+                await window.ProjectHubNotifications.ensurePushSubscription();
+                await window.ProjectHubNotifications.scheduleDelayedPushTest();
+                alert("✓ Beállítva! 1 perc múlva érkezik a teszt értesítés. Most bezárhatod az appot.");
+            } catch (error) {
+                alert("A késleltetett teszt nem sikerült: " + (error.message || error));
+            } finally {
+                button.disabled = false;
+                button.textContent = "⏱️ 1 perces teszt";
             }
         });
 
