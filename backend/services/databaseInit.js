@@ -498,6 +498,34 @@ async function initializeTasksDatabase() {
     `);
 
 
+    // Push subscriptions for background notifications.
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS push_subscriptions (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            endpoint TEXT NOT NULL UNIQUE,
+            p256dh TEXT NOT NULL,
+            auth TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    `);
+
+    await pool.query(`
+        ALTER TABLE tasks
+        ADD COLUMN IF NOT EXISTS reminder_minutes INTEGER;
+    `);
+
+    await pool.query(`
+        ALTER TABLE tasks
+        ADD COLUMN IF NOT EXISTS reminder_sent_at TIMESTAMP;
+    `);
+
+    await pool.query(`
+        CREATE INDEX IF NOT EXISTS push_subscriptions_user_id_idx
+        ON push_subscriptions(user_id);
+    `);
+
     // ==================================================
     // RÉGI TASKS TÁBLA MIGRÁCIÓ
     // ==================================================
