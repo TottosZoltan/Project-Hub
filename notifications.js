@@ -125,6 +125,34 @@
         saveInbox([]);
     }
 
+    async function sendTestNotification() {
+        const testItem = addInboxNotification({
+            key: "test:" + Date.now(),
+            type: "test",
+            title: "Teszt értesítés",
+            body: "Ha ezt látod, az alkalmazáson belüli értesítések működnek.",
+            detail: "Project Hub értesítési teszt"
+        });
+        updateInboxBadges();
+        let browserShown = false;
+        let browserReason = "";
+        try {
+            if (Notification.permission !== "granted") {
+                await requestPermission();
+            }
+            browserShown = await notify("Project Hub — teszt", {
+                body: "A böngészős értesítés is működik.",
+                tag: "project-hub-test",
+                requireInteraction: false,
+                data: { url: "/Project-Hub/pages/notifications/notifications.html" }
+            });
+            if (!browserShown) browserReason = "A böngészős értesítést a rendszer nem jelenítette meg, de az Inbox teszt létrejött.";
+        } catch (error) {
+            browserReason = error?.message || "A böngészős értesítés nem volt engedélyezhető.";
+        }
+        return { inbox: !!testItem, browser: browserShown, browserReason };
+    }
+
     window.ProjectHubNotifications = {
         DEFAULTS,
         getSettings,
@@ -136,7 +164,8 @@
         addInboxNotification,
         markInboxRead,
         markAllInboxRead,
-        clearInbox
+        clearInbox,
+        sendTestNotification
     };
 
     function updateInboxBadges() {
