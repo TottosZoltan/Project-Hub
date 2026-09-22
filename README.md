@@ -1,4 +1,4 @@
-# Project Hub 1.6.3
+# Project Hub 1.7.0
 
 A Project Hub egy személyes, mobil-first dashboard jegyzetekkel, feladatokkal, játékokkal, Steam-integrációval, saját játékkönyvtárral és helykezeléssel.
 
@@ -26,6 +26,8 @@ A Project Hub egy személyes, mobil-first dashboard jegyzetekkel, feladatokkal, 
 - 👤 Profil
 - 🔗 Steam kapcsolat
 - 🖼️ SteamGridDB artwork fallback
+- ⏰ Feladat határidők és emlékeztetők
+- 🔔 Telefonos értesítések és értesítési beállítások
 - 📱 PWA / iPhone
 - 🖥️ Fejlesztői console
 
@@ -50,4 +52,4 @@ A hiányzó Steam artwork automatikusan a SteamGridDB v2 API-ból tölthető be,
 
 ## Verzió
 
-**Project Hub 1.6.3**
+**Project Hub 1.7.0**
