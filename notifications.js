@@ -44,8 +44,8 @@
         }
         try {
             const n = new Notification(title, Object.assign({
-                icon: "./icons/icon-192.png",
-                badge: "./icons/icon-192.png"
+                icon: "/Project-Hub/icons/icon-192.png",
+                badge: "/Project-Hub/icons/icon-192.png"
             }, options || {}));
             n.onclick = function () {
                 window.focus();
