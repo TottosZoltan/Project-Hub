@@ -1,3 +1,10 @@
+## 1.6.1 — 2026-09-22
+
+### 🎮 Egyéni játék képkeresés
+- A „Képkeresési név” mező most közvetlenül a SteamGridDB kereséséhez kerül elküldésre.
+- A találat azonnal megjelenik előnézetként, és a megtalált kép URL-je menthető a játékhoz.
+- A képkeresés külön visszajelzést ad sikeres és sikertelen keresés esetén.
+
 ## 1.7.1 — 2026-09-22
 
 ### Értesítési Inbox
