@@ -1250,3 +1250,13 @@
 .module-toggle-button, .save-task-button { min-height: 44px; border-radius: 13px; }
 .task-stat, .task-progress, .task-item { border-color: rgba(255,255,255,.07); }
 @media (max-width: 600px) { .task-editor, .tasks-tools { padding: 15px; } }
+
+
+/* Project Hub 1.7 — task scheduling */
+.task-datetime-options { margin-top: 14px; }
+.task-option-wide { flex: 1 1 280px; }
+.task-option-wide input,
+.task-option-wide select { width: 100%; box-sizing: border-box; }
+.task-option-wide small { display:block; margin-top:6px; color:#777e8d; font-size:11px; line-height:1.4; }
+.task-due-date { display:block; margin-top:7px; color:#aab2c2; font-size:12px; }
+.task-due-date.overdue { color:#ff8f8f; font-weight:600; }
