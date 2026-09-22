@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const customGameImageStatus = document.getElementById("customGameImageStatus");
     const customGameImagePreview = document.getElementById("customGameImagePreview");
     const customGameImagePreviewImg = document.getElementById("customGameImagePreviewImg");
+    const customGameImageChoices = document.getElementById("customGameImageChoices");
+    const customGameImageChoicesGrid = document.getElementById("customGameImageChoicesGrid");
     const customGameSubmit = customGameForm ? customGameForm.querySelector('button[type="submit"]') : null;
     let editingCustomId = null;
 
@@ -128,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
         customGameSearchName.value = game?.searchName || game?.name || "";
         customGameImage.value = game?.image || "";
         showCustomImagePreview(game?.image || "");
+        showCustomImageChoices([], game?.image || "");
         setCustomImageStatus(game?.image ? "Mentett kép betöltve." : "A név elhagyásakor automatikusan megpróbáljuk megtalálni a képet.");
         customGameMinutes.value = game?.minutes || 0;
         if (customGameStatus) customGameStatus.value = game?.status || "backlog";
@@ -150,6 +153,31 @@ document.addEventListener("DOMContentLoaded", function () {
         customGameImageStatus.innerHTML =
             '<span class="custom-image-status-icon">' + (icons[type] || icons.idle) + '</span>' +
             '<span>' + escapeHtml(message) + '</span>';
+    }
+
+    function showCustomImageChoices(images, selectedUrl = "") {
+        if (!customGameImageChoices || !customGameImageChoicesGrid) return;
+        const list = Array.isArray(images) ? images.filter(Boolean).slice(0, 3) : [];
+        customGameImageChoicesGrid.innerHTML = "";
+        if (!list.length) {
+            customGameImageChoices.hidden = true;
+            return;
+        }
+        list.forEach((url, index) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "custom-image-choice" + (url === selectedUrl ? " selected" : "");
+            button.setAttribute("aria-label", "Kép " + (index + 1) + " kiválasztása");
+            button.innerHTML = '<img src="' + escapeHtml(url) + '" alt="Talált játék kép ' + (index + 1) + '">';
+            button.addEventListener("click", () => {
+                customGameImage.value = url;
+                showCustomImagePreview(url);
+                showCustomImageChoices(list, url);
+                setCustomImageStatus("✓ Ezt a képet választottad véglegesnek.", "success");
+            });
+            customGameImageChoicesGrid.appendChild(button);
+        });
+        customGameImageChoices.hidden = false;
     }
 
     function showCustomImagePreview(url) {
@@ -206,6 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "error"
                 );
                 showCustomImagePreview("");
+                showCustomImageChoices([]);
                 return null;
             }
 
