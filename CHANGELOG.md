@@ -1,3 +1,11 @@
+## 1.6.2 — 2026-09-22
+
+### 🔔 Automatikus frissítési értesítés
+- Az alkalmazás induláskor ellenőrzi a közzétett aktuális verziót.
+- Új verzió esetén frissítési értesítés kerül az alkalmazáson belüli Értesítések Inboxba.
+- Ha a böngészős értesítések engedélyezve vannak, külön rendszerértesítés is megjelenik.
+- A főoldali verziószám és a PWA verziójelölések 1.6.2-re frissítve.
+
 ## 1.6.1 — 2026-09-22
 
 ### 🎮 Egyéni játék képkeresés
