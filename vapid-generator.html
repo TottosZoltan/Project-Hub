@@ -57,9 +57,9 @@ document.getElementById("generate").addEventListener("click", async () => {
       throw new Error("A böngésző nem támogatja a biztonságos kulcsgenerálást.");
     }
     const keyPair = await crypto.subtle.generateKey(
-      { name: "ECDSA", namedCurve: "P-256" },
+      { name: "ECDH", namedCurve: "P-256" },
       true,
-      ["sign", "verify"]
+      ["deriveBits"]
     );
     const jwk = await crypto.subtle.exportKey("jwk", keyPair.privateKey);
     const rawPublicKey = new Uint8Array(
