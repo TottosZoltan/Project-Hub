@@ -31,7 +31,7 @@ button:disabled{opacity:.6}
 <textarea id="privateKey" readonly></textarea>
 <label>VAPID_SUBJECT</label>
 <input id="subject" value="mailto:your-email@example.com">
-<p class="ok">✓ Kész. A három értéket beírhatod Render → Environment Variables alatt.</p>
+<p class="ok">✓ Kész. A három értéket beírhatod Render → Environment Variables alatt.</p><p id="keyCheck" style="margin-top:10px;color:#aeb6c8;font-size:12px"></p>
 </div>
 </div>
 <script>
@@ -69,7 +69,7 @@ document.getElementById("generate").addEventListener("click", async () => {
       throw new Error("Érvénytelen P-256 kulcspár.");
     }
     const publicKey = toBase64Url(rawPublicKey);
-    document.getElementById("publicKey").value = publicKey;
+    document.getElementById("publicKey").value = publicKey;\n    document.getElementById("keyCheck").textContent = "Public key: 65 bájt (helyes). Renderbe csak a mező értékét másold, idézőjelek nélkül.";
     document.getElementById("privateKey").value = jwk.d;
     document.getElementById("result").hidden = false;
     button.textContent = "Új kulcspár generálása";
