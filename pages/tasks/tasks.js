@@ -1106,6 +1106,18 @@ function scheduleTaskReminder(task) {
         const remaining = reminder - Date.now();
 
         if (remaining <= 0) {
+            const inboxKey = "task-reminder:" + task.id + ":" + due + ":" + task.reminderMinutes;
+
+            window.ProjectHubNotifications.addInboxNotification({
+                key: inboxKey,
+                type: "task-reminder",
+                title: "Feladat emlékeztető",
+                body: task.title,
+                detail: "Határidő: " + formatDueDate(task.dueDate),
+                taskId: task.id,
+                dueDate: task.dueDate
+            });
+
             window.ProjectHubNotifications.notify(
                 "Project Hub — emlékeztető",
                 {
@@ -1113,8 +1125,8 @@ function scheduleTaskReminder(task) {
                     tag: "task-" + task.id,
                     requireInteraction: true
                 }
-            ).then(function (shown) {
-                if (shown) sessionStorage.setItem(key, "1");
+            ).then(function () {
+                sessionStorage.setItem(key, "1");
             });
             return;
         }
