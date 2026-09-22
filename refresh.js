@@ -5,7 +5,7 @@
 (function () {
     "use strict";
 
-    const APP_VERSION = "1.5.2";
+    const APP_VERSION = "1.6.2";
     const PULL_THRESHOLD = 72;
     const EDGE_SWIPE_THRESHOLD = 55;
     const EDGE_ZONE = 28;
@@ -32,15 +32,94 @@
 
     function mountVersionFooter() {
         const existing = document.querySelector(".app-version-footer");
+        const html = `<span>Project Hub</span><span>v${APP_VERSION}</span><a class="uicons-credit" href="https://www.flaticon.com/uicons" target="_blank" rel="noopener">Uicons by Flaticon</a>`;
         if (existing) {
-            existing.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span><a class="uicons-credit" href="https://www.flaticon.com/uicons" target="_blank" rel="noopener">Uicons by Flaticon</a>`;
+            existing.innerHTML = html;
             return;
         }
 
         const footer = document.createElement("footer");
         footer.className = "app-version-footer";
-        footer.innerHTML = `<span>Project Hub</span><span>v${APP_VERSION}</span><a class="uicons-credit" href="https://www.flaticon.com/uicons" target="_blank" rel="noopener">Uicons by Flaticon</a>`;
+        footer.innerHTML = html;
         document.body.appendChild(footer);
+    }
+
+    function compareVersions(a, b) {
+        const aa = String(a || "0").split(".").map(Number);
+        const bb = String(b || "0").split(".").map(Number);
+        for (let i = 0; i < 3; i++) {
+            const x = Number.isFinite(aa[i]) ? aa[i] : 0;
+            const y = Number.isFinite(bb[i]) ? bb[i] : 0;
+            if (x !== y) return x - y;
+        }
+        return 0;
+    }
+
+    async function checkForAppUpdate() {
+        try {
+            const versionUrl = new URL("./version.json?ts=" + Date.now(), document.baseURI).href;
+            const response = await fetch(versionUrl, {
+                cache: "no-store",
+                headers: { "Cache-Control": "no-cache" }
+            });
+            if (!response.ok) return;
+
+            const remote = await response.json();
+            const latestVersion = String(remote.version || "").trim();
+            if (!latestVersion || compareVersions(latestVersion, APP_VERSION) <= 0) return;
+
+            const noticeKey = "projectHubUpdateNotified:" + latestVersion;
+            if (localStorage.getItem(noticeKey) === "1") return;
+
+            localStorage.setItem(noticeKey, "1");
+
+            const title = "Új Project Hub frissítés";
+            const body = `Elérhető a Project Hub ${latestVersion} verziója. Frissítsd az oldalt az új funkciókhoz.`;
+            const url = new URL("./index.html", document.baseURI).href;
+
+            if (window.ProjectHubNotifications) {
+                window.ProjectHubNotifications.addInboxNotification({
+                    key: noticeKey,
+                    type: "update",
+                    title,
+                    body,
+                    detail: "Új alkalmazásverzió érhető el.",
+                    url
+                });
+
+                if (
+                    window.ProjectHubNotifications.getSettings().enabled &&
+                    "Notification" in window &&
+                    Notification.permission === "granted"
+                ) {
+                    await window.ProjectHubNotifications.notify(title, {
+                        body,
+                        tag: "project-hub-update-" + latestVersion,
+                        data: { url }
+                    });
+                }
+            } else if ("Notification" in window && Notification.permission === "granted") {
+                const registration = "serviceWorker" in navigator
+                    ? await navigator.serviceWorker.ready
+                    : null;
+
+                if (registration?.showNotification) {
+                    await registration.showNotification(title, {
+                        body,
+                        icon: "./icons/icon-192.png",
+                        badge: "./icons/icon-192.png",
+                        tag: "project-hub-update-" + latestVersion,
+                        data: { url }
+                    });
+                }
+            }
+
+            window.dispatchEvent(new CustomEvent("projecthub:update-available", {
+                detail: { version: latestVersion, url }
+            }));
+        } catch (error) {
+            console.warn("Automatikus verzióellenőrzés sikertelen:", error);
+        }
     }
 
     function setupPullRefresh() {
@@ -213,11 +292,13 @@
             mountVersionFooter();
             setupPullRefresh();
             setupMobileGestures();
+            checkForAppUpdate();
         }, { once: true });
     } else {
         handleSteamCallbackRedirect();
         mountVersionFooter();
         setupPullRefresh();
         setupMobileGestures();
+        checkForAppUpdate();
     }
 })();
