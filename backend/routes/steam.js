@@ -750,6 +750,12 @@ router.get(
             }
 
 
+            const cacheKey = getSteamGamesCacheKey(user.id);
+            const cached = steamGamesCache.get(cacheKey);
+            if (cached && cached.expiresAt > Date.now()) {
+                return res.json(cached.payload);
+            }
+
             const account =
                 await getSteamAccountForUser(
                     user.id
@@ -885,6 +891,13 @@ router.delete(
 // ======================================================
 // STEAM GAMES
 // ======================================================
+
+const steamGamesCache = new Map();
+const STEAM_GAMES_CACHE_MS = 60000;
+
+function getSteamGamesCacheKey(userId) {
+    return String(userId || "");
+}
 
 router.get(
     "/api/steam/games",
@@ -1057,25 +1070,21 @@ router.get(
                 );
 
 
-            return res.json({
-
+            const payload = {
                 success: true,
-
                 connected: true,
+                steamId: account.steam_id,
+                steamName: account.steam_name,
+                gameCount: formattedGames.length,
+                games: formattedGames
+            };
 
-                steamId:
-                    account.steam_id,
-
-                steamName:
-                    account.steam_name,
-
-                gameCount:
-                    formattedGames.length,
-
-                games:
-                    formattedGames
-
+            steamGamesCache.set(cacheKey, {
+                expiresAt: Date.now() + STEAM_GAMES_CACHE_MS,
+                payload
             });
+
+            return res.json(payload);
 
         }
         catch (error) {
