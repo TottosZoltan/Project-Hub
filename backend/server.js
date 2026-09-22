@@ -13,6 +13,8 @@ const notesRoutes = require("./routes/notes");
 const tasksRoutes = require("./routes/tasks");
 const steamRoutes = require("./routes/steam");
 const libraryRoutes = require("./routes/library");
+const notificationsRoutes = require("./routes/notifications");
+const { processTaskReminders } = require("./services/push");
 
 const app = express();
 
@@ -76,6 +78,7 @@ app.use(notesRoutes);
 app.use(tasksRoutes);
 app.use(steamRoutes);
 app.use(libraryRoutes);
+app.use(notificationsRoutes);
 
 // ======================================================
 // GLOBAL ERROR HANDLER
@@ -101,6 +104,11 @@ app.use(
 // ======================================================
 
 async function startServer() {
+    setInterval(function () {
+        processTaskReminders().catch(function (error) {
+            console.error("TASK REMINDER WORKER HIBA:", error);
+        });
+    }, 30000);
     try {
         await initializeDatabase();
         await initializeTasksDatabase();
