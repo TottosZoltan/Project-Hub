@@ -1531,7 +1531,10 @@ function renderTasks() {
             if (task.dueDate) {
                 const due = document.createElement("small");
                 due.className = "task-due-date";
-                due.innerHTML = '<i class="fi fi-br-calendar-clock" aria-hidden="true"></i> Határidő: ' + escapeHtml(formatDueDate(task.dueDate));
+                const reminderText = task.reminderMinutes != null && task.reminderMinutes !== "none"
+                    ? ' · Emlékeztető: ' + (Number(task.reminderMinutes) >= 1440 ? '1 nappal' : Number(task.reminderMinutes) >= 60 ? (Number(task.reminderMinutes) / 60) + ' órával' : Number(task.reminderMinutes) + ' perccel') + ' előtte'
+                    : '';
+                due.innerHTML = '<i class="fi fi-br-calendar-clock" aria-hidden="true"></i> Ütemezett · Határidő: ' + escapeHtml(formatDueDate(task.dueDate)) + '<span class="task-reminder-label">' + escapeHtml(reminderText) + '</span>';
                 if (!task.completed && new Date(task.dueDate).getTime() < Date.now()) {
                     due.classList.add("overdue");
                 }
