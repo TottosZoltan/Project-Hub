@@ -738,3 +738,13 @@ body.authenticated {
         flex: 1 1 100%;
     }
 }
+
+
+/* Profile page header: back navigation stays on the left. */
+.profile-page-header {
+    justify-content: flex-start;
+}
+
+.profile-page-header-title {
+    min-width: 0;
+}
