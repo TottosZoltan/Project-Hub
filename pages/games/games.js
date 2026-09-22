@@ -342,7 +342,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const lookup = fetch(
-            BACKEND_URL + "/api/steam/grid-image/" + encodeURIComponent(appId),
+            BACKEND_URL + "/api/steam/grid-image/" + encodeURIComponent(appId) +
+            "?name=" + encodeURIComponent(game?.name || ""),
             {
                 method: "GET",
                 headers: headers(),
@@ -362,6 +363,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     return result.image;
                 }
 
+                if (response.ok && result && result.message) {
+                    console.info("SteamGridDB:", result.message);
+                }
                 return null;
             })
             .catch(error => {
