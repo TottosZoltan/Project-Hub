@@ -748,3 +748,23 @@ body.authenticated {
 .profile-page-header-title {
     min-width: 0;
 }
+
+
+/* Delayed push test — always clearly visible */
+.notification-delayed-test {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid rgba(29,108,255,.28);
+    border-radius: 14px;
+    background: rgba(29,108,255,.06);
+}
+.notification-delayed-test strong { display:block; color:#fff; font-size:13px; }
+.notification-delayed-test small { display:block; margin-top:4px; color:#858b99; font-size:11px; line-height:1.4; }
+.notification-delayed-test .profile-button { flex:0 0 auto; }
+@media (max-width:600px) {
+    .notification-delayed-test { flex-direction:column; align-items:stretch; }
+    .notification-delayed-test .profile-button { width:100%; }
+}
