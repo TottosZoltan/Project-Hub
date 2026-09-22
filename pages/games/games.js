@@ -37,6 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const CUSTOM_API = BACKEND_URL + "/api/library/games";
     const customGameStatus = document.getElementById("customGameStatus");
     const customGameFavorite = document.getElementById("customGameFavorite");
+    const customGameImageSearch = document.getElementById("customGameImageSearch");
+    const customGameImageStatus = document.getElementById("customGameImageStatus");
+    const customGameImagePreview = document.getElementById("customGameImagePreview");
+    const customGameImagePreviewImg = document.getElementById("customGameImagePreviewImg");
     const customGameSubmit = customGameForm ? customGameForm.querySelector('button[type="submit"]') : null;
     let editingCustomId = null;
 
@@ -121,6 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("customGameTitle").textContent = game ? "Játék szerkesztése" : "Játék hozzáadása";
         customGameName.value = game?.name || "";
         customGameImage.value = game?.image || "";
+        showCustomImagePreview(game?.image || "");
+        setCustomImageStatus(game?.image ? "Mentett kép betöltve." : "A név elhagyásakor automatikusan megpróbáljuk megtalálni a képet.");
         customGameMinutes.value = game?.minutes || 0;
         if (customGameStatus) customGameStatus.value = game?.status || "backlog";
         if (customGameFavorite) customGameFavorite.checked = !!game?.favorite;
@@ -133,6 +139,86 @@ document.addEventListener("DOMContentLoaded", function () {
     function closeCustomGameModal() {
         customGameModal.hidden = true;
         document.body.classList.remove("modal-open");
+    }
+
+    function setCustomImageStatus(message, type = "") {
+        if (!customGameImageStatus) return;
+        customGameImageStatus.textContent = message;
+        customGameImageStatus.className = "custom-image-status" + (type ? " " + type : "");
+    }
+
+    function showCustomImagePreview(url) {
+        if (!customGameImagePreview || !customGameImagePreviewImg) return;
+        if (!url) {
+            customGameImagePreview.hidden = true;
+            customGameImagePreviewImg.removeAttribute("src");
+            return;
+        }
+        customGameImagePreviewImg.src = url;
+        customGameImagePreview.hidden = false;
+        customGameImagePreviewImg.onerror = () => {
+            customGameImagePreview.hidden = true;
+        };
+    }
+
+    async function findCustomGameImage() {
+        const name = customGameName?.value.trim();
+        if (!name) {
+            setCustomImageStatus("Előbb írd be a játék nevét.", "error");
+            customGameName?.focus();
+            return null;
+        }
+
+        if (customGameImageSearch) customGameImageSearch.disabled = true;
+        setCustomImageStatus("Játék keresése a Steam adatbázisában…");
+
+        try {
+            const searchUrl = "https://store.steampowered.com/api/storesearch/?term=" +
+                encodeURIComponent(name) + "&cc=hu&l=hungarian";
+            const response = await fetch(searchUrl, { cache: "no-store" });
+            if (!response.ok) throw new Error("steam_search_failed");
+
+            const result = await response.json();
+            const items = Array.isArray(result.items) ? result.items : [];
+            if (!items.length) {
+                setCustomImageStatus("Nem találtam pontos találatot. Megadhatsz saját kép URL-t.", "error");
+                return null;
+            }
+
+            const match = items.find(item =>
+                String(item.name || "").trim().toLocaleLowerCase("hu-HU") === name.toLocaleLowerCase("hu-HU")
+            ) || items[0];
+
+            const appid = match.appid ? String(match.appid) : "";
+            let image = "";
+
+            if (appid) {
+                image = await getSteamGridImage({ appid }) || "";
+            }
+
+            if (!image) {
+                image = match.header || match.tiny_image || "";
+            }
+
+            if (!image) {
+                setCustomImageStatus("A játékot megtaláltam, de nem érkezett hozzá kép. Adj meg saját képet URL-lel.", "error");
+                return null;
+            }
+
+            customGameImage.value = image;
+            showCustomImagePreview(image);
+            setCustomImageStatus(
+                "Kép megtalálva: " + (match.name || name) + (image.includes("steamgriddb") ? " · SteamGridDB" : " · Steam"),
+                "success"
+            );
+            return image;
+        } catch (error) {
+            console.warn("Automatikus egyéni játék képkeresés sikertelen:", error);
+            setCustomImageStatus("Az automatikus keresés most nem érhető el. Használhatsz saját kép URL-t.", "error");
+            return null;
+        } finally {
+            if (customGameImageSearch) customGameImageSearch.disabled = false;
+        }
     }
 
     function renderCustomGames() {
@@ -563,6 +649,18 @@ document.addEventListener("DOMContentLoaded", function () {
     closeCustomGameButton.addEventListener("click", closeCustomGameModal);
     cancelCustomGameButton.addEventListener("click", closeCustomGameModal);
     customGameOverlay.addEventListener("click", closeCustomGameModal);
+
+    customGameImageSearch?.addEventListener("click", findCustomGameImage);
+    customGameName?.addEventListener("blur", () => {
+        if (customGameName.value.trim() && !customGameImage.value.trim()) {
+            findCustomGameImage();
+        }
+    });
+    customGameImage?.addEventListener("input", () => {
+        const value = customGameImage.value.trim();
+        showCustomImagePreview(value);
+        if (value) setCustomImageStatus("Saját kép URL megadva.");
+    });
     customGameForm.addEventListener("submit", async event => {
         event.preventDefault(); const name=customGameName.value.trim(); if(!name)return;
         const payload={name,image:customGameImage.value.trim(),minutes:Math.max(0,Number(customGameMinutes.value)||0),status:customGameStatus?.value || "backlog",favorite:!!customGameFavorite?.checked};
