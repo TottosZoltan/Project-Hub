@@ -87,16 +87,25 @@
                     url
                 });
 
-                if (
-                    window.ProjectHubNotifications.getSettings().enabled &&
-                    "Notification" in window &&
-                    Notification.permission === "granted"
-                ) {
-                    await window.ProjectHubNotifications.notify(title, {
-                        body,
-                        tag: "project-hub-update-" + latestVersion,
-                        data: { url }
-                    });
+                if ("Notification" in window) {
+                    try {
+                        if (Notification.permission === "default") {
+                            await window.ProjectHubNotifications.requestPermission();
+                        }
+
+                        if (
+                            window.ProjectHubNotifications.getSettings().enabled &&
+                            Notification.permission === "granted"
+                        ) {
+                            await window.ProjectHubNotifications.notify(title, {
+                                body,
+                                tag: "project-hub-update-" + latestVersion,
+                                data: { url }
+                            });
+                        }
+                    } catch (_) {
+                        // Az Inbox értesítés ettől még megmarad.
+                    }
                 }
             } else if ("Notification" in window && Notification.permission === "granted") {
                 const registration = "serviceWorker" in navigator
