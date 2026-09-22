@@ -620,9 +620,9 @@ router.put(
                             CURRENT_TIMESTAMP
 
                     WHERE
-                        id = $8
-                        AND user_id = $9
-                        AND owner_tag = $10
+                        id = $9
+                        AND user_id = $10
+                        AND owner_tag = $11
 
                     RETURNING
                         id,
