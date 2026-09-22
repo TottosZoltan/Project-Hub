@@ -498,6 +498,13 @@ async function initializeTasksDatabase() {
     `);
 
 
+    // A határidő valódi időpont legyen; a régi TIMESTAMP értékeket Budapest helyi időként kezeljük.
+    await pool.query(`
+        ALTER TABLE tasks
+        ALTER COLUMN due_date TYPE TIMESTAMPTZ
+        USING due_date AT TIME ZONE 'Europe/Budapest';
+    `);
+
     // Push subscriptions for background notifications.
     await pool.query(`
         CREATE TABLE IF NOT EXISTS push_subscriptions (
