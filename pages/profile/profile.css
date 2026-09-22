@@ -707,3 +707,15 @@ body.authenticated {
     .steam-avatar { width: 60px; height: 60px; flex-basis: 60px; }
     .profile-button { width: 100%; }
 }
+
+
+/* Project Hub 1.7 — notification settings */
+.notification-settings-card { display:flex; flex-direction:column; gap:18px; }
+.notification-status-row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.notification-status-row strong { color:#fff; font-size:14px; }
+.notification-status-row p { margin:5px 0 0; color:#777e8d; font-size:12px; line-height:1.45; }
+.notification-toggle-row { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.08); cursor:pointer; }
+.notification-toggle-row strong { display:block; color:#fff; font-size:13px; }
+.notification-toggle-row small { display:block; margin-top:4px; color:#777e8d; font-size:11px; }
+.notification-toggle-row input { width:22px; height:22px; accent-color:#1d6cff; }
+@media (max-width:600px){ .notification-status-row { flex-direction:column; align-items:stretch; } .notification-toggle-row { align-items:flex-start; } }
