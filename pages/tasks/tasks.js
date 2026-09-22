@@ -466,6 +466,24 @@ async function loadTasks(silent = false) {
 
 
 // =========================================
+// HELYI DATETIME -> VALÓDI ISO IDŐPONT
+// A datetime-local értéke timezone nélküli falióra-idő.
+// A böngésző saját időzónájában alakítjuk ISO-ra, így a backend
+// mindig ugyanazt a konkrét időpontot kapja, és nem tud +2 órát rátenni.
+// =========================================
+
+function toServerDueDate(value) {
+    const raw = String(value || "").trim();
+    if (!raw) return null;
+
+    const local = new Date(raw);
+    if (Number.isNaN(local.getTime())) return null;
+
+    return local.toISOString();
+}
+
+
+// =========================================
 // FELADAT LÉTREHOZÁSA
 // =========================================
 
@@ -1726,7 +1744,7 @@ if (
                 taskCategory.value =
                     "Egyéb";
 
-                if (taskDueDate) taskDueDate.value = "";
+                if (taskDueDate) toServerDueDate(taskDueDate.value) = "";
                 if (taskReminder) taskReminder.value = "30";
 
 
