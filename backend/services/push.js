@@ -76,4 +76,27 @@ async function processTaskReminders() {
     }
 }
 
-module.exports = { isPushConfigured, sendPushToUser, processTaskReminders, VAPID_PUBLIC_KEY };
+async function processScheduledPushTests() {
+    if (!isPushConfigured()) return;
+    const result = await pool.query(`
+        SELECT id, user_id
+        FROM push_subscriptions
+        WHERE test_scheduled_at IS NOT NULL
+          AND test_scheduled_at <= CURRENT_TIMESTAMP
+        ORDER BY test_scheduled_at ASC
+        LIMIT 100
+    `);
+    for (const item of result.rows) {
+        const pushResult = await sendPushToUser(item.user_id, {
+            title: "Project Hub — teszt értesítés",
+            body: "Ez az 1 perccel ezelőtt beállított teszt. Az app bezárva is működik. ✅",
+            url: "/Project-Hub/pages/profile/profile.html",
+            tag: "project-hub-delayed-test"
+        });
+        if (pushResult.sent > 0) {
+            await pool.query("UPDATE push_subscriptions SET test_scheduled_at = NULL WHERE id = $1", [item.id]);
+        }
+    }
+}
+
+module.exports = { isPushConfigured, sendPushToUser, processTaskReminders, processScheduledPushTests, VAPID_PUBLIC_KEY };
