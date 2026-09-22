@@ -71,6 +71,26 @@
         });
     }
 
+    document.getElementById("testNotification").addEventListener("click", async function () {
+        const button = this;
+        button.disabled = true;
+        button.textContent = "⏳ Tesztelés...";
+        try {
+            const result = await window.ProjectHubNotifications.sendTestNotification();
+            render();
+            if (result.browser) {
+                alert("✓ Teszt sikeres: az Inboxba bekerült, és a böngészős értesítést is elküldtük.");
+            } else {
+                alert("✓ Az Inbox teszt sikeres.\n\n" + (result.browserReason || "A böngészős értesítés nem jelent meg."));
+            }
+        } catch (error) {
+            alert("Az értesítési teszt hibával leállt: " + (error.message || error));
+        } finally {
+            button.disabled = false;
+            button.textContent = "🔔 Teszt";
+        }
+    });
+
     document.getElementById("markAllRead").addEventListener("click", function () {
         window.ProjectHubNotifications.markAllInboxRead();
         render();
