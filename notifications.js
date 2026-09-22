@@ -139,7 +139,18 @@
         clearInbox
     };
 
+    function updateInboxBadges() {
+        const unread = getInbox().filter(function (item) { return !item.read; }).length;
+        document.querySelectorAll("#inboxUnreadBadge, #homeInboxUnread").forEach(function (badge) {
+            badge.textContent = unread;
+            badge.hidden = unread === 0;
+        });
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         registerServiceWorker();
+        updateInboxBadges();
     });
+
+    window.addEventListener("storage", updateInboxBadges);
 })();
