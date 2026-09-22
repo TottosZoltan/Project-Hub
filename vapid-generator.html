@@ -9,78 +9,21 @@
 body{margin:0;background:#080b12;color:#fff;font-family:Arial,sans-serif;padding:24px;box-sizing:border-box}
 .card{max-width:700px;margin:30px auto;background:#111622;border:1px solid #293248;border-radius:18px;padding:22px}
 h1{font-size:22px;margin-top:0}p{color:#aeb6c8;line-height:1.5}
-label{display:block;margin:16px 0 7px;font-weight:700;font-size:13px}
-textarea,input{width:100%;box-sizing:border-box;background:#080b12;color:#fff;border:1px solid #35415a;border-radius:10px;padding:12px;font:12px monospace}
-textarea{min-height:90px;resize:vertical}
-button{border:0;border-radius:10px;padding:12px 16px;background:#1d6cff;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
-button:disabled{opacity:.6}
+button{border:0;border-radius:10px;padding:14px 18px;background:#1d6cff;color:#fff;font-weight:700;font-size:15px;cursor:pointer;width:100%}
 .warn{padding:12px;border-radius:10px;background:#2a1f0d;border:1px solid #5d461c;color:#f4d28a;font-size:13px;line-height:1.45}
-.ok{color:#79e2a0;font-weight:700}
 </style>
 </head>
 <body>
 <div class="card">
 <h1>🔐 Project Hub VAPID kulcsgenerátor</h1>
-<p>A kulcspár <strong>közvetlenül ebben a böngészőben</strong> készül. A private key-t ez az oldal nem küldi sehova és nem menti el.</p>
-<div class="warn">⚠️ A <strong>Private Key</strong>-t kezeld titkos adatként. Csak a Render <code>VAPID_PRIVATE_KEY</code> mezőjébe másold.</div>
-<p><button id="generate">VAPID kulcsok generálása</button></p>
-<div id="result" hidden>
-<label>VAPID_PUBLIC_KEY</label>
-<textarea id="publicKey" readonly></textarea>
-<label>VAPID_PRIVATE_KEY</label>
-<textarea id="privateKey" readonly></textarea>
-<label>VAPID_SUBJECT</label>
-<input id="subject" value="mailto:your-email@example.com">
-<p class="ok">✓ Kész. A három értéket beírhatod Render → Environment Variables alatt.</p><p id="keyCheck" style="margin-top:10px;color:#aeb6c8;font-size:12px"></p>
+<p>A korábbi böngészős WebCrypto-generátort lecseréltem. Ez a gomb közvetlenül a Project Hub szerverén generál egy szabványos VAPID P-256 kulcspárt, ezért mobil böngészőben is működik.</p>
+<div class="warn">⚠️ A Private Key titkos adat. Ne küldd el senkinek, és csak a Render <strong>VAPID_PRIVATE_KEY</strong> mezőjébe másold.</div>
+<p style="margin-top:18px">
+<form action="https://project-hub-backend-1.onrender.com/api/notifications/generate-vapid" method="get">
+<button type="submit">VAPID kulcsok generálása</button>
+</form>
+</p>
+<p>A gomb megnyomása után egy új oldal jelenik meg a három szükséges értékkel.</p>
 </div>
-</div>
-<script>
-const fromBase64Url = (value) => {
-  const base64 = value.replace(/-/g, "+").replace(/_/g, "/");
-  const padded = base64 + "=".repeat((4 - base64.length % 4) % 4);
-  const binary = atob(padded);
-  return Uint8Array.from(binary, c => c.charCodeAt(0));
-};
-const toBase64Url = (bytes) => {
-  let binary = "";
-  for (let i = 0; i < bytes.length; i += 0x8000) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-  }
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-};
-document.getElementById("generate").addEventListener("click", async () => {
-  const button = document.getElementById("generate");
-  button.disabled = true;
-  button.textContent = "Generálás…";
-  try {
-    if (!window.crypto || !window.crypto.subtle) {
-      throw new Error("A böngésző nem támogatja a biztonságos kulcsgenerálást.");
-    }
-    const keyPair = await crypto.subtle.generateKey(
-      { name: "ECDH", namedCurve: "P-256" },
-      true,
-      ["deriveBits"]
-    );
-    const jwk = await crypto.subtle.exportKey("jwk", keyPair.privateKey);
-    const rawPublicKey = new Uint8Array(
-      await crypto.subtle.exportKey("raw", keyPair.publicKey)
-    );
-    if (rawPublicKey.length !== 65 || !jwk.d) {
-      throw new Error("Érvénytelen P-256 kulcspár.");
-    }
-    const publicKey = toBase64Url(rawPublicKey);
-    document.getElementById("publicKey").value = publicKey;
-    document.getElementById("keyCheck").textContent = "Public key: 65 bájt (helyes). Renderbe csak a mező értékét másold, idézőjelek nélkül.";
-    document.getElementById("privateKey").value = jwk.d;
-    document.getElementById("result").hidden = false;
-    button.textContent = "Új kulcspár generálása";
-  } catch (error) {
-    alert("A generálás nem sikerült: " + (error.message || error));
-    button.textContent = "VAPID kulcsok generálása";
-  } finally {
-    button.disabled = false;
-  }
-});
-</script>
 </body>
 </html>
