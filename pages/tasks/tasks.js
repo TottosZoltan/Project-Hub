@@ -1590,7 +1590,7 @@ if (
                 taskCategory.value;
 
             const dueDate =
-                taskDueDate?.value || "";
+                toServerDueDate(taskDueDate?.value);
 
             const reminderMinutes =
                 taskReminder?.value || "none";
@@ -1744,7 +1744,7 @@ if (
                 taskCategory.value =
                     "Egyéb";
 
-                if (taskDueDate) toServerDueDate(taskDueDate.value) = "";
+                if (taskDueDate) taskDueDate.value = "";
                 if (taskReminder) taskReminder.value = "30";
 
 
