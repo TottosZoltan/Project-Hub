@@ -479,12 +479,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function loadGames() {
         setState("loading", "Steam játékok betöltése...");
+        libraryMeta.textContent = "Steam könyvtár lekérése…";
         refreshButton.disabled = true;
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 20000);
         try {
             const response = await fetch(BACKEND_URL + "/api/steam/games", {
                 method: "GET",
                 headers: headers(),
-                credentials: "include"
+                credentials: "include",
+                signal: controller.signal,
+                cache: "no-store"
             });
             if (response.status === 401) return showAuthError();
             const result = await response.json();
@@ -496,9 +501,13 @@ document.addEventListener("DOMContentLoaded", function () {
             renderGames();
         } catch (error) {
             console.error("Steam games error:", error);
-            setState("error", "Nem sikerült betölteni a játékokat", error.message || "Próbáld újra később.");
+            const message = error?.name === "AbortError"
+                ? "A Steam szervere túl sokáig válaszolt. Próbáld meg újra."
+                : (error.message || "Próbáld újra később.");
+            setState("error", "Nem sikerült betölteni a játékokat", message);
             libraryMeta.textContent = "A játéklista jelenleg nem érhető el.";
         } finally {
+            window.clearTimeout(timeout);
             refreshButton.disabled = false;
         }
     }
@@ -726,9 +735,11 @@ document.addEventListener("DOMContentLoaded", function () {
     setLibrary("steam");
 
     (async function init() {
-        await syncCustomGames();
+        const [customGamesResult, connected] = await Promise.all([
+            syncCustomGames(),
+            loadSteamAccount()
+        ]);
         renderCustomGames();
-        const connected = await loadSteamAccount();
         if (connected) await loadGames();
     })();
 });
