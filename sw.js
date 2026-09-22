@@ -1,4 +1,4 @@
-const CACHE_NAME = "project-hub-v18";
+const CACHE_NAME = "project-hub-v19";
 
 const APP_SHELL = [
     "./",
@@ -23,6 +23,9 @@ const APP_SHELL = [
     "./pages/tasks/tasks.html",
     "./pages/tasks/tasks.css",
     "./pages/tasks/tasks.js",
+    "./pages/notifications/notifications.html",
+    "./pages/notifications/notifications.css",
+    "./pages/notifications/notifications.js",
     "./pages/games/games.html",
     "./pages/games/games.css",
     "./pages/games/games.js",
