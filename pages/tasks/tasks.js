@@ -272,32 +272,6 @@ function escapeHtml(value) {
 // FELADAT NORMALIZÁLÁS
 // =========================================
 
-const TASK_SCHEDULE_STORAGE_KEY = "projectHubTaskSchedules:" + (getAuthToken() || "guest").slice(0, 24);
-
-function getLocalTaskSchedules() {
-    try { return JSON.parse(localStorage.getItem(TASK_SCHEDULE_STORAGE_KEY) || "{}"); }
-    catch (_) { return {}; }
-}
-
-function saveLocalTaskSchedule(taskId, dueDate, reminderMinutes) {
-    const schedules = getLocalTaskSchedules();
-    if (!dueDate) delete schedules[String(taskId)];
-    else schedules[String(taskId)] = {
-        dueDate: dueDate,
-        reminderMinutes: reminderMinutes === "none" ? null : Number(reminderMinutes)
-    };
-    localStorage.setItem(TASK_SCHEDULE_STORAGE_KEY, JSON.stringify(schedules));
-}
-
-function applyLocalTaskSchedule(task) {
-    const local = getLocalTaskSchedules()[String(task.id)];
-    if (!local) return task;
-    return Object.assign({}, task, {
-        dueDate: local.dueDate,
-        reminderMinutes: local.reminderMinutes
-    });
-}
-
 function normalizeTask(task) {
 
     return {
@@ -379,7 +353,7 @@ async function getApiErrorMessage(response) {
 // FELADATOK BETÖLTÉSE
 // =========================================
 
-async function loadTasks() {
+async function loadTasks(silent = false) {
 
     const token =
         getAuthToken();
@@ -452,7 +426,7 @@ async function loadTasks() {
 
             tasks =
                 result.tasks.map(function (task) {
-                    return applyLocalTaskSchedule(normalizeTask(task));
+                    return normalizeTask(task);
                 });
 
         }
@@ -479,10 +453,12 @@ async function loadTasks() {
 
         renderTasks();
 
-        alert(
-            "A feladatokat nem sikerült betölteni.\n\n" +
-            error.message
-        );
+        if (!silent) {
+            alert(
+                "A feladatokat nem sikerült betölteni.\n\n" +
+                error.message
+            );
+        }
 
     }
 
@@ -1089,54 +1065,6 @@ function formatDueDate(value) {
     return date.toLocaleString("hu-HU", { dateStyle: "medium", timeStyle: "short" });
 }
 
-function scheduleTaskReminder(task) {
-    if (!window.ProjectHubNotifications || !task.dueDate || task.completed) return;
-
-    const settings = window.ProjectHubNotifications.getSettings();
-    if (!settings.enabled || !settings.taskReminders || task.reminderMinutes == null || task.reminderMinutes === "none") return;
-
-    const due = new Date(task.dueDate).getTime();
-    const reminder = due - Number(task.reminderMinutes) * 60000;
-    const key = "projectHubReminder:" + task.id + ":" + due + ":" + task.reminderMinutes;
-
-    if (!Number.isFinite(due) || !Number.isFinite(reminder) || reminder <= Date.now()) return;
-    if (sessionStorage.getItem(key)) return;
-
-    function arm() {
-        const remaining = reminder - Date.now();
-
-        if (remaining <= 0) {
-            const inboxKey = "task-reminder:" + task.id + ":" + due + ":" + task.reminderMinutes;
-
-            window.ProjectHubNotifications.addInboxNotification({
-                key: inboxKey,
-                type: "task-reminder",
-                title: "Feladat emlékeztető",
-                body: task.title,
-                detail: "Határidő: " + formatDueDate(task.dueDate),
-                taskId: task.id,
-                dueDate: task.dueDate
-            });
-
-            window.ProjectHubNotifications.notify(
-                "Project Hub — emlékeztető",
-                {
-                    body: task.title + "\nHatáridő: " + formatDueDate(task.dueDate),
-                    tag: "task-" + task.id,
-                    requireInteraction: true
-                }
-            ).then(function () {
-                sessionStorage.setItem(key, "1");
-            });
-            return;
-        }
-
-        setTimeout(arm, Math.min(remaining, 2147483647));
-    }
-
-    arm();
-}
-
 // =========================================
 // FELADATOK MEGJELENÍTÉSE
 // =========================================
@@ -1594,7 +1522,6 @@ function renderTasks() {
                     due.classList.add("overdue");
                 }
                 taskCard.appendChild(due);
-                scheduleTaskReminder(task);
             }
 
 
@@ -1722,9 +1649,6 @@ if (
                             }
                         );
 
-
-                    saveLocalTaskSchedule(editingTaskId, dueDate, reminderMinutes);
-
                     if (updatedTask) {
 
                         tasks =
@@ -1778,12 +1702,8 @@ if (
 
 
                     if (newTask) {
-
                         const normalizedNewTask = normalizeTask(newTask);
-                        saveLocalTaskSchedule(normalizedNewTask.id, dueDate, reminderMinutes);
-                        tasks.unshift(
-                            applyLocalTaskSchedule(normalizedNewTask)
-                        );
+                        tasks.unshift(normalizedNewTask);
 
                     }
 
@@ -2596,6 +2516,20 @@ initializeTasksHamburgerCompatibility();
 
 loadTasks();
 
-window.addEventListener("focus", function () {
-    tasks.forEach(scheduleTaskReminder);
-});
+
+// A szerver az egyetlen igazságforrás. Más eszközökön végzett módosítások
+// 5 másodpercen belül megjelennek ezen az eszközön is.
+let tasksSyncInFlight = false;
+
+async function syncTasksFromServer() {
+    if (tasksSyncInFlight || document.hidden) return;
+    tasksSyncInFlight = true;
+    try {
+        await loadTasks(true);
+    } finally {
+        tasksSyncInFlight = false;
+    }
+}
+
+window.setInterval(syncTasksFromServer, 5000);
+window.addEventListener("focus", syncTasksFromServer);
