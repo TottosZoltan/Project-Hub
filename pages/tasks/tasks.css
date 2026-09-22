@@ -1260,3 +1260,6 @@
 .task-option-wide small { display:block; margin-top:6px; color:#777e8d; font-size:11px; line-height:1.4; }
 .task-due-date { display:block; margin-top:7px; color:#aab2c2; font-size:12px; }
 .task-due-date.overdue { color:#ff8f8f; font-weight:600; }
+
+.task-due-date { display:flex; flex-wrap:wrap; gap:5px; align-items:center; }
+.task-reminder-label { opacity:.78; }
