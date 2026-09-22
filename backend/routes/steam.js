@@ -752,7 +752,8 @@ router.get(
 
             const cacheKey = getSteamGamesCacheKey(user.id);
             const cached = steamGamesCache.get(cacheKey);
-            if (cached && cached.expiresAt > Date.now()) {
+            const forceRefresh = String(req.query.refresh || "") === "1";
+            if (!forceRefresh && cached && cached.expiresAt > Date.now()) {
                 return res.json(cached.payload);
             }
 
