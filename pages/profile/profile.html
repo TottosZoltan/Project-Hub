@@ -190,7 +190,7 @@
                         <strong id="notificationPermissionStatus">Értesítések ellenőrzése...</strong>
                         <p id="notificationPermissionHelp">Az engedélyt a telefon böngészője kezeli.</p>
                     </div>
-                    <button id="enableNotificationsButton" class="profile-button primary" type="button">Értesítések engedélyezése</button>
+                    <div class="notification-settings-actions"><button id="enableNotificationsButton" class="profile-button primary" type="button">Értesítések engedélyezése</button><button id="profileTestNotificationButton" class="profile-button" type="button">🔔 Teszt értesítés</button></div>
                 </div>
 
                 <label class="notification-toggle-row">
@@ -1420,6 +1420,23 @@
             } catch (error) {
                 alert(error.message || "Az értesítéseket nem sikerült engedélyezni.");
                 updateNotificationSettingsUI();
+            }
+        });
+
+        document.getElementById("profileTestNotificationButton")?.addEventListener("click", async function () {
+            const button = this;
+            button.disabled = true;
+            button.textContent = "⏳ Tesztelés...";
+            try {
+                const result = await window.ProjectHubNotifications.sendTestNotification();
+                alert(result.browser
+                    ? "✓ Teszt sikeres: az Inboxba és a böngészős értesítések közé is bekerült."
+                    : "✓ Az Inbox teszt sikeres. " + (result.browserReason || ""));
+            } catch (error) {
+                alert("Az értesítési teszt nem sikerült: " + (error.message || error));
+            } finally {
+                button.disabled = false;
+                button.textContent = "🔔 Teszt értesítés";
             }
         });
 
