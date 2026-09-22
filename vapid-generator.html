@@ -69,7 +69,8 @@ document.getElementById("generate").addEventListener("click", async () => {
       throw new Error("Érvénytelen P-256 kulcspár.");
     }
     const publicKey = toBase64Url(rawPublicKey);
-    document.getElementById("publicKey").value = publicKey;\n    document.getElementById("keyCheck").textContent = "Public key: 65 bájt (helyes). Renderbe csak a mező értékét másold, idézőjelek nélkül.";
+    document.getElementById("publicKey").value = publicKey;
+    document.getElementById("keyCheck").textContent = "Public key: 65 bájt (helyes). Renderbe csak a mező értékét másold, idézőjelek nélkül.";
     document.getElementById("privateKey").value = jwk.d;
     document.getElementById("result").hidden = false;
     button.textContent = "Új kulcspár generálása";
