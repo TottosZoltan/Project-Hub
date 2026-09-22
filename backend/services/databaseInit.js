@@ -526,6 +526,11 @@ async function initializeTasksDatabase() {
         ON push_subscriptions(user_id);
     `);
 
+    await pool.query(`
+        ALTER TABLE push_subscriptions
+        ADD COLUMN IF NOT EXISTS test_scheduled_at TIMESTAMP;
+    `);
+
     // ==================================================
     // RÉGI TASKS TÁBLA MIGRÁCIÓ
     // ==================================================
