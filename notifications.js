@@ -37,16 +37,29 @@
         return permission;
     }
 
-    function notify(title, options) {
+    async function notify(title, options) {
         const settings = getSettings();
         if (!settings.enabled || !("Notification" in window) || Notification.permission !== "granted") {
             return false;
         }
+
+        const payload = Object.assign({
+            icon: "/Project-Hub/icons/icon-192.png",
+            badge: "/Project-Hub/icons/icon-192.png"
+        }, options || {});
+
         try {
-            const n = new Notification(title, Object.assign({
-                icon: "/Project-Hub/icons/icon-192.png",
-                badge: "/Project-Hub/icons/icon-192.png"
-            }, options || {}));
+            if ("serviceWorker" in navigator) {
+                const registration = await navigator.serviceWorker.ready;
+                if (registration && registration.showNotification) {
+                    await registration.showNotification(title, payload);
+                    return true;
+                }
+            }
+        } catch (_) {}
+
+        try {
+            const n = new Notification(title, payload);
             n.onclick = function () {
                 window.focus();
                 n.close();
