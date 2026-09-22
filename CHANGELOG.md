@@ -1,3 +1,11 @@
+## 1.6.6 — 2026-09-22
+
+### ⏱️ Egyperces háttérértesítés teszt
+- Új „1 perces teszt” gomb a Profil → Értesítések részen.
+- A gomb szerveroldalon ütemezi a push értesítést, ezért az app bezárása után is tesztelhető.
+- A normál „Teszt értesítés” gomb működése változatlan maradt.
+
+
 ## 1.6.5 — 2026-09-22
 
 ### 🔔 Háttérben is működő értesítések és mobil fejléc javítás
