@@ -80,13 +80,63 @@
         }
     }
 
+    const INBOX_KEY = "projectHubInboxNotifications";
+
+    function getInbox() {
+        try {
+            const items = JSON.parse(localStorage.getItem(INBOX_KEY) || "[]");
+            return Array.isArray(items) ? items : [];
+        } catch (_) {
+            return [];
+        }
+    }
+
+    function saveInbox(items) {
+        localStorage.setItem(INBOX_KEY, JSON.stringify(items.slice(0, 100)));
+    }
+
+    function addInboxNotification(item) {
+        const next = Object.assign({
+            id: "n-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8),
+            createdAt: new Date().toISOString(),
+            read: false,
+            type: "general"
+        }, item || {});
+        const items = getInbox();
+        if (next.key && items.some(function (item) { return item.key === next.key; })) return items;
+        items.unshift(next);
+        saveInbox(items);
+        return items;
+    }
+
+    function markInboxRead(id) {
+        saveInbox(getInbox().map(function (item) {
+            return item.id === id ? Object.assign({}, item, { read: true }) : item;
+        }));
+    }
+
+    function markAllInboxRead() {
+        saveInbox(getInbox().map(function (item) {
+            return Object.assign({}, item, { read: true });
+        }));
+    }
+
+    function clearInbox() {
+        saveInbox([]);
+    }
+
     window.ProjectHubNotifications = {
         DEFAULTS,
         getSettings,
         saveSettings,
         requestPermission,
         notify,
-        registerServiceWorker
+        registerServiceWorker,
+        getInbox,
+        addInboxNotification,
+        markInboxRead,
+        markAllInboxRead,
+        clearInbox
     };
 
     document.addEventListener("DOMContentLoaded", function () {
