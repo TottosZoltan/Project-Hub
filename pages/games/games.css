@@ -513,3 +513,25 @@ body.modal-open { overflow:hidden; }
     0%, 100% { opacity: .45; transform: scale(.9); }
     50% { opacity: 1; transform: scale(1.08); }
 }
+
+
+/* 1.6.10 — SteamGridDB 3-képes választó + asztali kártya overflow fix */
+.custom-image-choices { margin-top: 10px; padding: 10px; border: 1px solid var(--border); border-radius: 14px; background: rgba(255,255,255,.025); }
+.custom-image-choices[hidden] { display:none!important; }
+.custom-image-choices-title { margin-bottom: 8px; color: var(--muted-strong); font-size: 10px; font-weight: 750; }
+.custom-image-choices-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.custom-image-choice { min-width:0; padding:3px; border:1px solid var(--border-strong); border-radius:10px; background:#0b1018; overflow:hidden; cursor:pointer; }
+.custom-image-choice img { display:block; width:100%; aspect-ratio:16/9; height:auto; object-fit:cover; border-radius:7px; }
+.custom-image-choice.selected { border-color:rgba(124,140,255,.9); box-shadow:0 0 0 2px rgba(124,140,255,.18); }
+.custom-game-content { max-height:min(720px, calc(100dvh - 28px)); overflow-x:hidden; overflow-y:auto; }
+.custom-image-preview { width:100%; overflow:hidden; border-radius:12px; }
+.custom-image-preview img { display:block; width:100%; max-width:100%; height:auto; max-height:260px; object-fit:cover; border-radius:12px; }
+.custom-game-card { overflow:hidden; min-width:0; }
+.custom-game-card .game-card-media { overflow:hidden; }
+.custom-game-card .game-card-body { min-width:0; overflow:hidden; }
+.custom-game-card .custom-status { overflow-wrap:anywhere; word-break:break-word; }
+@media (max-width:560px) {
+  .custom-image-choices-grid { gap:6px; }
+  .custom-game-content { max-height:calc(100dvh - 14px); margin:7px auto; padding:16px; }
+  .custom-image-preview img { max-height:210px; }
+}
