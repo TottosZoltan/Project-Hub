@@ -1149,35 +1149,21 @@ router.get(
                 });
             }
 
-            // A lookup csak a saját Steam könyvtárban lévő AppID-kre engedélyezett.
-            const ownedGamesData = await steamApiGet(
-                "IPlayerService",
-                "GetOwnedGames",
-                "v0001",
-                {
-                    steamid: account.steam_id,
-                    include_appinfo: 1,
-                    include_played_free_games: 1
-                }
+            // A képkereső az „Egyéb játékok” számára is működjön:
+            // ezért az SGDB lookupot nem korlátozzuk a saját Steam könyvtárra.
+            // A végpont továbbra is csak bejelentkezett felhasználónak érhető el.
+            const image = await getSteamGridImage(
+                appId,
+                String(req.query.name || "").trim()
             );
-
-            const ownedGame = (
-                ownedGamesData?.response?.games || []
-            ).find(item => Number(item.appid) === appId);
-
-            if (!ownedGame) {
-                return res.status(404).json({
-                    success: false,
-                    message: "A játék nem található a Steam könyvtáradban."
-                });
-            }
-
-            const image = await getSteamGridImage(appId);
 
             return res.json({
                 success: true,
                 image: image || null,
-                source: image ? "steamgriddb" : null
+                source: image ? "steamgriddb" : null,
+                message: image
+                    ? "SteamGridDB kép megtalálva."
+                    : "A SteamGridDB nem adott vissza használható vízszintes képet ehhez a játékhoz."
             });
         } catch (error) {
             console.error("STEAMGRIDDB IMAGE HIBA:", error);
