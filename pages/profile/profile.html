@@ -194,7 +194,7 @@
                         <strong id="notificationPermissionStatus">Értesítések ellenőrzése...</strong>
                         <p id="notificationPermissionHelp">Az engedélyt a telefon böngészője kezeli.</p>
                     </div>
-                    <div class="notification-settings-actions"><button id="enableNotificationsButton" class="profile-button primary" type="button">Értesítések engedélyezése</button><button id="profileTestNotificationButton" class="profile-button" type="button">🔔 Teszt értesítés</button></div>
+                    <div class="notification-settings-actions"><button id="enableNotificationsButton" class="profile-button primary" type="button">Értesítések engedélyezése</button><button id="profileTestNotificationButton" class="profile-button" type="button">🔔 Teszt értesítés</button><button id="profileDelayedTestNotificationButton" class="profile-button" type="button">⏱️ 1 perces teszt</button></div>
                 </div>
 
                 <label class="notification-toggle-row">
@@ -1439,6 +1439,7 @@
             button.textContent = "⏳ Tesztelés...";
             try {
                 const result = await window.ProjectHubNotifications.sendTestNotification();
+                try { await window.ProjectHubNotifications.scheduleDelayedPushTest(); alert("Beállítva! 1 perc múlva érkezik a teszt értesítés. Most bezárhatod az appot."); } catch (error) { alert(error.message || "Nem sikerült beállítani a tesztet."); }
                 try { await window.ProjectHubNotifications.sendServerPushTest(); } catch (_) {}
                 alert(result.browser
                     ? "✓ Teszt sikeres: az Inboxba és a böngészős értesítések közé is bekerült."
