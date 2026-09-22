@@ -1,3 +1,12 @@
+## 1.6.3 — 2026-09-22
+
+### ⚡ Hibajavítás és gyorsítás
+- Javítva a Játékok oldal JavaScript szintaktikai hibája, amely megakadályozhatta az oldal betöltését.
+- A Steam könyvtár lekérése most legfeljebb 20 másodpercig vár, utána egyértelmű hibaüzenetet ad.
+- A játékoldal indulásakor a független háttérlekérések párhuzamosan indulnak.
+- A Steam játéklista 60 másodperces rövid szerveroldali cache-t kapott, így az ismételt betöltések gyorsabbak.
+- A verziószám minden felületen 1.6.3-ra frissítve.
+
 ## 1.6.2 — 2026-09-22
 
 ### 🔔 Automatikus frissítési értesítés
