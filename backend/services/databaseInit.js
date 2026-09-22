@@ -502,7 +502,7 @@ async function initializeTasksDatabase() {
     // FONTOS: csak a régi TIMESTAMP (timezone nélküli) oszlopot migráljuk.
     // Ha már TIMESTAMPTZ, újraindításkor TILOS újra átalakítani, mert az +1/+2 órás eltolást okozna.
     await pool.query(`
-        DO $
+        DO $migration$
         BEGIN
             IF EXISTS (
                 SELECT 1
@@ -517,7 +517,7 @@ async function initializeTasksDatabase() {
                 USING due_date AT TIME ZONE 'Europe/Budapest';
             END IF;
         END
-        $;
+        $migration$;
     `);
 
     // Push subscriptions for background notifications.
