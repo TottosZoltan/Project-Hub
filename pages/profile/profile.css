@@ -719,3 +719,22 @@ body.authenticated {
 .notification-toggle-row small { display:block; margin-top:4px; color:#777e8d; font-size:11px; }
 .notification-toggle-row input { width:22px; height:22px; accent-color:#1d6cff; }
 @media (max-width:600px){ .notification-status-row { flex-direction:column; align-items:stretch; } .notification-toggle-row { align-items:flex-start; } }
+
+
+.notification-settings-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+.notification-settings-actions .profile-button {
+    margin-top: 0;
+}
+@media (max-width: 520px) {
+    .notification-settings-actions {
+        width: 100%;
+    }
+    .notification-settings-actions .profile-button {
+        flex: 1 1 100%;
+    }
+}
