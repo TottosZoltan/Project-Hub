@@ -72,4 +72,29 @@ router.post("/api/notifications/test-push", async function (req, res) {
     }
 });
 
+router.post("/api/notifications/test-push-delayed", async function (req, res) {
+    try {
+        const user = await getAuthenticatedTasksUser(req);
+        if (!user) return res.status(401).json({ success: false, message: "Érvényes bejelentkezés szükséges." });
+        if (!isPushConfigured()) return res.status(503).json({ success: false, message: "A háttérértesítések még nincsenek konfigurálva." });
+
+        const result = await pool.query(`
+            UPDATE push_subscriptions
+            SET test_scheduled_at = CURRENT_TIMESTAMP + INTERVAL '1 minute',
+                updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = $1
+            RETURNING id
+        `, [user.id]);
+
+        if (result.rows.length === 0) {
+            return res.status(400).json({ success: false, message: "Előbb engedélyezd az értesítéseket." });
+        }
+
+        return res.json({ success: true, delaySeconds: 60 });
+    } catch (error) {
+        console.error("KÉSLELTETETT PUSH TESZT HIBA:", error);
+        return res.status(500).json({ success: false, message: "A késleltetett teszt beállítása sikertelen." });
+    }
+});
+
 module.exports = router;
