@@ -70,6 +70,91 @@
         }
     }
 
+    function getAuthToken() {
+        return localStorage.getItem("projectHubAuthToken");
+    }
+
+    function urlBase64ToUint8Array(base64String) {
+        const padding = "=".repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+        const rawData = atob(base64);
+        return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+    }
+
+    async function ensurePushSubscription() {
+        if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
+            throw new Error("A háttérértesítések nem támogatottak ezen az eszközön.");
+        }
+        const token = getAuthToken();
+        if (!token) throw new Error("Bejelentkezés szükséges.");
+
+        const response = await fetch("https://project-hub-backend-1.onrender.com/api/notifications/vapid-public-key", { cache: "no-store" });
+        const config = await response.json();
+        if (!response.ok || !config.publicKey) throw new Error(config.message || "A háttérértesítések még nincsenek beállítva.");
+
+        const registration = await registerServiceWorker();
+        if (!registration) throw new Error("A service worker nem indítható el.");
+
+        let subscription = await registration.pushManager.getSubscription();
+        if (!subscription) {
+            subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(config.publicKey)
+            });
+        }
+
+        const saveResponse = await fetch("https://project-hub-backend-1.onrender.com/api/notifications/subscribe", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ subscription: subscription.toJSON() })
+        });
+        const result = await saveResponse.json();
+        if (!saveResponse.ok || !result.success) throw new Error(result.message || "A push kapcsolat mentése sikertelen.");
+
+        saveSettings({ enabled: true, pushEnabled: true });
+        return subscription;
+    }
+
+    async function disablePushSubscription() {
+        const token = getAuthToken();
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        if (!subscription) {
+            saveSettings({ enabled: false, pushEnabled: false });
+            return;
+        }
+        try {
+            if (token) {
+                await fetch("https://project-hub-backend-1.onrender.com/api/notifications/subscribe", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify({ endpoint: subscription.endpoint })
+                });
+            }
+        } finally {
+            await subscription.unsubscribe().catch(() => {});
+            saveSettings({ enabled: false, pushEnabled: false });
+        }
+    }
+
+    async function sendServerPushTest() {
+        const token = getAuthToken();
+        if (!token) throw new Error("Bejelentkezés szükséges.");
+        const response = await fetch("https://project-hub-backend-1.onrender.com/api/notifications/test-push", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + token }
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || "A push teszt sikertelen.");
+        return result;
+    }
+
     async function registerServiceWorker() {
         if (!("serviceWorker" in navigator)) return null;
         try {
@@ -160,6 +245,9 @@
         requestPermission,
         notify,
         registerServiceWorker,
+        ensurePushSubscription,
+        disablePushSubscription,
+        sendServerPushTest,
         getInbox,
         addInboxNotification,
         markInboxRead,
