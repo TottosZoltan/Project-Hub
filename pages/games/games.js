@@ -477,14 +477,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    async function loadGames() {
+    async function loadGames(forceRefresh = false) {
         setState("loading", "Steam játékok betöltése...");
         libraryMeta.textContent = "Steam könyvtár lekérése…";
         refreshButton.disabled = true;
         const controller = new AbortController();
         const timeout = window.setTimeout(() => controller.abort(), 20000);
         try {
-            const response = await fetch(BACKEND_URL + "/api/steam/games", {
+            const response = await fetch(BACKEND_URL + "/api/steam/games" + (forceRefresh ? "?refresh=1" : ""), {
                 method: "GET",
                 headers: headers(),
                 credentials: "include",
@@ -711,7 +711,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setLibrary(dx < 0 ? "custom" : "steam");
     }, { passive: true });
 
-    refreshButton.addEventListener("click", loadGames);
+    refreshButton.addEventListener("click", () => loadGames(true));
     searchInput.addEventListener("input", renderGames);
     document.querySelectorAll(".filter-button").forEach(button => {
         button.addEventListener("click", () => {
