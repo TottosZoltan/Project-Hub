@@ -1403,7 +1403,12 @@
             if (!settings || !("Notification" in window)) return;
 
             if (Notification.permission === "granted") {
-                settings.saveSettings({ enabled: !settings.getSettings().enabled });
+                if (settings.getSettings().enabled) {
+                    await settings.disablePushSubscription();
+                } else {
+                    await settings.requestPermission();
+                    await settings.ensurePushSubscription();
+                }
                 updateNotificationSettingsUI();
                 return;
             }
@@ -1415,6 +1420,7 @@
 
             try {
                 await settings.requestPermission();
+                await settings.ensurePushSubscription();
                 settings.saveSettings({ taskReminders: true });
                 updateNotificationSettingsUI();
                 settings.notify("Project Hub", { body: "Az értesítések sikeresen engedélyezve vannak." });
@@ -1430,6 +1436,7 @@
             button.textContent = "⏳ Tesztelés...";
             try {
                 const result = await window.ProjectHubNotifications.sendTestNotification();
+                try { await window.ProjectHubNotifications.sendServerPushTest(); } catch (_) {}
                 alert(result.browser
                     ? "✓ Teszt sikeres: az Inboxba és a böngészős értesítések közé is bekerült."
                     : "✓ Az Inbox teszt sikeres. " + (result.browserReason || ""));
