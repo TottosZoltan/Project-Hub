@@ -1,55 +1,45 @@
-# Project Hub 1.6.4
+# Project Hub Backend – modularized
 
-A Project Hub egy személyes, mobil-first dashboard jegyzetekkel, feladatokkal, játékokkal, Steam-integrációval, saját játékkönyvtárral és helykezeléssel.
+This folder is a modular split of the uploaded `server.js`. The route logic was kept from the original file; the main structural cleanup is that the application is now split into database, auth, Steam service, and route modules.
 
-## 1.4 újdonságok
+## Structure
 
-- 🎮 Egyéni játékok cloud mentése, szerkesztése, törlése
-- ⭐ Kedvenc egyéni játékok
-- 🎯 Egyéni játékállapotok
-- 📍 Teljes Helyek modul
-- 🔎 Helykeresés és kategóriaszűrés
-- ⭐ Kedvenc helyek
-- ☁️ PostgreSQL alapú felhasználói adatszinkronizáció a saját játékokhoz és helyekhez
-- 📱 Mobilbarát modalok és gesztusbarát kezelőfelület
-- 🔄 PWA frissítési rendszer 1.5.2
+- `server.js` – app setup, CORS, session, route mounting, startup
+- `config.js` – backend/frontend/Steam configuration
+- `database.js` – PostgreSQL pool
+- `services/databaseInit.js` – original database initialization functions
+- `services/steam.js` – Steam helper functions
+- `middleware/auth.js` – auth token/user helpers and owner tag
+- `routes/system.js` – database test + basic route
+- `routes/auth.js` – register, login, `/api/auth/me`
+- `routes/notes.js` – notes CRUD
+- `routes/tasks.js` – tasks CRUD
+- `routes/steam.js` – Steam linking/account/games/profile/recent games routes
 
-## Fő modulok
+## Important
 
-- 🏠 Dashboard
-- 📝 Jegyzetek
-- ✅ Feladatok
-- 🎮 Steam játékok
-- 📚 Egyéni játékok
-- 🏆 Steam achievementek
-- 📍 Helyek
-- 👤 Profil
-- 🔗 Steam kapcsolat
-- 🖼️ SteamGridDB artwork fallback
-- ⏰ Feladat határidők és emlékeztetők
-- 🔔 Telefonos értesítések és értesítési beállítások
-- 📱 PWA / iPhone
-- 🖥️ Fejlesztői console
+The uploaded backend already contains the `users.profile_image` column, but it does not currently contain the `/api/profile` avatar routes. Those are therefore not invented here.
 
-## Backend
+Before replacing the Render backend, keep a backup of the current working `server.js`. Deploy this modular version only after testing it locally or on a separate branch.
 
-A backend Node.js + Express + PostgreSQL alapú. A felhasználói adatok token alapú hitelesítéssel vannak leválasztva.
+## Dinamikus értesítések (Dynamic Island stílus)
 
-### SteamGridDB artwork fallback
+Az `rit3zh/expo-dynamic-notifications` ötlete alapján webre átalakítva (az eredeti React Native/Skia sablon, nem használható Node backendben).
 
-A hiányzó Steam artwork automatikusan a SteamGridDB v2 API-ból tölthető be, kizárólag akkor, ha a normál Steam képek nem érhetők el. Ehhez a backend környezetében be kell állítani a `STEAMGRIDDB_API_KEY` változót. A kulcsot nem szabad a frontend kódjába vagy a repository-ba commitolni.
+- `services/notifications.js` – felhasználónkénti SSE kapcsolatok, `publish(userId, notification)`
+- `routes/notifications.js` – `GET /api/notifications/stream` (Bearer fejléc vagy `?token=`)
+- `public/dynamic-notifications.js` – függőség nélküli kliens modul, a backend szolgálja ki: `/dynamic-notifications.js`
+- Értesítést küld: jegyzet és feladat létrehozás / módosítás / törlés
 
-### Új 1.4 API-k
+Frontend:
 
-- `GET /api/library/games`
-- `POST /api/library/games`
-- `PATCH /api/library/games/:id`
-- `DELETE /api/library/games/:id`
-- `GET /api/places`
-- `POST /api/places`
-- `PATCH /api/places/:id`
-- `DELETE /api/places/:id`
+```html
+<script src="https://project-hub-backend-1.onrender.com/dynamic-notifications.js"></script>
+<script>
+  DynamicNotifications.connect({ token: localStorage.getItem("authToken") });
+  // kézi hívás:
+  DynamicNotifications.trigger({ title: "Szia", message: "Teszt", symbol: "✓", accent: "#2F9BFF" });
+</script>
+```
 
-## Verzió
-
-**Project Hub 1.6.4**
+Mezők: `title`, `message`, `avatar`, `symbol`, `accent`, `duration` (ms, `null` = marad), `onPress`, `render`.
