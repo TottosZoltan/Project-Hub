@@ -1,0 +1,7 @@
+Dependencies required by the uploaded server.js:
+express
+cors
+express-session
+connect-pg-simple
+pg
+bcrypt
